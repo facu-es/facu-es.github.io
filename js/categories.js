@@ -6,6 +6,8 @@ let currentSortCriteria = undefined;
 let minCount = undefined;
 let maxCount = undefined;
 
+// Ordena los elementos del array recibido
+// Cuando se define criterio la funcion de comparacion adecuada es utilizada
 function sortCategories(criteria, array){
     let result = [];
     if (criteria === ORDER_ASC_BY_NAME)
@@ -35,11 +37,13 @@ function sortCategories(criteria, array){
     return result;
 }
 
+// Guarda el valor de la categoria elegida en el Almacen Local del navegador accesible por la página "products.html"
 function setCatID(id) {
     localStorage.setItem("catID", id);
     window.location = "products.html"
 }
 
+// Crea el contenido HTML que muestra las categorías
 function showCategoriesList(){
 
     let htmlContentToAppend = "";
@@ -71,6 +75,7 @@ function showCategoriesList(){
     }
 }
 
+// Ordena y muestra las catagorias
 function sortAndShowCategories(sortCriteria, categoriesArray){
     currentSortCriteria = sortCriteria;
 
@@ -96,6 +101,8 @@ document.addEventListener("DOMContentLoaded", function(e){
         }
     });
 
+    // Al llamar a esta funcion no se le pasa el parámetro categoriesArray
+    // este fue inicializado con la escucha del evento "DOMContentLoaded"
     document.getElementById("sortAsc").addEventListener("click", function(){
         sortAndShowCategories(ORDER_ASC_BY_NAME);
     });
@@ -108,6 +115,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         sortAndShowCategories(ORDER_BY_PROD_COUNT);
     });
 
+    // Vacía los valores establecidos en el filtro de rango de cantidad de productos
     document.getElementById("clearRangeFilter").addEventListener("click", function(){
         document.getElementById("rangeFilterCountMin").value = "";
         document.getElementById("rangeFilterCountMax").value = "";
