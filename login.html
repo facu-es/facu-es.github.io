@@ -38,7 +38,8 @@
               </div>
 
               <!-- Boton de envío -->
-              <button type="button" class="btn btn-primary btn-lg btn-block w-100 mb-4" id="iniciar-sesion">Iniciar sesión</button>
+              <button type="button" class="btn btn-primary btn-lg btn-block w-100 mb-4" id="iniciar-sesion">Iniciar
+                sesión</button>
 
               <!-- Boton de registro -->
               <a href="register.html" class="btn btn-secondary btn-lg w-100">Quiero registrar una cuenta</a>
@@ -128,7 +129,7 @@
     // Funcion para inicio de sesion desde base de datos de Firebase
     function autenticarUsuario() {
       // Continua solo si los campos son validos
-            if (!validaCamposFormulario()) {
+      if (!validaCamposFormulario()) {
         return;
       };
       const referenciaBD = ref(db);
