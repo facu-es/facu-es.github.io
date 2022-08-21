@@ -79,7 +79,7 @@ let botonCuentaUsuario = document.getElementById("cuenta-usuario");
     } else {
       botonCrearUsuario.style = "display: none";
       
-      botonCuentaUsuario.innerText = usuarioActual.nombre_usuario;
+      botonCuentaUsuario.innerText = usuarioActual.nombre_completo;
       botonCuentaUsuario.classList.replace("nav-link", "btn", "active");
       botonCuentaUsuario.classList.add("btn-primary");
       botonCuentaUsuario.href = "#";
