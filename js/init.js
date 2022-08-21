@@ -47,7 +47,7 @@ let botonCuentaUsuario = document.getElementById("cuenta-usuario");
   var usuarioActual = null;
 
   function adquiereNombreUsuario() {
-    let mantenerSesionIniciada = localStorage.getItem("mantenersesionsniciada");
+    let mantenerSesionIniciada = localStorage.getItem("mantenersesioninciada");
 
     if (mantenerSesionIniciada) {
       usuarioActual = JSON.parse(localStorage.getItem("usuario"));
