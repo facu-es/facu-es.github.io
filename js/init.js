@@ -39,3 +39,51 @@ let getJSONData = function(url){
         return result;
     });
 }
+
+// Gestion de menus de usuario
+let botonCuentaUsuario = document.getElementById("cuenta-usuario");
+  let botonCrearUsuario = document.getElementById("crear-cuenta");
+  let menuOpcionesUsuario = document.getElementById("menu-usuario");
+  var usuarioActual = null;
+
+  function adquiereNombreUsuario() {
+    let mantenerSesionIniciada = localStorage.getItem("mantenersesionsniciada");
+
+    if (mantenerSesionIniciada) {
+      usuarioActual = JSON.parse(localStorage.getItem("usuario"));
+    } else {
+      usuarioActual = JSON.parse(sessionStorage.getItem("usuario"));
+    }
+  }
+
+  function cerrarSesion() {
+    sessionStorage.removeItem('usuario');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('mantenersesionsniciada');
+    window.location.href = "index.html";
+  }
+
+  window.onload = function () {
+    adquiereNombreUsuario()
+    if (usuarioActual == null) {
+      // Cuando no hay usuario logeado se oculta el menu de usuario y se muestra el boton de crear cuenta y el de iniciar sesión
+      botonCuentaUsuario.innerText = "Iniciar sesión";
+      botonCuentaUsuario.classList.replace("nav-link", "btn", "active");
+      botonCuentaUsuario.classList.add("btn-success");
+      botonCuentaUsuario.href = "login.html";
+
+      menuOpcionesUsuario.style = "display: none";
+
+      // Por requisito de la letra se fuerza el inicio de sesion
+      window.location = "login.html"
+    } else {
+      botonCrearUsuario.style = "display: none";
+      
+      botonCuentaUsuario.innerText = usuarioActual.nombre_usuario;
+      botonCuentaUsuario.classList.replace("nav-link", "btn", "active");
+      botonCuentaUsuario.classList.add("btn-primary");
+      botonCuentaUsuario.href = "#";
+
+      menuOpcionesUsuario.style = "display: block";
+    }
+  }

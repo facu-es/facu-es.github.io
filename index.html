@@ -33,6 +33,18 @@
           </li>
         </ul>
       </div>
+      <div class="btn-group">
+        <a class="btn btn-danger" href="register.html" id="crear-cuenta">Crear cuenta</a>
+        <a class="btn btn-success" href="login.html" id="cuenta-usuario">Iniciar sesión</a>
+        <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" id="menu-usuario"><span class="visually-hidden"></span></button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="my-profile.html">Mi perfil</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" href="javascript:cerrarSesion()">Cerrar sesión</a></li>
+        </ul>
+      </div>
     </div>
   </nav>
   <main>
@@ -91,5 +103,4 @@
   <script src="js/init.js"></script>
   <script src="js/index.js"></script>
 </body>
-
 </html>
