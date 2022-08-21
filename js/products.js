@@ -47,8 +47,8 @@ function setProdID(id) {
 function showProductsList(){
 
     let htmlContentToAppend = "";
-    for(let i = 0; i < currentProductsArray.length; i++){
-        let product = currentProductsArray[i];
+    for(let i = 0; i < currentProductsArray.products.length; i++){
+        let product = currentProductsArray.products[i];
 
         if (((minCount == undefined) || (minCount != undefined && parseInt(product.cost) >= minCount)) &&
             ((maxCount == undefined) || (maxCount != undefined && parseInt(product.cost) <= maxCount))){
@@ -95,10 +95,12 @@ function sortAndShowProducts(sortCriteria, productsArray){
 document.addEventListener("DOMContentLoaded", function(e){
     getJSONData(PRODUCTS_URL + localStorage.getItem("catID") + ".json").then(function(resultObj){
         if (resultObj.status === "ok"){
-            currentProductsArray = resultObj.data.products 
+            currentProductsArray = resultObj.data 
+            document.getElementById('titulo-productos').innerHTML = "Verás aquí todos los productos de la categoría " + currentProductsArray.catName;
             showProductsList()
             //sortAndShowProducts(ORDER_ASC_BY_NAME, resultObj.data);
         }
+        
     });
 
     // Al llamar a esta funcion no se le pasa el parámetro productsArray ya que
