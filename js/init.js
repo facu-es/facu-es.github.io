@@ -59,7 +59,7 @@ let botonCuentaUsuario = document.getElementById("cuenta-usuario");
   function cerrarSesion() {
     sessionStorage.removeItem('usuario');
     localStorage.removeItem('usuario');
-    localStorage.removeItem('mantenersesionsniciada');
+    localStorage.removeItem('mantenersesioniniciada');
     window.location.href = "index.html";
   }
 
