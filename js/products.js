@@ -83,7 +83,7 @@ function sortAndShowProducts(sortCriteria, productsArray){
         currentProductsArray = productsArray;
     }
 
-    currentProductsArray = sortProducts(currentSortCriteria, currentProductsArray);
+    currentProductsArray = sortProducts(currentSortCriteria, currentProductsArray.products);
 
     //Muestro los productos ordenados
     showProductsList();
