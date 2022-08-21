@@ -136,13 +136,13 @@
       const referenciaBD = ref(db);
 
       // Busca un elemento con el nombre de usuario ingresado, si existe alerta al usuario y no registra
-      get(child(referenciaBD, "UserList/" + nombreUsuarioRegistro.value)).then((intento) => {
+      get(child(referenciaBD, "ListadoUsuarios/" + nombreUsuarioRegistro.value)).then((intento) => {
         if (intento.exists()) {
           alert('El nombre de usuario ya existe intente con otro');
         }
         // Crea el usuario en la base de datos
         else {
-          set(ref(db, "UserList/" + nombreUsuarioRegistro.value),
+          set(ref(db, "ListadoUsuarios/" + nombreUsuarioRegistro.value),
             {
               nombre_completo: nombreRegistro.value,
               correo: correoRegistro.value,

@@ -133,7 +133,7 @@
       };
       const referenciaBD = ref(db);
 
-      get(child(referenciaBD, "UserList/" + nombreUsuario.value)).then((intento) => {
+      get(child(referenciaBD, "ListadoUsuarios/" + nombreUsuario.value)).then((intento) => {
         if (intento.exists()) {
           let contraEnBD = decifrarContra(intento.val().contra);
           if (contraEnBD == contraUsuario.value) {
