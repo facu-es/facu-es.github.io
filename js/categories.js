@@ -5,6 +5,7 @@ let currentCategoriesArray = [];
 let currentSortCriteria = undefined;
 let minCount = undefined;
 let maxCount = undefined;
+let textoParaBuscar = undefined;
 
 // Ordena los elementos del array recibido
 // Cuando se define criterio la funcion de comparacion adecuada es utilizada
@@ -50,7 +51,8 @@ function showCategoriesList() {
         let category = currentCategoriesArray[i];
 
         if (((minCount == undefined) || (minCount != undefined && parseInt(category.productCount) >= minCount)) &&
-            ((maxCount == undefined) || (maxCount != undefined && parseInt(category.productCount) <= maxCount))) {
+            ((maxCount == undefined) || (maxCount != undefined && parseInt(category.productCount) <= maxCount)) &&
+            ((textoParaBuscar == undefined || textoParaBuscar == '') || (category.name.toLowerCase().includes(textoParaBuscar) || category.description.toLowerCase().includes(textoParaBuscar))) ) {
 
             htmlContentToAppend += `
             <div onclick="setCatID(${category.id})" class="list-group-item list-group-item-action cursor-active">
@@ -143,6 +145,19 @@ document.addEventListener("DOMContentLoaded", function (e) {
         }
         else {
             maxCount = undefined;
+        }
+
+        showCategoriesList();
+    });
+
+    document.getElementById("buscarTexto").addEventListener("input", function () {
+        textoParaBuscar = document.getElementById("buscarTexto").value;
+
+        if ((textoParaBuscar != undefined) && (textoParaBuscar != "")) {
+            textoParaBuscar = textoParaBuscar.toLowerCase();
+        }
+        else {
+            textoParaBuscar = '';
         }
 
         showCategoriesList();
