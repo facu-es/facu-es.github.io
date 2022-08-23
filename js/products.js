@@ -1,34 +1,41 @@
-const ORDER_ASC_BY_NAME = "AZ";
-const ORDER_DESC_BY_NAME = "ZA";
-const ORDER_BY_PRICE = "Precio";
+const ORDER_ASC_BY_PRICE = "Precio_Ascendente";
+const ORDER_DESC_BY_PRICE = "Precio_Descendente";
+const ORDER_DESC_BY_RELEVANCE = "Relevancia";
 let currentProductsArray = [];
 let currentSortCriteria = undefined;
 let minCount = undefined;
 let maxCount = undefined;
+let textoParaBuscar = undefined;
 
 // Ordena los elementos del array recibido
 // Cuando se define criterio la funcion de comparacion adecuada es utilizada
 function sortProducts(criteria, array) {
     let result = [];
-    if (criteria === ORDER_ASC_BY_NAME) {
+    if (criteria === ORDER_ASC_BY_PRICE) {
         result = array.sort(function (a, b) {
-            if (a.name < b.name) { return -1; }
-            if (a.name > b.name) { return 1; }
+            let aCost = parseInt(a.cost);
+            let bCost = parseInt(b.cost);
+
+            if (aCost < bCost) { return -1; }
+            if (aCost > bCost) { return 1; }
             return 0;
         });
-    } else if (criteria === ORDER_DESC_BY_NAME) {
-        result = array.sort(function (a, b) {
-            if (a.name > b.name) { return -1; }
-            if (a.name < b.name) { return 1; }
-            return 0;
-        });
-    } else if (criteria === ORDER_BY_PRICE) {
+    } else if (criteria === ORDER_DESC_BY_PRICE) {
         result = array.sort(function (a, b) {
             let aCost = parseInt(a.cost);
             let bCost = parseInt(b.cost);
 
             if (aCost > bCost) { return -1; }
             if (aCost < bCost) { return 1; }
+            return 0;
+        });
+    } else if (criteria === ORDER_DESC_BY_RELEVANCE) {
+        result = array.sort(function (a, b) {
+            let aSoldCount = parseInt(a.soldCount);
+            let bSoldCount = parseInt(b.soldCount);
+
+            if (aSoldCount > bSoldCount) { return -1; }
+            if (aSoldCount < bSoldCount) { return 1; }
             return 0;
         });
     }
@@ -50,7 +57,8 @@ function showProductsList() {
         let product = currentProductsArray[i];
 
         if (((minCount == undefined) || (minCount != undefined && parseInt(product.cost) >= minCount)) &&
-            ((maxCount == undefined) || (maxCount != undefined && parseInt(product.cost) <= maxCount))) {
+            ((maxCount == undefined) || (maxCount != undefined && parseInt(product.cost) <= maxCount)) &&
+            ((textoParaBuscar == undefined || textoParaBuscar == '') || (product.name.toLowerCase().includes(textoParaBuscar) || product.description.toLowerCase().includes(textoParaBuscar))) ) {
 
             htmlContentToAppend += `
             <div onclick="setProdID(${product.id})" class="list-group-item list-group-item-action cursor-active">
@@ -104,16 +112,16 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
     // Al llamar a esta funcion no se le pasa el parámetro productsArray ya que
     // este fue inicializado con la escucha del evento "DOMContentLoaded"
-    document.getElementById("sortAsc").addEventListener("click", function () {
-        sortAndShowProducts(ORDER_ASC_BY_NAME);
+    document.getElementById("sortAscByPrice").addEventListener("click", function () {
+        sortAndShowProducts(ORDER_ASC_BY_PRICE);
     });
 
-    document.getElementById("sortDesc").addEventListener("click", function () {
-        sortAndShowProducts(ORDER_DESC_BY_NAME);
+    document.getElementById("sortDescByPrice").addEventListener("click", function () {
+        sortAndShowProducts(ORDER_DESC_BY_PRICE);
     });
 
-    document.getElementById("sortByCount").addEventListener("click", function () {
-        sortAndShowProducts(ORDER_BY_PRICE);
+    document.getElementById("sortByRelevance").addEventListener("click", function () {
+        sortAndShowProducts(ORDER_DESC_BY_RELEVANCE);
     });
 
     // Vacía los valores establecidos en el filtro de rango de cantidad de productos
@@ -148,4 +156,18 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
         showProductsList();
     });
+
+    document.getElementById("buscarTexto").addEventListener("input", function () {
+        textoParaBuscar = document.getElementById("buscarTexto").value;
+
+        if ((textoParaBuscar != undefined) && (textoParaBuscar != "")) {
+            textoParaBuscar = textoParaBuscar.toLowerCase();
+        }
+        else {
+            textoParaBuscar = '';
+        }
+
+        showProductsList();
+    });
+
 });
