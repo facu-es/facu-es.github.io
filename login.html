@@ -169,7 +169,10 @@
     }
 
     // Escucha de evento de click sobre el boton de login
-    botonIniciarSesion.addEventListener('click', autenticarUsuario);
+    document.addEventListener("DOMContentLoaded", function () {
+      botonIniciarSesion.addEventListener('click', autenticarUsuario);
+    };
+
   </script>
 </body>
 
