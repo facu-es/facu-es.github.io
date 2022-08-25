@@ -41,10 +41,12 @@ let getJSONData = function (url) {
 }
 
 // Gestion de menus de usuario
-let botonCuentaUsuario = document.getElementById("cuenta-usuario");
-let botonCrearUsuario = document.getElementById("crear-cuenta");
-let menuOpcionesUsuario = document.getElementById("menu-usuario");
-var usuarioActual = null;
+document.addEventListener("DOMContentLoaded", function () {
+  let botonCuentaUsuario = document.getElementById("cuenta-usuario");
+  let botonCrearUsuario = document.getElementById("crear-cuenta");
+  let menuOpcionesUsuario = document.getElementById("menu-usuario");
+  var usuarioActual = null;
+};
 
 function adquiereNombreUsuario() {
   let mantenerSesionIniciada = localStorage.getItem("mantenersesioniniciada");
