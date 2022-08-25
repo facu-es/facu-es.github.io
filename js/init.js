@@ -7,6 +7,11 @@ const CART_INFO_URL = "https://japceibal.github.io/emercado-api/user_cart/";
 const CART_BUY_URL = "https://japceibal.github.io/emercado-api/cart/buy.json";
 const EXT_TYPE = ".json";
 
+let botonCuentaUsuario = undefined;
+let botonCrearUsuario = undefined;
+let menuOpcionesUsuario = undefined;
+let usuarioActual = undefined;
+
 let showSpinner = function () {
   document.getElementById("spinner-wrapper").style.display = "block";
 }
@@ -42,11 +47,11 @@ let getJSONData = function (url) {
 
 // Gestion de menus de usuario
 document.addEventListener("DOMContentLoaded", function () {
-  let botonCuentaUsuario = document.getElementById("cuenta-usuario");
-  let botonCrearUsuario = document.getElementById("crear-cuenta");
-  let menuOpcionesUsuario = document.getElementById("menu-usuario");
-  var usuarioActual = null;
-};
+  botonCuentaUsuario = document.getElementById("cuenta-usuario");
+  botonCrearUsuario = document.getElementById("crear-cuenta");
+  menuOpcionesUsuario = document.getElementById("menu-usuario");
+  usuarioActual = null;
+});
 
 function adquiereNombreUsuario() {
   let mantenerSesionIniciada = localStorage.getItem("mantenersesioniniciada");
