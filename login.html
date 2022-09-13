@@ -74,15 +74,13 @@
       <p>Clickea <a target="_blank" href="Letra.pdf">aquí</a> para descargar la letra del obligatorio.</p>
     </div>
   </footer>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
-    integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/crypto-js-4.1.1.min.js"></script>
   <script type="module">
     // Importa scripts de Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
-    // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-analytics.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-auth.js";
-    import { getDatabase, set, ref, child, get, update, remove } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-database.js";
+    import { initializeApp } from "./js/firebase-9.9.2/firebase-app.js";
+    // import { getAnalytics } from "./js/firebase-9.9.2/firebase-analytics.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "./js/firebase-9.9.2/firebase-auth.js";
+    import { getDatabase, set, ref, child, get, update, remove } from "./js/firebase-9.9.2/firebase-database.js";
 
     // Inicializa configuracion de Firebase
     const firebaseConfig = {
