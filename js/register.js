@@ -1,8 +1,8 @@
 // Importa scripts de Firebase
-import { initializeApp } from "./js/firebase-9.9.2/firebase-app.js";
-// import { getAnalytics } from "./js/firebase-9.9.2/firebase-analytics.js";
-// import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "./js/firebase-9.9.2/firebase-auth.js";
-import { getDatabase, set, ref, child, get, update, remove } from "./js/firebase-9.9.2/firebase-database.js";
+import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
+// import { getAnalytics } from "./firebase-9.9.2/firebase-analytics.js";
+// import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "./firebase-9.9.2/firebase-auth.js";
+import { getDatabase, set, ref, child, get, update, remove } from "./firebase-9.9.2/firebase-database.js";
 
 // Inicializa configuracion de Firebase
 const firebaseConfig = {
