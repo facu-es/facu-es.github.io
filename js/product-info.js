@@ -64,8 +64,8 @@ function showProductInfo() {
                             </ol>
                         </nav>
                         <hr class="singleline">
-                        <div class="text-muted"><span>Cantidad vendidos: ${currentProductInfo.soldCount}</span></div>
-                        <div> <span> Precio: ${currentProductInfo.currency}
+                        <div><span class="fw-bold">Cantidades vendidas:</span> <span>${currentProductInfo.soldCount}</span></div>
+                        <div> <span class="fw-bold">Precio: </span><span>${currentProductInfo.currency}
                                 ${currentProductInfo.cost}</span> </div>
                         <hr class="singleline">
                         <div> <span>${currentProductInfo.description}<span><br>
