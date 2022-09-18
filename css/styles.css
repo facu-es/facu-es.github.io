@@ -189,6 +189,12 @@ a.custom-card:hover {
   color: orange;
 }
 
+/*
+
+Inicio de sesión
+
+*/
+
 .logos-login {
   height: 40px;
   object-fit: cover;
@@ -198,4 +204,49 @@ a.custom-card:hover {
 
 .login-register-background {
   background-color: rgb(248, 249, 250);
+}
+
+/*
+
+Product-Info Comentarios
+
+*/
+
+.estrella-marcada {
+  color: orange;
+}
+
+.estrella-sin-marcar {
+  color: rgb(24, 24, 24);
+}
+
+/*
+
+Product-Info Productos
+
+*/
+
+.breadcrumb-item+.breadcrumb-item::before {
+  content: ">"
+}
+
+.breadcrumb {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: .1rem 0rem !important;
+  margin-bottom: 0rem;
+  list-style: none;
+  background-color: #ffffff;
+  border-radius: .25rem
+}
+
+.row-underline {
+  content: "";
+  display: block;
+  border-bottom: 2px solid #1d1d1d;
+  margin: 0px 0px;
+  margin-bottom: 20px;
+  margin-top: 15px
 }
