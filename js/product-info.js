@@ -3,35 +3,54 @@ let currentCommentsArray = [];
 
 // Crea el contenido HTML que muestra el currentProductInfoo
 function showProductInfo() {
-
+    let imagenesProducto = "";
+    let relacionadosProducto = "";
     let htmlContentToAppend = "";
+        
+    // Construye html con las imagenes del producto
+    // NOTA para mi: Podria haber utilizado la notacion hardcodeada de no ser porque un solo producto contiene 5 imagenes
+    // aunque no está representadas en el JSON entregado por el servidor.
+    for (let i = 1; i < currentProductInfo.images.length; i++) {
+        imagenesProducto += `
+                        <div class="col-4 mt-1">
+                            <img src="${currentProductInfo.images[i]}" data-mdb-img="${currentProductInfo.images[i]}"
+                                alt="Imagen ${i} de ${currentProductInfo.name}" class="img-thumbnail" />
+                        </div>
+        `;
+    }
+
+    // Construye html con los productos relacionados del producto
+    // NOTA para mi: Podria haber utilizado la notacion hardcodeada de no ser porque la API no define explicitamente
+    // que solo se presenten dos relacionados, aunque ese ha sido el caso
+    for (let i = 0; i < currentProductInfo.relatedProducts.length; i++) {
+        relacionadosProducto += `
+                            <div class="col-md-6">
+                                <div class="card mb-4 shadow-sm custom-card cursor-active">
+                                    <img class="card-img-top"
+                                        src="${currentProductInfo.relatedProducts[i].image}"
+                                        alt="Imagen de ${currentProductInfo.relatedProducts[i].name}">
+                                    <h3 class="m-3">${currentProductInfo.relatedProducts[i].name}</h3>
+                                </div>
+                            </div>
+                            `
+    }
+    
     htmlContentToAppend += `
     <div class="row mt-4">
-                        <div class="row row-underline">
-                            <div class="text-center p-4"> <h2>${currentProductInfo.name}</h2></div>
-                        </div>
-                    </div>
+        <div class="row row-underline">
+            <div class="text-center p-4"> <h2>${currentProductInfo.name}</h2></div>
+            </div>
+        </div>
     <div class="container-fluid">
         <div class="row">
             <div class="row mt-2 mb-2">
                 <div class="col-md-6">
                     <div class="card mb-4 shadow-sm custom-card cursor-active">
                         <img class="bd-placeholder-img card-img-top" src="${currentProductInfo.images[0]}"
-                            alt="Imagen de ${currentProductInfo.name}">
+                            alt="Imagen principal de ${currentProductInfo.name}">
                     </div>
                     <div class="row">
-                        <div class="col-4 mt-1">
-                            <img src="${currentProductInfo.images[1]}" data-mdb-img="${currentProductInfo.images[1]}"
-                                alt="Imagen 2 de ${currentProductInfo.name}" class="img-thumbnail" />
-                        </div>
-                        <div class="col-4 mt-1">
-                            <img src="${currentProductInfo.images[2]}" data-mdb-img="${currentProductInfo.images[2]}"
-                                alt="Imagen 3 de ${currentProductInfo.name}" class="img-thumbnail" />
-                        </div>
-                        <div class="col-4 mt-1">
-                            <img src="${currentProductInfo.images[3]}" data-mdb-img="${currentProductInfo.images[3]}"
-                                alt="Imagen 4 de ${currentProductInfo.name}" class="img-thumbnail" />
-                    </div>
+                        ${imagenesProducto}
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -61,22 +80,7 @@ function showProductInfo() {
                         </div>
                     </div>
                     <div class="row mt-2 mb-2">
-                        <div class="col-md-6">
-                            <div class="card mb-4 shadow-sm custom-card cursor-active">
-                                <img class="card-img-top"
-                                    src="${currentProductInfo.relatedProducts[0].image}"
-                                    alt="Imagen de ${currentProductInfo.relatedProducts[0].name}">
-                                <h3 class="m-3">${currentProductInfo.relatedProducts[0].name}</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card mb-4 shadow-sm custom-card cursor-active">
-                                <img class="card-img-top"
-                                    src="${currentProductInfo.relatedProducts[1].image}"
-                                    alt="Imagen de ${currentProductInfo.relatedProducts[1].name}">
-                                <h3 class="m-3">${currentProductInfo.relatedProducts[1].name}</h3>
-                            </div>
-                        </div>
+                        ${relacionadosProducto}
                     </div>
                     <!-- Comentarios -->
                     <div class="row">
@@ -154,7 +158,7 @@ function showCommentsList() {
 //elementos HTML presentes en el DOM.
 document.addEventListener("DOMContentLoaded", function (e) {
     if (localStorage.getItem("prodID") === null) {
-        alert("Debe seleccionar un currentProductInfoo");
+        alert("Debe seleccionar un producto");
     } else {
         getJSONData(PRODUCT_INFO_URL + localStorage.getItem("prodID") + EXT_TYPE).then(function (resultObj) {
             if (resultObj.status === "ok") {
