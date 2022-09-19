@@ -7,9 +7,7 @@ const CART_INFO_URL = "https://japceibal.github.io/emercado-api/user_cart/";
 const CART_BUY_URL = "https://japceibal.github.io/emercado-api/cart/buy.json";
 const EXT_TYPE = ".json";
 
-let botonCuentaUsuario = undefined;
-let botonCrearUsuario = undefined;
-let menuOpcionesUsuario = undefined;
+let botonesInicioRegistroCuenta = undefined;
 let usuarioActual = undefined;
 
 let showSpinner = function () {
@@ -47,9 +45,7 @@ let getJSONData = function (url) {
 
 // Gestion de menus de usuario
 document.addEventListener("DOMContentLoaded", function () {
-  botonCuentaUsuario = document.getElementById("cuenta-usuario");
-  botonCrearUsuario = document.getElementById("crear-cuenta");
-  menuOpcionesUsuario = document.getElementById("menu-usuario");
+  botonesInicioRegistroCuenta = document.getElementById("inicio-registro-cuenta");
   usuarioActual = null;
 });
 
@@ -73,24 +69,20 @@ function cerrarSesion() {
 window.onload = function () {
   adquiereNombreUsuario()
   if (usuarioActual == null) {
-    // Cuando no hay usuario logeado se oculta el menu de usuario y se muestra el boton de crear cuenta y el de iniciar sesión
-    botonCuentaUsuario.innerText = "Iniciar sesión";
-    botonCuentaUsuario.classList.replace("nav-link", "btn", "active");
-    botonCuentaUsuario.classList.add("btn-success");
-    botonCuentaUsuario.href = "login.html";
-
-    menuOpcionesUsuario.style = "display: none";
-
-    // Por requisito de la letra se fuerza el inicio de sesion
-    window.location = "login.html"
+    // Cuando no hay usuario logeado se crea el boton de crear cuenta y el de iniciar sesión
+    botonesInicioRegistroCuenta.innerHTML += `
+      <a class="btn btn-danger" href="register.html" id="crear-cuenta">Crear cuenta</a>
+      <a class="btn btn-success" href="login.html" id="cuenta-usuario">Iniciar sesión</a>
+    `
   } else {
-    botonCrearUsuario.style = "display: none";
-
-    botonCuentaUsuario.innerText = usuarioActual.nombre_completo;
-    botonCuentaUsuario.classList.replace("nav-link", "btn", "active");
-    botonCuentaUsuario.classList.add("btn-primary");
-    botonCuentaUsuario.href = "#";
-
-    menuOpcionesUsuario.style = "display: block";
+    botonesInicioRegistroCuenta.innerHTML += `
+      <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">${usuarioActual.nombre_completo}</button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="cart.html">Mi carrito</a></li>
+          <li><a class="dropdown-item" href="my-profile.html">Mi perfil</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="javascript:cerrarSesion()">Cerrar sesión</a></li>
+        </ul>
+    `
   }
 }
