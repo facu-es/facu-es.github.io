@@ -1,6 +1,17 @@
 let currentProductInfo = [];
 let currentCommentsArray = [];
 
+
+// Actualiza el valor del producto elegido en el Almacen Local del navegador
+function setProdID(id) {
+    localStorage.setItem("prodID", id);
+    adquiereProductoComentarios();
+}
+
+function setPrincipalImage(imagen) {
+    document.getElementById("imagen-principal").src = imagen;
+}
+
 // Crea el contenido HTML que muestra el currentProductInfoo
 function showProductInfo() {
     let imagenesProducto = "";
@@ -10,9 +21,9 @@ function showProductInfo() {
     // Construye html con las imagenes del producto
     // NOTA para mi: Podria haber utilizado la notacion hardcodeada de no ser porque un solo producto contiene 5 imagenes
     // aunque no está representadas en el JSON entregado por el servidor.
-    for (let i = 1; i < currentProductInfo.images.length; i++) {
+    for (let i = 0; i < currentProductInfo.images.length; i++) {
         imagenesProducto += `
-                        <div class="col-4 mt-1">
+                        <div onmouseover="setPrincipalImage('${currentProductInfo.images[i]}')" class="col-3 mt-1">
                             <img src="${currentProductInfo.images[i]}" data-mdb-img="${currentProductInfo.images[i]}"
                                 alt="Imagen ${i} de ${currentProductInfo.name}" class="img-thumbnail" />
                         </div>
@@ -24,7 +35,7 @@ function showProductInfo() {
     // que solo se presenten dos relacionados, aunque ese ha sido el caso
     for (let i = 0; i < currentProductInfo.relatedProducts.length; i++) {
         relacionadosProducto += `
-                            <div class="col-md-6">
+                            <div onclick="setProdID(${currentProductInfo.relatedProducts[i].id})" class="col-md-6">
                                 <div class="card mb-4 shadow-sm custom-card cursor-active">
                                     <img class="card-img-top"
                                         src="${currentProductInfo.relatedProducts[i].image}"
@@ -46,7 +57,7 @@ function showProductInfo() {
             <div class="row mt-2 mb-2">
                 <div class="col-md-6">
                     <div class="card mb-4 shadow-sm custom-card cursor-active">
-                        <img class="bd-placeholder-img card-img-top" src="${currentProductInfo.images[0]}"
+                        <img class="bd-placeholder-img card-img-top" src="${currentProductInfo.images[0]}" id="imagen-principal"
                             alt="Imagen principal de ${currentProductInfo.name}">
                     </div>
                     <div class="row">
@@ -153,10 +164,7 @@ function showCommentsList() {
     document.getElementById("comentarios").innerHTML = htmlContentToAppend;
 }
 
-//Función que se ejecuta una vez que se haya lanzado el evento de
-//que el documento se encuentra cargado, es decir, se encuentran todos los
-//elementos HTML presentes en el DOM.
-document.addEventListener("DOMContentLoaded", function (e) {
+function adquiereProductoComentarios() {
     if (localStorage.getItem("prodID") === null) {
         alert("Debe seleccionar un producto");
     } else {
@@ -177,4 +185,11 @@ document.addEventListener("DOMContentLoaded", function (e) {
             }
         });
     }
+}
+
+//Función que se ejecuta una vez que se haya lanzado el evento de
+//que el documento se encuentra cargado, es decir, se encuentran todos los
+//elementos HTML presentes en el DOM.
+document.addEventListener("DOMContentLoaded", function (e) {
+    adquiereProductoComentarios();
 });
