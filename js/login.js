@@ -2,7 +2,7 @@
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
 // import { getAnalytics } from "./firebase-9.9.2/firebase-analytics.js";
 // import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "./firebase-9.9.2/firebase-auth.js";
-import { getDatabase, set, ref, child, get, update, remove } from "./firebase-9.9.2/firebase-database.js";
+import { getDatabase, ref, child, get } from "./firebase-9.9.2/firebase-database.js";
 
 // Inicializa configuracion de Firebase
 const firebaseConfig = {
@@ -21,24 +21,26 @@ const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 const db = getDatabase();
 
-// Guarda los elementos del formulario
-const nombreUsuario = document.getElementById('nombre-usuario');
-const contraUsuario = document.getElementById('contra-usuario');
-const botonSesionInciada = document.getElementById('flexSwitchCheckDefault');
-const botonIniciarSesion = document.getElementById('iniciar-sesion');
-const botonIniciaConGoogle = document.getElementById('inicia-con-google');
+// Inicializa variables para los elementos del formulario
+let nombreUsuario = undefined;
+let contraUsuario = undefined;
+let botonSesionInciada = undefined;
 
 function validaCamposFormulario() {
+  // Aquiere valores del formulario
+  nombreUsuario = document.getElementById('nombre-usuario').value;
+  contraUsuario = document.getElementById('contra-usuario').value;
+  
   // Definen las constantes de expresion regular que deben cumplir los datos ingresados
   const usuarioRegEx = /^[a-zA-Z0-9]{5,}$/;
 
   // Si el nombre de usuario no cumple con la expresion regular, muestra un mensaje de error
-  if (!usuarioRegEx.test(nombreUsuario.value)) {
+  if (!usuarioRegEx.test(nombreUsuario)) {
     alert('El nombre de usuario debe ser de al menos 5 caracteres y solo puede contener caracteres alfanumericos');
     return false;
   }
   // Si la contraseña no cumple con la expresion regular, muestra un mensaje de error
-  if (!contraUsuario.value) {
+  if (!contraUsuario) {
     alert('La contraseña no puede estar vacía');
     return false;
   }
@@ -55,10 +57,10 @@ function autenticarUsuario() {
 
   const referenciaBD = ref(db);
 
-  get(child(referenciaBD, "ListadoUsuarios/" + nombreUsuario.value)).then((intento) => {
+  get(child(referenciaBD, "ListadoUsuarios/" + nombreUsuario)).then((intento) => {
     if (intento.exists()) {
       let contraEnBD = decifrarContra(intento.val().contra);
-      if (contraEnBD == contraUsuario.value) {
+      if (contraEnBD == contraUsuario) {
         iniciarSesion(intento.val());
         window.location.href = "index.html";
       }
@@ -74,12 +76,14 @@ function autenticarUsuario() {
 
 // Funcion para descifrar una contraseña utilizando AES
 function decifrarContra(contraEnBD) {
-  var contraDescifrada = CryptoJS.AES.decrypt(contraEnBD, contraUsuario.value);
+  var contraDescifrada = CryptoJS.AES.decrypt(contraEnBD, contraUsuario);
   return contraDescifrada.toString(CryptoJS.enc.Utf8);
 }
 
 // Funcion para guardar en almacenamiento local o en almacenamiento de sesion el usuario logueado
 function iniciarSesion(usuarioIniciado) {
+  botonSesionInciada = document.getElementById('recuerdame');
+  
   if (botonSesionInciada.checked) {
     localStorage.setItem('mantenersesioniniciada', true);
     localStorage.setItem('usuario', JSON.stringify(usuarioIniciado));
@@ -91,5 +95,19 @@ function iniciarSesion(usuarioIniciado) {
 
 // Escucha de evento de click sobre el boton de login
 document.addEventListener("DOMContentLoaded", function () {
-  botonIniciarSesion.addEventListener('click', autenticarUsuario);
+  let usuarioActual = undefined;
+
+  if (localStorage.getItem("mantenersesioniniciada")) {
+      usuarioActual = JSON.parse(localStorage.getItem("usuario"));
+  } else {
+      usuarioActual = JSON.parse(sessionStorage.getItem("usuario"));
+  }
+
+  if (usuarioActual != undefined) {
+    alert("Ya tiene una sesion iniciada de: " + usuarioActual.nombre_usuario);
+    window.location.href = "index.html";
+  }
+
+  document.getElementById('iniciar-sesion').addEventListener('click', autenticarUsuario);
+  // document.getElementById('inicia-con-google').addEventListener('click', autenticarConGoogle);
 });
