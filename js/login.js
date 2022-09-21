@@ -1,7 +1,7 @@
 // Importa scripts de Firebase
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
 // import { getAnalytics } from "./firebase-9.9.2/firebase-analytics.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "./firebase-9.9.2/firebase-auth.js";
+// import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "./firebase-9.9.2/firebase-auth.js";
 import { getDatabase, set, ref, child, get, update, remove } from "./firebase-9.9.2/firebase-database.js";
 
 // Inicializa configuracion de Firebase
@@ -52,6 +52,7 @@ function autenticarUsuario() {
   if (!validaCamposFormulario()) {
     return;
   };
+
   const referenciaBD = ref(db);
 
   get(child(referenciaBD, "ListadoUsuarios/" + nombreUsuario.value)).then((intento) => {
