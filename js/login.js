@@ -79,12 +79,12 @@ function decifrarContra(contraEnBD) {
 
 // Funcion para guardar en almacenamiento local o en almacenamiento de sesion el usuario logueado
 function iniciarSesion(usuarioIniciado) {
-  if (!botonSesionInciada.checked) {
-    sessionStorage.setItem('usuario', JSON.stringify(usuarioIniciado));
-  }
-  else {
+  if (botonSesionInciada.checked) {
     localStorage.setItem('mantenersesioniniciada', true);
     localStorage.setItem('usuario', JSON.stringify(usuarioIniciado));
+  }
+  else {
+    sessionStorage.setItem('usuario', JSON.stringify(usuarioIniciado));
   }
 }
 
