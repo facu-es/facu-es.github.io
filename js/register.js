@@ -1,8 +1,6 @@
 // Importa scripts de Firebase
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
-// import { getAnalytics } from "./firebase-9.9.2/firebase-analytics.js";
-// import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "./firebase-9.9.2/firebase-auth.js";
-import { getDatabase, set, ref, child, get, update, remove } from "./firebase-9.9.2/firebase-database.js";
+import { getDatabase, set, ref, child, get } from "./firebase-9.9.2/firebase-database.js";
 
 // Inicializa configuracion de Firebase
 const firebaseConfig = {
@@ -18,35 +16,39 @@ const firebaseConfig = {
 
 // Inicializa Firebase (aplicacion y acceso a base de datos en tiempo real)
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 const db = getDatabase();
 
-// Guarda los elementos del formulario
-const nombreRegistro = document.getElementById('nombre-registro');
-const contraRegistro = document.getElementById('contra-registro');
-const nombreUsuarioRegistro = document.getElementById('usuario-registro');
-const correoRegistro = document.getElementById('correo-registro');
-const botonRegistrar = document.getElementById('registrarse');
+// Inicializa variables para los elementos del formulario
+let nombreRegistro = undefined;
+let contraRegistro = undefined;
+let correoRegistro = undefined;
+let nombreUsuarioRegistro = undefined;
 
 // Realiza validaciones del formulario de Registro
 function validaCamposFormulario() {
+  // Aquiere valores del formulario
+  nombreRegistro = document.getElementById('nombre-registro').value;
+  contraRegistro = document.getElementById('contra-registro').value;
+  correoRegistro = document.getElementById('correo-registro').value;
+  nombreUsuarioRegistro = document.getElementById('usuario-registro').value;
+
   // Definen las constantes de expresion regular que deben cumplir los datos ingresados
   const nombreRegEx = /^[a-zA-Z\s]+$/;
   const correoRegEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const usuarioRegEx = /^[a-zA-Z0-9]{5,}$/;
 
   // Si el nombre completo no cumple con la expresion regular, muestra un mensaje de error
-  if (!nombreRegEx.test(nombreRegistro.value)) {
+  if (!nombreRegEx.test(nombreRegistro)) {
     alert('El nombre completo solo puede contener caracteres alfabeticos y espacios');
     return false;
   }
   // Si el correo electronico no cumple con la expresion regular, muestra un mensaje de error
-  if (!correoRegEx.test(correoRegistro.value)) {
+  if (!correoRegEx.test(correoRegistro)) {
     alert('El correo electronico debe ser válido');
     return false;
   }
   // Si el nombre de usuario no cumple con la expresion regular, muestra un mensaje de error
-  if (!usuarioRegEx.test(nombreUsuarioRegistro.value)) {
+  if (!usuarioRegEx.test(nombreUsuarioRegistro)) {
     alert('El nombre de usuario debe ser de al menos 5 caracteres y solo puede contener caracteres alfanumericos');
     return false;
   }
@@ -61,7 +63,7 @@ function iniciarSesion(usuario) {
 
 // Cifra la contraseña con el algoritmo de cifrado AES
 function cifrarContra() {
-  const cifrada = CryptoJS.AES.encrypt(contraRegistro.value, contraRegistro.value);
+  const cifrada = CryptoJS.AES.encrypt(contraRegistro, contraRegistro);
   return cifrada.toString();
 }
 
@@ -75,26 +77,26 @@ function registrarUsuario() {
   const referenciaBD = ref(db);
 
   // Busca un elemento con el nombre de usuario ingresado, si existe alerta al usuario y no registra
-  get(child(referenciaBD, "ListadoUsuarios/" + nombreUsuarioRegistro.value)).then((intento) => {
+  get(child(referenciaBD, "ListadoUsuarios/" + nombreUsuarioRegistro)).then((intento) => {
     if (intento.exists()) {
       alert('El nombre de usuario ya existe intente con otro');
     }
     // Crea el usuario en la base de datos
     else {
-      set(ref(db, "ListadoUsuarios/" + nombreUsuarioRegistro.value),
+      set(ref(db, "ListadoUsuarios/" + nombreUsuarioRegistro),
         {
-          nombre_completo: nombreRegistro.value,
-          correo: correoRegistro.value,
-          nombre_usuario: nombreUsuarioRegistro.value,
+          nombre_completo: nombreRegistro,
+          correo: correoRegistro,
+          nombre_usuario: nombreUsuarioRegistro,
           contra: cifrarContra()
         })
         // Inicia sesion con el usuario registrado
         .then(() => {
           alert('Usuario registrado correctamente');
           iniciarSesion({
-            nombre_completo: nombreRegistro.value,
-            correo: correoRegistro.value,
-            nombre_usuario: nombreUsuarioRegistro.value,
+            nombre_completo: nombreRegistro,
+            correo: correoRegistro,
+            nombre_usuario: nombreUsuarioRegistro,
             contra: cifrarContra()
           });
         })
@@ -107,5 +109,5 @@ function registrarUsuario() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  botonRegistrar.addEventListener('click', registrarUsuario);
+  document.getElementById('registrarse').addEventListener('click', registrarUsuario);
 });
