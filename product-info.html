@@ -46,6 +46,49 @@
             <div class="container my-1 py-1">
                 <div class="row d-flex justify-content-center">
                     <div class="col-md-12 col-lg-10 col-xl-10">
+                      <div class="row">
+                          <div class="col text-end">
+                            <div class="btn-group btn-group-toggle mb-4" data-bs-toggle="buttons">
+                                <input type="radio" class="btn-check" name="options" id="sortAscByDate">
+                                <label class="btn btn-light" for="sortAscByDate"><i class="fas fa-sort-amount-down-alt"> Fecha</i></label>
+                                <input type="radio" class="btn-check" name="options" id="sortDescByDate">
+                                <label class="btn btn-light" for="sortDescByDate"><i class="fas fa-sort-amount-down"> Fecha</i></label>
+                                <input type="radio" class="btn-check" name="options" id="sortAscByScore">
+                              <label class="btn btn-light" for="sortAscByScore"><i class="fas fa-sort-amount-down-alt"> Star</i></label>
+                              <input type="radio" class="btn-check" name="options" id="sortDescByScore">
+                              <label class="btn btn-light" for="sortDescByScore"><i class="fas fa-sort-amount-down"> Star</i></label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-lg-6 offset-lg-6 col-md-12 mb-1 container">
+                            <div class="row container p-0 m-0 mb-2">
+                              <div class="col">
+                                <p class="font-weight-normal text-end my-2">Calificacion </p>
+                              </div>
+                              <div class="col">
+                                <input class="form-control" type="number" placeholder="min." id="rangeFilterCountMin">
+                              </div>
+                              <div class="col">
+                                <input class="form-control" type="number" placeholder="máx." id="rangeFilterCountMax">
+                              </div>
+                              <div class="col-3 p-0">
+                                <div class="btn-group" role="group">
+                                  <button class="btn btn-light btn-block" id="rangeFilterCount">Filtrar</button>
+                                  <button class="btn btn-link btn-sm" id="clearRangeFilter">Limpiar</button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row container p-0 m-0">
+                              <div class="col-3 p-0">
+                                <p class="font-weight-normal text-end my-2">Busqueda</p>
+                              </div>
+                              <div class="col">
+                                <input class="form-control" type="search" placeholder="Buscar en los comentarios..." id="buscarTexto">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         <div class="card text-dark" id="comentarios">
                         </div>
                     </div>
@@ -66,20 +109,20 @@
                                     <ul class="rating mb-3" data-mdb-toggle="rating">
                                     </ul>
                                     <div class="form-outline">
-                                        <label class="form-label mt-2" for="puntos">Calificación:</label>
-                                        <select class="form-control" id="puntos" name="puntos" size="1">
+                                        <label class="form-label mt-2" for="puntosComentario">Calificación:</label>
+                                        <select class="form-control" id="puntosComentario" name="puntos" size="1">
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3" selected>3</option>
                                             <option value="4">4</option>
                                             <option value="5">5</option>
                                         </select>
-                                        <textarea class="form-control mt-2" id="textAreaExample" rows="4"
+                                        <textarea class="form-control mt-2" id="textoComentario" rows="4"
                                             placeholder="¿Cual es tu opinion?"></textarea>
-                                        <label class="form-label" for="textAreaExample"></label>
+                                        <label class="form-label" for="textoComentario"></label>
                                     </div>
                                     <div class="d-flex justify-content-between">
-                                        <button type="button" class="btn btn-success">Enviar<i
+                                        <button type="button" class="btn btn-success" id="enviarComentario">Enviar<i
                                                 class="fas fa-long-arrow-alt-right ms-1"></i></button>
                                         </button>
                                     </div>
@@ -112,6 +155,7 @@
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/moment-with-locales.js"></script>
     <script src="js/init.js"></script>
+    <script type="module" src="js/firebase-comentarios.js"></script>
     <script src="js/product-info.js"></script>
 </body>
 
