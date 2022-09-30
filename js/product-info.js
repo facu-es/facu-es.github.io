@@ -7,14 +7,13 @@ const ORDER_DESC_BY_SCORE = "Calificacion_Descendente";
 let minCount = undefined;
 let maxCount = undefined;
 let textoParaBuscar = undefined;
+let textoComentario = "";
+let puntosComentario = "";
 
+let currentProdID = undefined;
 let currentProductInfo = [];
 let currentCommentsArray = [];
 let firebaseCommentsArray = [];
-let currentProdID = "";
-
-let textoComentario = "";
-let puntosComentario = "";
 
 // Ordena los elementos del array recibido
 // Cuando se define criterio la funcion de comparacion adecuada es utilizada
@@ -178,10 +177,10 @@ function showCommentsList() {
 
 function adquiereProductoComentarios(prodID) {
     // Verifica que se haya elegido un producto
-    let currentProdID = prodID;
+    currentProdID = prodID;
         
     // Si no fue elegido ninguno redirige a products
-    if (prodID === null || prodID === "" | prodID === undefined) {
+    if (currentProdID === null || currentProdID === "" | currentProdID === undefined) {
         if (localStorage.getItem("prodID") === null) {
             alert("Debe elegir un producto");
             window.location.href = "products.html";
@@ -190,6 +189,7 @@ function adquiereProductoComentarios(prodID) {
             currentProdID = localStorage.getItem("prodID");
         }
     }
+
     // Adquiere el JSON del producto elegido
     getJSONData(PRODUCT_INFO_URL + currentProdID + EXT_TYPE).then(function (resultObj) {
         if (resultObj.status === "ok") {
@@ -198,6 +198,7 @@ function adquiereProductoComentarios(prodID) {
             showProductInfo()
         }
     });
+
     // Adquiere el JSON de los comentarios de JaP
     getJSONData(PRODUCT_INFO_COMMENTS_URL + currentProdID + EXT_TYPE).then(function (resultObj) {
         if (resultObj.status === "ok") {
