@@ -206,7 +206,7 @@ function showCommentsList() {
                 <h6 class="fw-bold mb-1">${comment.user}</h6>
                 <div class="d-flex align-items-center mb-1">
                   <p class="mb-0">
-                  <span>Fecha: </span>${moment(comment.dateTime, moment.ISO_8601).format('LL [a las] LTS')}
+                  <span>Fecha: </span>${moment(comment.dateTime, moment.ISO_8601).format('LL [, ] LTS')}
                   </p>
                 </div>
                 <div class="d-flex align-items-center mb-3">
