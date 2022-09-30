@@ -100,7 +100,17 @@ function sortAndShowProducts(sortCriteria, productsArray) {
 //que el documento se encuentra cargado, es decir, se encuentran todos los
 //elementos HTML presentes.
 document.addEventListener("DOMContentLoaded", function (e) {
-    getJSONData(PRODUCTS_URL + localStorage.getItem("catID") + ".json").then(function (resultObj) {
+    // Verifica que se haya elegido una categoría
+    let currentCategoryID = localStorage.getItem("catID");
+    
+    // Si no fue elegida ninguna redirige a categories
+    if (currentCategoryID === null) {
+        alert("Debe elegir una categoría");
+        window.location.href = "categories.html";
+        return
+    }
+    
+    getJSONData(PRODUCTS_URL + currentCategoryID + EXT_TYPE).then(function (resultObj) {
         if (resultObj.status === "ok") {
             currentProductsArray = resultObj.data.products
             document.getElementById('titulo-productos').innerHTML = "Verás aquí todos los productos de la categoría " + resultObj.data.catName;

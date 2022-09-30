@@ -61,12 +61,6 @@ function sortComments(criteria, array) {
     return result;
 }
 
-// Actualiza el valor del producto elegido en el Almacen Local del navegador
-function setProdID(id) {
-    localStorage.setItem("prodID", id);
-    adquiereProductoComentarios();
-}
-
 function setPrincipalImage(imagen) {
     document.getElementById("imagen-principal").src = imagen;
 }
@@ -97,7 +91,7 @@ function showProductInfo() {
     // que solo se presenten dos relacionados, aunque ese ha sido el caso
     for (let i = 0; i < currentProductInfo.relatedProducts.length; i++) {
         relacionadosProductoHTML += `
-        <div onclick="setProdID(${currentProductInfo.relatedProducts[i].id})" class="col-md-6">
+        <div onclick="adquiereProductoComentarios(${currentProductInfo.relatedProducts[i].id})" class="col-md-6">
             <div class="card mb-4 shadow-sm custom-card cursor-active w-100">
                 <img class="card-img-top"
                     src="${currentProductInfo.relatedProducts[i].image}"
@@ -182,37 +176,43 @@ function showCommentsList() {
     document.getElementById("comentarios").innerHTML = htmlContentToAppend;
 }
 
-function adquiereProductoComentarios() {
-    if (localStorage.getItem("prodID") === null) {
-        alert("Debe seleccionar un producto");
-    } else {
-        // Guarda en la variable global el id del producto actual
-        currentProdID = localStorage.getItem("prodID");
-
-        getJSONData(PRODUCT_INFO_URL + currentProdID + EXT_TYPE).then(function (resultObj) {
-            if (resultObj.status === "ok") {
-                currentProductInfo = resultObj.data
-                // Muestra el producto y los productos relacionados
-                showProductInfo()
-            }
-        });
-
-        // Adquiere el JSON de los Comentarios de JaP
-        getJSONData(PRODUCT_INFO_COMMENTS_URL + currentProdID + EXT_TYPE).then(function (resultObj) {
-            if (resultObj.status === "ok") {
-                currentCommentsArray = resultObj.data
-            }
-        }).then(function () {
-            // Adquiere el Array de Commentarios en Firebase
-            return adquiereComentariosFirebase(currentProdID)
-        }).then(function (firebaseArrayComments) {
-            // Combina los comentarios
-            firebaseArrayComments.forEach(elemento => currentCommentsArray.push(elemento));
-        }).then(function () {
-            // Muestra los comentarios
-            sortAndShowComments(ORDER_ASC_BY_DATE)
-        });
+function adquiereProductoComentarios(prodID) {
+    // Verifica que se haya elegido un producto
+    let currentProdID = prodID;
+        
+    // Si no fue elegido ninguno redirige a products
+    if (prodID === null || prodID === "" | prodID === undefined) {
+        if (localStorage.getItem("prodID") === null) {
+            alert("Debe elegir un producto");
+            window.location.href = "products.html";
+            return
+        } else {
+            currentProdID = localStorage.getItem("prodID");
+        }
     }
+    // Adquiere el JSON del producto elegido
+    getJSONData(PRODUCT_INFO_URL + currentProdID + EXT_TYPE).then(function (resultObj) {
+        if (resultObj.status === "ok") {
+            currentProductInfo = resultObj.data
+            // Muestra el producto y los productos relacionados
+            showProductInfo()
+        }
+    });
+    // Adquiere el JSON de los comentarios de JaP
+    getJSONData(PRODUCT_INFO_COMMENTS_URL + currentProdID + EXT_TYPE).then(function (resultObj) {
+        if (resultObj.status === "ok") {
+            currentCommentsArray = resultObj.data
+        }
+    }).then(function () {
+        // Adquiere el Array de commentarios en Firebase
+        return adquiereComentariosFirebase(currentProdID)
+    }).then(function (firebaseArrayComments) {
+        // Combina los comentarios
+        firebaseArrayComments.forEach(elemento => currentCommentsArray.push(elemento));
+    }).then(function () {
+        // Muestra los comentarios
+        sortAndShowComments(ORDER_ASC_BY_DATE)
+    });
 };
 
 // Ordena y muestra los comentarios
