@@ -73,98 +73,55 @@ function setPrincipalImage(imagen) {
 
 // Crea el contenido HTML que muestra el currentProductInfoo
 function showProductInfo() {
-    let imagenesProducto = "";
-    let relacionadosProducto = "";
-    let htmlContentToAppend = "";
-
-
+    let carrouselElementosHTML = "";
+    let carrouselIdicadoresHTML = "";
+    let relacionadosProductoHTML = "";
+    let detallesProductoHTML = "";
 
     // Construye html con las imagenes del producto
     // NOTA: Podria haber utilizado la notacion hardcodeada de no ser porque un solo producto contiene 5 imagenes
     // aunque no están representadas en el JSON entregado por el servidor.
+
     for (let i = 0; i < currentProductInfo.images.length; i++) {
-        imagenesProducto += `
-                        <div onmouseover="setPrincipalImage('${currentProductInfo.images[i]}')" class="col-3 mt-1">
-                            <img src="${currentProductInfo.images[i]}" data-mdb-img="${currentProductInfo.images[i]}"
-                                alt="Imagen ${i} de ${currentProductInfo.name}" class="img-thumbnail" />
-                        </div>
-        `;
-    }
+        if (i === 0) {
+            carrouselElementosHTML += `<div class="carousel-item active"><img src="${currentProductInfo.images[i]}" class="d-block w-100" alt="Imagen ${i + 1} de ${currentProductInfo.name}"></div>`;
+            carrouselIdicadoresHTML += `<button type="button" data-bs-target="#indicadorImagen" data-bs-slide-to="${i}" class="active" aria-current="true" aria-label="Imagen ${i + 1} de ${currentProductInfo.name}"></button>`;
+        } else {
+            carrouselElementosHTML += `<div class="carousel-item"><img src="${currentProductInfo.images[i]}" class="d-block w-100" alt="Imagen ${i + 1} de ${currentProductInfo.name}"></div>`;
+            carrouselIdicadoresHTML += `<button type="button" data-bs-target="#indicadorImagen" data-bs-slide-to="${i}" aria-label="Imagen ${i + 1} de ${currentProductInfo.name}"></button>`;
+        }
+    };
 
     // Construye html con los productos relacionados del producto
     // NOTA: Podria haber utilizado la notacion hardcodeada de no ser porque la API no define explicitamente
     // que solo se presenten dos relacionados, aunque ese ha sido el caso
     for (let i = 0; i < currentProductInfo.relatedProducts.length; i++) {
-        relacionadosProducto += `
-                            <div onclick="setProdID(${currentProductInfo.relatedProducts[i].id})" class="col-md-6">
-                                <div class="card mb-4 shadow-sm custom-card cursor-active">
-                                    <img class="card-img-top"
-                                        src="${currentProductInfo.relatedProducts[i].image}"
-                                        alt="Imagen de ${currentProductInfo.relatedProducts[i].name}">
-                                    <h3 class="m-3">${currentProductInfo.relatedProducts[i].name}</h3>
-                                </div>
-                            </div>
-                            `
-    }
-
-    htmlContentToAppend += `
-    <div class="row mt-4">
-        <div class="row row-underline">
-            <div class="text-center p-4"> <h2>${currentProductInfo.name}</h2></div>
+        relacionadosProductoHTML += `
+        <div onclick="setProdID(${currentProductInfo.relatedProducts[i].id})" class="col-md-6">
+            <div class="card mb-4 shadow-sm custom-card cursor-active w-100">
+                <img class="card-img-top"
+                    src="${currentProductInfo.relatedProducts[i].image}"
+                    alt="Imagen de ${currentProductInfo.relatedProducts[i].name}">
+                <h3 class="m-3">${currentProductInfo.relatedProducts[i].name}</h3>
             </div>
         </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="row mt-2 mb-2">
-                <div class="col-md-6">
-                    <div class="card mb-4 shadow-sm custom-card cursor-active">
-                        <img class="bd-placeholder-img card-img-top" src="${currentProductInfo.images[0]}" id="imagen-principal"
-                            alt="Imagen principal de ${currentProductInfo.name}">
-                    </div>
-                    <div class="row">
-                        ${imagenesProducto}
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div>
-                        <nav>
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="categories.html">Categorias</a></li>
-                                <li class="breadcrumb-item"><a href="products.html#">${currentProductInfo.category}</a>
-                                </li>
-                                <li class="breadcrumb-item active">${currentProductInfo.name}</li>
-                            </ol>
-                        </nav>
-                        <hr class="singleline">
-                        <div><span class="fw-bold">Cantidades vendidas:</span> <span>${currentProductInfo.soldCount}</span></div>
-                        <div> <span class="fw-bold">Precio: </span><span>${currentProductInfo.currency}
-                                ${currentProductInfo.cost}</span> </div>
-                        <hr class="singleline">
-                        <div> <span>${currentProductInfo.description}<span><br>
-                        </div>
-                    </div>
-                </div>
-
-                    <!-- Productos relacionados -->
-                    <div class="row mt-4">
-                        <div class="row row-underline">
-                            <div class="col-md-6"> <h3>Productos relacionados</h3></div>
-                        </div>
-                    </div>
-                    <div class="row mt-2 mb-2">
-                        ${relacionadosProducto}
-                    </div>
-                    <!-- Comentarios -->
-                    <div class="row">
-                        <div class="row row-underline">
-                            <div class="col-md-6"> <h3>Comentarios</h3></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         `
-    document.getElementById("producto-principal").innerHTML = htmlContentToAppend;
-    setPrincipalImage(currentProductInfo.images[0]);
+    }
+
+    detallesProductoHTML = `
+    <div><span class="fw-bold">Cantidades vendidas:</span> <span>${currentProductInfo.soldCount}</span></div>
+    <div><span class="fw-bold">Precio: </span><span>${currentProductInfo.currency} ${currentProductInfo.cost}</span></div>
+    <hr class="singleline">
+    <span>${currentProductInfo.description}</span>
+    `
+    // Inserta HTML en los identificadores del producto
+    document.getElementById("nombreProducto").innerHTML = currentProductInfo.name;
+    document.getElementById("carrouselIdicadores").innerHTML = carrouselIdicadoresHTML;
+    document.getElementById("carrouselElementos").innerHTML = carrouselElementosHTML;
+    document.getElementById("relacionadosProducto").innerHTML = relacionadosProductoHTML;
+    document.getElementById("categoriaActual").innerHTML = currentProductInfo.category;
+    document.getElementById("productoActual").innerHTML = currentProductInfo.name;
+    document.getElementById("detallesProducto").innerHTML = detallesProductoHTML;
 }
 
 // Crea el contenido HTML que muestra el currentProductInfoo
@@ -174,7 +131,6 @@ function showCommentsList() {
     for (let i = 0; i < currentCommentsArray.length; i++) {
         let comment = currentCommentsArray[i];
         let htmlPuntuacionEstrellas = "";
-
 
         // Construye html con las estrellas correspondientes a la puntuacion
         // NOTA para mi: En el for se usa menor que y no se incluye el valor de la variable, ya que el conteo inicia en 0.
@@ -206,7 +162,7 @@ function showCommentsList() {
                 <h6 class="fw-bold mb-1">${comment.user}</h6>
                 <div class="d-flex align-items-center mb-1">
                   <p class="mb-0">
-                  <span>Fecha: </span>${moment(comment.dateTime, moment.ISO_8601).format('LL [, ] LTS')}
+                  <span>Fecha: </span>${moment(comment.dateTime, moment.ISO_8601).format('LL [a las] LTS')}
                   </p>
                 </div>
                 <div class="d-flex align-items-center mb-3">
@@ -286,16 +242,12 @@ function limpiarFiltrosComentarios() {
     showCommentsList();
 }
 
-// Función que se ejecuta una vez que se haya lanzado el evento de
-// que el documento se encuentra cargado, es decir, se encuentran todos los
-// elementos HTML presentes en el DOM.
+// Espera a que se encuentran todos los elementos HTML cargados en el DOM.
 document.addEventListener("DOMContentLoaded", function (e) {
     // Descarga la informacion de los Productos y Comentarios y llama a las funciones que los muestran
     adquiereProductoComentarios();
 
-    // Al llamar a esta funcion no se le pasa el parámetro commentsArray
-    // ya que este fue inicializado con la escucha del evento "DOMContentLoaded"
-    // en la variable global currentCommentsArray y la funcion utiliza ese por defecto
+    // Eventos de escucha de clic en los botones para filtrar comentarios
     document.getElementById("sortAscByDate").addEventListener("click", function () {
         sortAndShowComments(ORDER_ASC_BY_DATE);
     });
@@ -312,8 +264,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
     // Vacía los valores establecidos en el filtro de rango de calificaciones
     document.getElementById("clearRangeFilter").addEventListener("click", limpiarFiltrosComentarios);
     document.getElementById("rangeFilterCount").addEventListener("click", function () {
-        // Obtengo el mínimo y máximo de los intervalos para filtrar por puntaje
-        // en los cometarios del producto
+        // Obtengo el mínimo y máximo de los intervalos para filtrar por puntaje en los cometarios del producto
         minCount = document.getElementById("rangeFilterCountMin").value;
         maxCount = document.getElementById("rangeFilterCountMax").value;
         if ((minCount != undefined) && (minCount != "") && (parseInt(minCount)) >= 0) {
