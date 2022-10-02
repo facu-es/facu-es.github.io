@@ -64,14 +64,14 @@ function setPrincipalImage(imagen) {
     document.getElementById("imagen-principal").src = imagen;
 }
 
-// Crea el contenido HTML que muestra el currentProductInfoo
+// Crea el contenido HTML del producto partiendo de currentProductInfo
 function showProductInfo() {
     let carrouselElementosHTML = "";
     let carrouselIdicadoresHTML = "";
     let relacionadosProductoHTML = "";
     let detallesProductoHTML = "";
 
-    // Construye html con las imagenes del producto
+    // Construye HTML con las imagenes del producto
     // NOTA: Podria haber utilizado la notacion hardcodeada de no ser porque un solo producto contiene 5 imagenes
     // aunque no están representadas en el JSON entregado por el servidor.
 
@@ -85,9 +85,9 @@ function showProductInfo() {
         }
     };
 
-    // Construye html con los productos relacionados del producto
+    // Construye HTML con los productos relacionados al producto principal
     // NOTA: Podria haber utilizado la notacion hardcodeada de no ser porque la API no define explicitamente
-    // que solo se presenten dos relacionados, aunque ese ha sido el caso
+    // que solo se presenten dos relacionados, aunque ese ha sido el caso.
     for (let i = 0; i < currentProductInfo.relatedProducts.length; i++) {
         relacionadosProductoHTML += `
         <div onclick="adquiereProductoComentarios(${currentProductInfo.relatedProducts[i].id})" class="col-md-6">
@@ -101,13 +101,15 @@ function showProductInfo() {
         `
     }
 
+    // Crea ventana de detalles del producto
     detallesProductoHTML = `
     <div><span class="fw-bold">Cantidades vendidas:</span> <span>${currentProductInfo.soldCount}</span></div>
     <div><span class="fw-bold">Precio: </span><span>${currentProductInfo.currency} ${currentProductInfo.cost}</span></div>
     <hr class="singleline">
     <span>${currentProductInfo.description}</span>
     `
-    // Inserta HTML en los identificadores del producto
+
+    // Inserta HTML dentro de los identificadores correspondientes desde DOM
     document.getElementById("nombreProducto").innerHTML = currentProductInfo.name;
     document.getElementById("carrouselIdicadores").innerHTML = carrouselIdicadoresHTML;
     document.getElementById("carrouselElementos").innerHTML = carrouselElementosHTML;
@@ -117,58 +119,50 @@ function showProductInfo() {
     document.getElementById("detallesProducto").innerHTML = detallesProductoHTML;
 }
 
-// Crea el contenido HTML que muestra el currentProductInfoo
+// Crea el contenido HTML que muestra los comentarios
 function showCommentsList() {
-
+    // Variable para almacenar los comentarios a mostrar en este llamado
     let htmlContentToAppend = "";
+
+    // Establece idioma para los textos de Fecha
+    moment.locale('es');
+
     for (let i = 0; i < currentCommentsArray.length; i++) {
         let comment = currentCommentsArray[i];
-        let htmlPuntuacionEstrellas = "";
-
-        // Construye html con las estrellas correspondientes a la puntuacion
-        // NOTA para mi: En el for se usa menor que y no se incluye el valor de la variable, ya que el conteo inicia en 0.
-        for (let i = 0; i < 5; i++) {
-            if (i < comment.score) {
-                // Mientras no se alcance el puntaje agregar en orden estrellas marcadas
-                htmlPuntuacionEstrellas += `<i class="fas fa-star estrella-marcada"></i>`
-            } else {
-                // Completa con estrellas apagadas lo restante necesario para llegar a 5
-                htmlPuntuacionEstrellas += `<i class="fas fa-star estrella-sin-marcar"></i>`
-            }
-        }
-
-        // Establece idioma para los textos de Fecha
-        moment.locale('es');
 
         // Funciones de filtrado a los comentarios
         if (((minCount == undefined) || (minCount != undefined && parseInt(comment.score) >= minCount)) &&
             ((maxCount == undefined) || (maxCount != undefined && parseInt(comment.score) <= maxCount)) &&
+            // El campo de busqueda coincide por texto en usuarios y comentarios 
             ((textoParaBuscar == undefined || textoParaBuscar == '') || (comment.user.toLowerCase().includes(textoParaBuscar) || comment.description.toLowerCase().includes(textoParaBuscar)))) {
 
             htmlContentToAppend += `
-        <div class="card-body p-4">
-            <div class="d-flex flex-start">
-              <img class="rounded-circle shadow-1-strong me-3"
-                src="img/img_perfil.png" alt="avatar" width="60"
-                height="60" />
-              <div>
-                <h6 class="fw-bold mb-1">${comment.user}</h6>
-                <div class="d-flex align-items-center mb-1">
-                  <p class="mb-0">
-                  <span>Fecha: </span>${moment(comment.dateTime, moment.ISO_8601).format('LLLL')}
-                  </p>
+            <div class="card-body p-4">
+                <div class="d-flex flex-start">
+                    <img class="rounded-circle shadow-1-strong me-3" src="img/img_perfil.png" alt="avatar" width="60"
+                        height="60" />
+                    <div>
+                        <h6 class="fw-bold mb-1">${comment.user}</h6>
+                        <div class="d-flex align-items-center mb-1">
+                            <p class="mb-0"><span>Fecha: </span>${moment(comment.dateTime, moment.ISO_8601).format('LLLL')}</p>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <span>Calificación: </span>
+                            <div class="star-ratings-sprite"><span style="width:${
+                // Con las siguientes clases de CSS se define una superposición de dos conjuntos de cinco estrellas
+                // el de abajo con estrellas grises, y el de arriba con estrellas amarillas.
+                // La longitud de la extensión de las estrellas amarillas la defino con la etiqueta style aplicada a span
+                // Como el valor de extensión ( width ) es porcentual, se requiere un cambio de variable mediante el multiplicador 20
+                // Como el maximo valor en comment.score es 5 con ese multiplicador se establece incluso la posibilidad de puntuaciones fraccionarias.
+                comment.score * 20}%" class="star-ratings-sprite-rating"></span>
+                            </div>
+                        </div>
+                        <p class="mb-0">${comment.description}</p>
+                    </div>
                 </div>
-                <div class="d-flex align-items-center mb-3">
-                <span>Calificación: </span>${htmlPuntuacionEstrellas}
-                </div>
-                <p class="mb-0">
-                ${comment.description}
-                </p>
-              </div>
             </div>
-          </div>
-
-          <hr class="my-0" />
+                            
+            <hr class="my-0" />
             `
         }
     }
@@ -178,7 +172,7 @@ function showCommentsList() {
 function adquiereProductoComentarios(prodID) {
     // Verifica que se haya elegido un producto
     currentProdID = prodID;
-        
+
     // Si no fue elegido ninguno redirige a products
     if (currentProdID === null || currentProdID === "" | currentProdID === undefined) {
         if (localStorage.getItem("prodID") === null) {
@@ -270,14 +264,13 @@ document.addEventListener("DOMContentLoaded", function (e) {
         maxCount = document.getElementById("rangeFilterCountMax").value;
         if ((minCount != undefined) && (minCount != "") && (parseInt(minCount)) >= 0) {
             minCount = parseInt(minCount);
-        }
-        else {
+        } else {
             minCount = undefined;
         }
+
         if ((maxCount != undefined) && (maxCount != "") && (parseInt(maxCount)) >= 0) {
             maxCount = parseInt(maxCount);
-        }
-        else {
+        } else {
             maxCount = undefined;
         }
         showCommentsList();
@@ -290,8 +283,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
         textoParaBuscar = document.getElementById("buscarTexto").value;
         if ((textoParaBuscar != undefined) && (textoParaBuscar != "")) {
             textoParaBuscar = textoParaBuscar.toLowerCase();
-        }
-        else {
+        } else {
             textoParaBuscar = undefined;
         }
         showCommentsList();
