@@ -31,7 +31,7 @@ function adquiereComentariosFirebase(prodID) {
     });
 };
 
-// Formulario de envio de comentarios nuevos
+// Formulario de envío de comentarios nuevos
 function enviaComentarioFirebase() {
     let comentario = {};
 
