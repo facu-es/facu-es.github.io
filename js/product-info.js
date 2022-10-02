@@ -16,7 +16,7 @@ let currentCommentsArray = [];
 let firebaseCommentsArray = [];
 
 // Ordena los elementos del array recibido
-// Cuando se define criterio la funcion de comparacion adecuada es utilizada
+// Cuando se define criterio la función de comparación adecuada es utilizada
 function sortComments(criteria, array) {
     let result = [];
     if (criteria === ORDER_ASC_BY_DATE) {
@@ -67,26 +67,26 @@ function setPrincipalImage(imagen) {
 // Crea el contenido HTML del producto partiendo de currentProductInfo
 function showProductInfo() {
     let carrouselElementosHTML = "";
-    let carrouselIdicadoresHTML = "";
+    let carrouselIndicadoresHTML = "";
     let relacionadosProductoHTML = "";
     let detallesProductoHTML = "";
 
-    // Construye HTML con las imagenes del producto
-    // NOTA: Podria haber utilizado la notacion hardcodeada de no ser porque un solo producto contiene 5 imagenes
+    // Construye HTML con las imágenes del producto
+    // NOTA: Podría haber utilizado la notación directa de no ser porque un solo producto contiene 5 imágenes
     // aunque no están representadas en el JSON entregado por el servidor.
 
     for (let i = 0; i < currentProductInfo.images.length; i++) {
         if (i === 0) {
             carrouselElementosHTML += `<div class="carousel-item active"><img src="${currentProductInfo.images[i]}" class="d-block w-100" alt="Imagen ${i + 1} de ${currentProductInfo.name}"></div>`;
-            carrouselIdicadoresHTML += `<button type="button" data-bs-target="#indicadorImagen" data-bs-slide-to="${i}" class="active" aria-current="true" aria-label="Imagen ${i + 1} de ${currentProductInfo.name}"></button>`;
+            carrouselIndicadoresHTML += `<button type="button" data-bs-target="#indicadorImagen" data-bs-slide-to="${i}" class="active" aria-current="true" aria-label="Imagen ${i + 1} de ${currentProductInfo.name}"></button>`;
         } else {
             carrouselElementosHTML += `<div class="carousel-item"><img src="${currentProductInfo.images[i]}" class="d-block w-100" alt="Imagen ${i + 1} de ${currentProductInfo.name}"></div>`;
-            carrouselIdicadoresHTML += `<button type="button" data-bs-target="#indicadorImagen" data-bs-slide-to="${i}" aria-label="Imagen ${i + 1} de ${currentProductInfo.name}"></button>`;
+            carrouselIndicadoresHTML += `<button type="button" data-bs-target="#indicadorImagen" data-bs-slide-to="${i}" aria-label="Imagen ${i + 1} de ${currentProductInfo.name}"></button>`;
         }
     };
 
     // Construye HTML con los productos relacionados al producto principal
-    // NOTA: Podria haber utilizado la notacion hardcodeada de no ser porque la API no define explicitamente
+    // NOTA: Podría haber utilizado la notación directa de no ser porque la API no define explícitamente
     // que solo se presenten dos relacionados, aunque ese ha sido el caso.
     for (let i = 0; i < currentProductInfo.relatedProducts.length; i++) {
         relacionadosProductoHTML += `
@@ -111,7 +111,7 @@ function showProductInfo() {
 
     // Inserta HTML dentro de los identificadores correspondientes desde DOM
     document.getElementById("nombreProducto").innerHTML = currentProductInfo.name;
-    document.getElementById("carrouselIdicadores").innerHTML = carrouselIdicadoresHTML;
+    document.getElementById("carrouselIndicadores").innerHTML = carrouselIndicadoresHTML;
     document.getElementById("carrouselElementos").innerHTML = carrouselElementosHTML;
     document.getElementById("relacionadosProducto").innerHTML = relacionadosProductoHTML;
     document.getElementById("categoriaActual").innerHTML = currentProductInfo.category;
@@ -133,7 +133,7 @@ function showCommentsList() {
         // Funciones de filtrado a los comentarios
         if (((minCount == undefined) || (minCount != undefined && parseInt(comment.score) >= minCount)) &&
             ((maxCount == undefined) || (maxCount != undefined && parseInt(comment.score) <= maxCount)) &&
-            // El campo de busqueda coincide por texto en usuarios y comentarios 
+            // El campo de búsqueda coincide por texto en usuarios y comentarios 
             ((textoParaBuscar == undefined || textoParaBuscar == '') || (comment.user.toLowerCase().includes(textoParaBuscar) || comment.description.toLowerCase().includes(textoParaBuscar)))) {
 
             htmlContentToAppend += `
@@ -153,7 +153,7 @@ function showCommentsList() {
                 // el de abajo con estrellas grises, y el de arriba con estrellas amarillas.
                 // La longitud de la extensión de las estrellas amarillas la defino con la etiqueta style aplicada a span
                 // Como el valor de extensión ( width ) es porcentual, se requiere un cambio de variable mediante el multiplicador 20
-                // Como el maximo valor en comment.score es 5 con ese multiplicador se establece incluso la posibilidad de puntuaciones fraccionarias.
+                // Como el máximo valor en comment.score es 5 con ese multiplicador se establece incluso la posibilidad de puntuaciones fraccionarias.
                 comment.score * 20}%" class="star-ratings-sprite-rating"></span>
                             </div>
                         </div>
@@ -199,7 +199,7 @@ function adquiereProductoComentarios(prodID) {
             currentCommentsArray = resultObj.data
         }
     }).then(function () {
-        // Adquiere el Array de commentarios en Firebase
+        // Adquiere el Array de comentarios en Firebase
         return adquiereComentariosFirebase(currentProdID)
     }).then(function (firebaseArrayComments) {
         // Combina los comentarios
@@ -239,7 +239,7 @@ function limpiarFiltrosComentarios() {
 
 // Espera a que se encuentran todos los elementos HTML cargados en el DOM.
 document.addEventListener("DOMContentLoaded", function (e) {
-    // Descarga la informacion de los Productos y Comentarios y llama a las funciones que los muestran
+    // Descarga la información de los Productos y Comentarios y llama a las funciones que los muestran
     adquiereProductoComentarios();
 
     // Eventos de escucha de clic en los botones para filtrar comentarios
@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
     // Vacía los valores establecidos en el filtro de rango de calificaciones
     document.getElementById("clearRangeFilter").addEventListener("click", limpiarFiltrosComentarios);
     document.getElementById("rangeFilterCount").addEventListener("click", function () {
-        // Obtengo el mínimo y máximo de los intervalos para filtrar por puntaje en los cometarios del producto
+        // Obtengo el mínimo y máximo de los intervalos para filtrar por puntaje en los comentarios del producto
         minCount = document.getElementById("rangeFilterCountMin").value;
         maxCount = document.getElementById("rangeFilterCountMax").value;
         if ((minCount != undefined) && (minCount != "") && (parseInt(minCount)) >= 0) {
