@@ -65,9 +65,6 @@ function enviaComentarioFirebase() {
     // Agrega comentario al array actual
     currentCommentsArray.push(comentario);
 
-    // Notifica al usuario
-    alert("Comentario enviado");
-
     // Limpia los campos
     textoComentario.value = "";
     puntosComentario.value = 3;
