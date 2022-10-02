@@ -43,7 +43,7 @@ let getJSONData = function (url) {
     });
 }
 
-// Gestion de menus de usuario
+// Gestión de menus de usuario
 document.addEventListener("DOMContentLoaded", function () {
   botonesInicioRegistroCuenta = document.getElementById("inicio-registro-cuenta");
   usuarioActual = null;
@@ -69,7 +69,7 @@ function cerrarSesion() {
 window.onload = function () {
   adquiereNombreUsuario()
   if (usuarioActual == null) {
-    // Cuando no hay usuario logeado se crea el boton de crear cuenta y el de iniciar sesión
+    // Cuando no hay usuario iniciado se crea el botón de crear cuenta y el de iniciar sesión
     botonesInicioRegistroCuenta.innerHTML += `
       <a class="btn btn-danger" href="register.html" id="crear-cuenta">Crear cuenta</a>
       <a class="btn btn-success" href="login.html" id="cuenta-usuario">Iniciar sesión</a>
@@ -86,3 +86,5 @@ window.onload = function () {
     `
   }
 }
+
+window.cerrarSesion = cerrarSesion;
