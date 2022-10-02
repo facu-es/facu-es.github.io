@@ -76,7 +76,7 @@ window.onload = function () {
     `
   } else {
     botonesInicioRegistroCuenta.innerHTML += `
-      <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">${usuarioActual.nombre_completo}</button>
+      <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">${usuarioActual.nombre_completo}</button>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="cart.html">Mi carrito</a></li>
           <li><a class="dropdown-item" href="my-profile.html">Mi perfil</a></li>
