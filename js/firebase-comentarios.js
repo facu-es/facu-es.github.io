@@ -2,7 +2,7 @@
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
 import { getDatabase, set, ref, child, get, push, update, remove } from "./firebase-9.9.2/firebase-database.js";
 
-// Inicializa configuracion de Firebase
+// Inicializa configuración de Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyCQGRFacISlyqP8jORHOMbNZnbP_w_5FqE",
     authDomain: "ecommerce-jap-2022.firebaseapp.com",
@@ -14,7 +14,7 @@ const firebaseConfig = {
     measurementId: "G-ZZS723TP0W"
 };
 
-// Inicializa Firebase (aplicacion y acceso a base de datos en tiempo real y login con Google)
+// Inicializa Firebase (aplicación y acceso a base de datos en tiempo real)
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 

@@ -7,7 +7,6 @@ const CART_INFO_URL = "https://japceibal.github.io/emercado-api/user_cart/";
 const CART_BUY_URL = "https://japceibal.github.io/emercado-api/cart/buy.json";
 const EXT_TYPE = ".json";
 
-let botonesInicioRegistroCuenta = undefined;
 let usuarioActual = undefined;
 
 let showSpinner = function () {
@@ -70,7 +69,7 @@ function cerrarSesion() {
 document.addEventListener("DOMContentLoaded", function (e) {
   adquiereNombreUsuario()
 
-    if (usuarioActual == null) {
+    if (usuarioActual == undefined || usuarioActual == null) {
       // Cuando no hay usuario iniciado se crea el botón de crear cuenta y el de iniciar sesión
       document.getElementById("inicio-registro-cuenta").innerHTML += `
         <a class="btn btn-danger" href="register.html" id="crear-cuenta">Crear cuenta</a>
