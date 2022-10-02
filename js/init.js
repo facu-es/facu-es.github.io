@@ -12,11 +12,11 @@ let usuarioActual = undefined;
 
 let showSpinner = function () {
   document.getElementById("spinner-wrapper").style.display = "block";
-}
+};
 
 let hideSpinner = function () {
   document.getElementById("spinner-wrapper").style.display = "none";
-}
+};
 
 let getJSONData = function (url) {
   let result = {};
@@ -41,15 +41,14 @@ let getJSONData = function (url) {
       hideSpinner();
       return result;
     });
-}
+};
 
-// Gestión de menus de usuario
-document.addEventListener("DOMContentLoaded", function () {
-  botonesInicioRegistroCuenta = document.getElementById("inicio-registro-cuenta");
-  usuarioActual = null;
-});
-
+// Comprueba sesión iniciada de usuario
 function adquiereNombreUsuario() {
+  if (usuarioActual != undefined || usuarioActual != null) {
+    return
+  }
+  
   let mantenerSesionIniciada = localStorage.getItem("mantenersesioniniciada");
 
   if (mantenerSesionIniciada) {
@@ -57,34 +56,37 @@ function adquiereNombreUsuario() {
   } else {
     usuarioActual = JSON.parse(sessionStorage.getItem("usuario"));
   }
-}
+};
 
+// Cierra la sesión del usuario
 function cerrarSesion() {
   sessionStorage.removeItem('usuario');
   localStorage.removeItem('usuario');
   localStorage.removeItem('mantenersesioniniciada');
   window.location.href = "index.html";
-}
+};
 
-window.onload = function () {
+// Gestión de menus de usuario
+document.addEventListener("DOMContentLoaded", function (e) {
   adquiereNombreUsuario()
-  if (usuarioActual == null) {
-    // Cuando no hay usuario iniciado se crea el botón de crear cuenta y el de iniciar sesión
-    botonesInicioRegistroCuenta.innerHTML += `
-      <a class="btn btn-danger" href="register.html" id="crear-cuenta">Crear cuenta</a>
-      <a class="btn btn-success" href="login.html" id="cuenta-usuario">Iniciar sesión</a>
-    `
-  } else {
-    botonesInicioRegistroCuenta.innerHTML += `
-      <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">${usuarioActual.nombre_completo}</button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="cart.html">Mi carrito</a></li>
-          <li><a class="dropdown-item" href="my-profile.html">Mi perfil</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="javascript:cerrarSesion()">Cerrar sesión</a></li>
-        </ul>
-    `
-  }
-}
+
+    if (usuarioActual == null) {
+      // Cuando no hay usuario iniciado se crea el botón de crear cuenta y el de iniciar sesión
+      document.getElementById("inicio-registro-cuenta").innerHTML += `
+        <a class="btn btn-danger" href="register.html" id="crear-cuenta">Crear cuenta</a>
+        <a class="btn btn-success" href="login.html" id="cuenta-usuario">Iniciar sesión</a>
+      `
+    } else {
+      document.getElementById("inicio-registro-cuenta").innerHTML += `
+        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">${usuarioActual.nombre_completo}</button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="cart.html">Mi carrito</a></li>
+            <li><a class="dropdown-item" href="my-profile.html">Mi perfil</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="javascript:cerrarSesion()">Cerrar sesión</a></li>
+          </ul>
+      `
+    }
+});
 
 window.cerrarSesion = cerrarSesion;
