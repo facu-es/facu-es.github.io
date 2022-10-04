@@ -109,5 +109,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   document.getElementById('iniciar-sesion').addEventListener('click', autenticarUsuario);
-  // document.getElementById('inicia-con-google').addEventListener('click', autenticarConGoogle);
+  
+  // Inicio de sesion con Google
+  document.getElementById('inicia-con-google').addEventListener('click', iniciarSesionGoogle);
+  
+  // Inicio de sesion con Github
+  document.getElementById('inicia-con-github').addEventListener('click', iniciarSesionGithub);
 });

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>eMercado - Todo lo que busques está aquí</title>
   <link href="css/font-raleway.css" rel="stylesheet">
+  <link href="css/font-awesome.min.css" rel="stylesheet">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
 </head>
@@ -43,21 +44,37 @@
               <!-- Boton de registro -->
               <a href="register.html" class="btn btn-secondary btn-lg w-100">Quiero registrar una cuenta</a>
 
-              <!-- Funcion aun no implementada -->
-              <!--
               <div class="divider d-flex align-items-center my-4">
-                <span>O</span>
-                <span class="divider-line"></span>
+                <div class="row text-center">
+                  <p>o inicia sesion con:</p>
+                  <span class="divider-line"></span>
+                </div>
+                <div class="d-flex align-items-center justify-content-center h-90">
+                  <!--
+                  <button type="button" class="btn btn-link btn-floating mx-1" id="inicia-con-facebook">
+                    <i class="fab fa-facebook-f"></i>
+                  </button>
+                  -->
+                  <button type="button" class="btn btn-link btn-floating mx-1" id="inicia-con-google">
+                    <i class="fab fa-google"></i>
+                  </button>
+                  <!-- 
+                  <button type="button" class="btn btn-link btn-floating mx-1" id="inicia-con-twitter">
+                    <i class="fab fa-twitter"></i>
+                  </button>
+                  -->
+                  <button type="button" class="btn btn-link btn-floating mx-1" id="inicia-con-github">
+                    <i class="fab fa-github"></i>
+                  </button>
+                  <!--
+                  <button type="button" class="btn btn-link btn-floating mx-1" id="inicia-con-microsoft">
+                    <i class="fab fa-microsoft"></i>
+                  </button>
+                  -->
+                </div>
               </div>
-
-              <div class="mx-3 my-2 py-2 bordert">
-                <button type="button" class="btn btn-light btn-outline-secondary w-100" id="inicia-con-google"> <img class="logos-login"
-                    src="img/logo-google.png" alt="Logo de Google"> Inicia con Google</button>
-              </div>
-              -->
             </div>
           </div>
-        </div>
       </section>
     </div>
   </main>
@@ -71,6 +88,7 @@
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="js/crypto-js-4.1.1.min.js"></script>
   <script type="module" src="js/login.js"></script>
+  <script type="module" src="js/firebase-login.js"></script>
 </body>
 
 </html>
