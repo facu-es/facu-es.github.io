@@ -1,6 +1,9 @@
 // Importa scripts de Firebase
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
-import { getAuth, signOut, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "./firebase-9.9.2/firebase-auth.js";
+import { getAuth, signInWithPopup, onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithEmailAndPassword } from "./firebase-9.9.2/firebase-auth.js";
+
+// Variables globales
+let usuarioIniciado = undefined;
 
 // Inicializa configuracion de Firebase
 const firebaseConfig = {
@@ -28,7 +31,7 @@ const google = new GoogleAuthProvider();
 
 // Configura menu de login (agrega casilla de ejemplo)
 google.setCustomParameters({
-    'login_hint': 'user@example.com'
+    'login_hint': 'usuario@google.com'
 });
 
 // Agrega autenticacion con Github
@@ -36,81 +39,114 @@ const github = new GithubAuthProvider();
 
 // Configura menu de login (deshabilita el registro en Github)
 github.setCustomParameters({
-  'allow_signup': 'false'
+    'allow_signup': 'false'
 });
 
+// Inicia sesion con Google
 function iniciarSesionGoogle() {
-signInWithPopup(auth, google)
-    .then((result) => {
-        // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-        console.log("Google");
-        const credential = GithubAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-
-        // Aqui se obtine la informacion del usuario que inició sesión
-        const user = result.user;
-
-        // Guarda un elemento en el local storage con la informacion de usuario
-        console.log(user);
-
-        sessionStorage.setItem('usuario', JSON.stringify({
-            "correo": user.email,
-            "nombre_completo": user.displayName,
-            "nombre_usuario": user.uid,
-            "imagen": user.photoURL,
-        }));
-
-    }).catch((error) => {
-        // Manejo de errores
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // No hacemos nada con esta info por ahora
-    });
-}
-
-function iniciarSesionGithub() {
-console.log("Github");
-    signInWithPopup(auth, github)
+    signInWithPopup(auth, google)
         .then((result) => {
             // Se adquiere un Token de Acceso
-            console.log("Github login");
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
-    
+            const credential = GithubAuthProvider.credentialFromResult(result);
+            // const token = credential.accessToken;
+
             // Aqui se obtine la informacion del usuario que inició sesión
             const user = result.user;
 
-            // Guarda un elemento en el local storage con la informacion de usuario
-            console.log(user);
-    
-            sessionStorage.setItem('usuario', JSON.stringify({
-                "correo": user.email,
-                "nombre_completo": user.displayName,
-                "nombre_usuario": user.uid,
-                "imagen": user.photoURL,
-            }));
-    
         }).catch((error) => {
             // Manejo de errores
             const errorCode = error.code;
             const errorMessage = error.message;
             const email = error.customData.email;
             const credential = GoogleAuthProvider.credentialFromError(error);
-            // No hacemos nada con esta info por ahora
+
+            // Imprime errores en la consola
+            // Aunque no hacemos nada con esta info por ahora
+            console.log(errorCode);
+            console.log(errorMessage);
         });
 }
 
-function cerrarSesionFirebase() {
-    signOut(auth).then(() => {
-        // Cierre de sesión exitoso
-        window.location = "index.html"
-    }).catch((error) => {
-        // No hacemos nada con esta info por ahora
-    });
+// Inicia sesion con Github
+function iniciarSesionGithub() {
+    signInWithPopup(auth, github)
+        .then((result) => {
+            // Se adquiere un Token de Acceso
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            // const token = credential.accessToken;
+
+            // Aqui se obtine la informacion del usuario que inició sesión
+            const user = result.user;
+
+        }).catch((error) => {
+            // Manejo de errores
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const email = error.customData.email;
+            const credential = GoogleAuthProvider.credentialFromError(error);
+
+            // Imprime errores en la consola
+            // Aunque no hacemos nada con esta info por ahora
+            console.log(errorCode);
+            console.log(errorMessage);
+        });
 }
+
+// Inicia sesion con Email
+function iniciarSesionCorreo(email, password) {
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Aqui se obtine la informacion del usuario que inició sesión
+            const user = userCredential.user;
+            // ...
+        })
+        .catch((error) => {
+            // Manejo de errores
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            if (errorCode === "auth/user-not-found") {
+                alert("El usuario no está registrado")
+            }
+
+            // Imprime errores en la consola
+            // Aunque no hacemos nada con esta info por ahora
+            console.log(errorCode);
+            console.log(errorMessage);
+        });
+}
+
+// Escucha por un evento de inicio de sesion basado en Firebase
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // Se crea el objeto que alberga la informacion del usuario
+        if (user.displayName !== null) {
+            usuarioIniciado = {
+                "correo": user.email,
+                "nombre_completo": user.displayName,
+                "nombre_usuario": user.displayName.toLowerCase().replace(/[^a-zA-Z0-9]+/gmi, '_'),
+                "imagen": user.photoURL,
+            };
+        } else {
+            usuarioIniciado = {
+                "correo": user.email,
+                "nombre_completo": user.email,
+                "nombre_usuario": "user_" + user.email.toLowerCase().split("@")[0].replace(/[^a-zA-Z0-9]+/gmi, '_'),
+                "imagen": user.photoURL,
+            };
+        }
+
+        // Guarda la sesion en localStorage
+        // NOTA: Se mantiene para ser compatibile mientras se migra la autenticacion de correo a Firebase
+        localStorage.setItem('mantenersesioniniciada', true);
+        localStorage.setItem('usuario', JSON.stringify(usuarioIniciado));
+
+        // Redirecciona a pagina principal
+        window.location.href = "index.html";
+
+    }
+});
 
 window.iniciarSesionGoogle = iniciarSesionGoogle;
 window.iniciarSesionGithub = iniciarSesionGithub;
-window.cerrarSesionFirebase = cerrarSesionFirebase;
+window.iniciarSesionCorreo = iniciarSesionCorreo;

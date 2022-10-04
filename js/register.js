@@ -2,6 +2,10 @@
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
 import { getDatabase, set, ref, child, get } from "./firebase-9.9.2/firebase-database.js";
 
+// Nueva implementacion del registro mediante Firebase
+// https://firebase.google.com/docs/auth/web/password-auth
+import { getAuth, createUserWithEmailAndPassword } from "./firebase-9.9.2/firebase-auth.js";
+
 // Inicializa configuracion de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCQGRFacISlyqP8jORHOMbNZnbP_w_5FqE",
@@ -17,6 +21,41 @@ const firebaseConfig = {
 // Inicializa Firebase (aplicacion y acceso a base de datos en tiempo real)
 const app = initializeApp(firebaseConfig);
 const db = getDatabase();
+
+// NUEVO
+// Inicializa autenticacion mediante Firebase
+const auth = getAuth();
+
+// Crea cuenta desde un correo en Firebase
+function creaCuentaCorreo (email, password) {
+  // Continua solo si los campos son validos
+  if (!validaCamposFormulario()) {
+    return;
+  };
+
+
+createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in
+    const user = userCredential.user;
+    // ...
+  })
+  // Inicia sesion con el usuario registrado
+  .then(() => {
+    alert('Usuario registrado correctamente');
+    iniciarSesion({
+      nombre_completo: nombreRegistro,
+      correo: correoRegistro,
+      nombre_usuario: nombreUsuarioRegistro,
+      contra: cifrarContra()
+    });
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // ..
+  });
+}
 
 // Inicializa variables para los elementos del formulario
 let nombreRegistro = undefined;
@@ -110,4 +149,5 @@ function registrarUsuario() {
 
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('registrarse').addEventListener('click', registrarUsuario);
+  // document.getElementById('registrarse').addEventListener('click', creaCuentaCorreo);
 });

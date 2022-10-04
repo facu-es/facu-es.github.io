@@ -43,11 +43,13 @@ let getJSONData = function (url) {
 };
 
 // Comprueba sesión iniciada de usuario
+// NOTA: Se mantiene para ser compatibile mientras se migra la autenticacion de correo a Firebase
+// NOTA: Esta funcionalidad está implementada para FIrebase en firebase-usuario.js
 function adquiereNombreUsuario() {
   if (usuarioActual != undefined || usuarioActual != null) {
     return
   }
-  
+
   let mantenerSesionIniciada = localStorage.getItem("mantenersesioniniciada");
 
   if (mantenerSesionIniciada) {
@@ -57,26 +59,21 @@ function adquiereNombreUsuario() {
   }
 };
 
-// Cierra la sesión del usuario
-function cerrarSesion() {
-  sessionStorage.removeItem('usuario');
-  localStorage.removeItem('usuario');
-  localStorage.removeItem('mantenersesioniniciada');
-  window.location.href = "index.html";
-};
-
 // Gestión de menus de usuario
+// NOTA: Se mantiene para ser compatibile mientras se migra la autenticacion de correo a Firebase
+// NOTA: Luego esta funcionalidad se realizará desde firebase-usuario.js
+
 document.addEventListener("DOMContentLoaded", function (e) {
   adquiereNombreUsuario()
 
-    if (usuarioActual == undefined || usuarioActual == null) {
-      // Cuando no hay usuario iniciado se crea el botón de crear cuenta y el de iniciar sesión
-      document.getElementById("inicio-registro-cuenta").innerHTML += `
+  if (usuarioActual == undefined || usuarioActual == null) {
+    // Cuando no hay usuario iniciado se crea el botón de crear cuenta y el de iniciar sesión
+    document.getElementById("inicio-registro-cuenta").innerHTML += `
         <a class="btn btn-danger" href="register.html" id="crear-cuenta">Crear cuenta</a>
         <a class="btn btn-success" href="login.html" id="cuenta-usuario">Iniciar sesión</a>
       `
-    } else {
-      document.getElementById("inicio-registro-cuenta").innerHTML += `
+  } else {
+    document.getElementById("inicio-registro-cuenta").innerHTML += `
         <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">${usuarioActual.nombre_completo}</button>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="cart.html">Mi carrito</a></li>
@@ -85,7 +82,5 @@ document.addEventListener("DOMContentLoaded", function (e) {
             <li><a class="dropdown-item" href="javascript:cerrarSesion()">Cerrar sesión</a></li>
           </ul>
       `
-    }
+  }
 });
-
-window.cerrarSesion = cerrarSesion;

@@ -1,6 +1,5 @@
 // Importa scripts de Firebase
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
-// import { getAnalytics } from "./firebase-9.9.2/firebase-analytics.js";
 // import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "./firebase-9.9.2/firebase-auth.js";
 import { getDatabase, ref, child, get } from "./firebase-9.9.2/firebase-database.js";
 
@@ -16,7 +15,7 @@ const firebaseConfig = {
   measurementId: "G-ZZS723TP0W"
 };
 
-// Inicializa Firebase (aplicacion y acceso a base de datos en tiempo real y login con Google)
+// Inicializa Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 const db = getDatabase();
@@ -30,7 +29,7 @@ function validaCamposFormulario() {
   // Aquiere valores del formulario
   nombreUsuario = document.getElementById('nombre-usuario').value;
   contraUsuario = document.getElementById('contra-usuario').value;
-  
+
   // Definen las constantes de expresion regular que deben cumplir los datos ingresados
   const usuarioRegEx = /^[a-zA-Z0-9]{5,}$/;
 
@@ -61,15 +60,19 @@ function autenticarUsuario() {
     if (intento.exists()) {
       let contraEnBD = decifrarContra(intento.val().contra);
       if (contraEnBD == contraUsuario) {
-        iniciarSesion(intento.val());
+        iniciarSesionManual(intento.val());
+        // Redirige al index
         window.location.href = "index.html";
+        return
       }
       else {
         alert("Contraseña incorrecta");
+        return
       }
     }
     else {
       alert("Usuario no registrado");
+      return
     }
   });
 }
@@ -81,9 +84,9 @@ function decifrarContra(contraEnBD) {
 }
 
 // Funcion para guardar en almacenamiento local o en almacenamiento de sesion el usuario logueado
-function iniciarSesion(usuarioIniciado) {
+function iniciarSesionManual(usuarioIniciado) {
   botonSesionInciada = document.getElementById('recuerdame');
-  
+
   if (botonSesionInciada.checked) {
     localStorage.setItem('mantenersesioniniciada', true);
     localStorage.setItem('usuario', JSON.stringify(usuarioIniciado));
@@ -98,21 +101,25 @@ document.addEventListener("DOMContentLoaded", function () {
   let usuarioActual = undefined;
 
   if (localStorage.getItem("mantenersesioniniciada")) {
-      usuarioActual = JSON.parse(localStorage.getItem("usuario"));
+    usuarioActual = JSON.parse(localStorage.getItem("usuario"));
   } else {
-      usuarioActual = JSON.parse(sessionStorage.getItem("usuario"));
+    usuarioActual = JSON.parse(sessionStorage.getItem("usuario"));
   }
 
-  if (usuarioActual != undefined) {
-    alert("Ya tiene una sesion iniciada de: " + usuarioActual.nombre_usuario);
-    window.location.href = "index.html";
-  }
-
+  // Inicio de sesion Manual
+  // NOTA: Esta funcionalidad será remplazada por el inicio de seison por correo de Firebase
   document.getElementById('iniciar-sesion').addEventListener('click', autenticarUsuario);
-  
+
+//  // Inicio de sesion con Correo electrónico
+//  document.getElementById('inicia-con-correo').addEventListener('click', iniciarSesionCorreo);
+
   // Inicio de sesion con Google
   document.getElementById('inicia-con-google').addEventListener('click', iniciarSesionGoogle);
-  
+
   // Inicio de sesion con Github
   document.getElementById('inicia-con-github').addEventListener('click', iniciarSesionGithub);
+
+
 });
+
+window.iniciarSesionManual = iniciarSesionManual;
