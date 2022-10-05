@@ -14,27 +14,16 @@ const firebaseConfig = {
     measurementId: "G-ZZS723TP0W"
 };
 
-// Inicializa Firebase (aplicacion y acceso a base de datos en tiempo real)
+// Inicializa aplicacion Firebase
 const app = initializeApp(firebaseConfig);
 
 // Inicializa autenticacion mediante Firebase
 const auth = getAuth();
 
-// Adquiere usuario actualmente iniciado
-const user = auth.currentUser;
-
-if (user !== null) {
-    const displayName = user.displayName;
-    const email = user.email;
-    const photoURL = user.photoURL;
-    const emailVerified = user.emailVerified;
-    // Este identificador es único para el proyecto actual de Firebase
-    const uid = user.uid;
-}
-
+// Destruye el estado de autenticacion en Firebase
 function cerrarSesion() {
     signOut(auth).then(() => {
-        // Si se detecta el cierre de sesion de Firebase se cierra la sesion local
+        // Si se completa el cierre de sesion de Firebase se eliminan las claves en el almacenamiento local
         sessionStorage.removeItem('usuario');
         localStorage.removeItem('usuario');
         localStorage.removeItem('mantenersesioniniciada');
@@ -52,7 +41,7 @@ function cerrarSesion() {
         console.log(errorCode);
         console.log(errorMessage);
     });
-    
+
     // Recarga la página actual
     location.reload();
 }
