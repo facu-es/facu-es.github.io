@@ -29,17 +29,18 @@
               <input type="text" placeholder="Correo electronico" id="correo-registro"
                 class="form-control form-control-lg mb-4">
 
-              <!-- Nombre de usuario -->
-              <input type="text" placeholder="Usuario" id="usuario-registro" class="form-control form-control-lg mb-4">
-
               <!-- Contraseña -->
-              <input type="password" placeholder="Contraseña" id="contra-registro"
+              <input type="password" placeholder="Indroduce una contraseña" id="contra-registro-primera"
                 class="form-control form-control-lg mb-4">
+
+              <!-- Repetir contraseña -->
+              <input type="password" placeholder="Repite la contraseña" id="contra-registro-segunda"
+              class="form-control form-control-lg mb-4">
 
               <!-- Boton de envío -->
               <button type="text" id="registrarse"
-                class="btn btn-primary btn-lg btn-block w-100 mb-4">Registrarse</button>
-              <a href="login.html" class="btn btn-secondary btn-lg w-100"> ¿Ya tienes una cuenta?</a>
+                class="btn btn-success btn-lg btn-block w-100 mb-4">Registrarse</button>
+              <a href="login.html" class="btn btn-dark btn-lg w-100"> ¿Ya tienes una cuenta?</a>
             </div>
           </div>
         </div>
@@ -55,8 +56,8 @@
     </div>
   </footer>
   <script src="js/bootstrap.bundle.min.js"></script>
-  <script src="js/crypto-js-4.1.1.min.js"></script>
-  <script type="module" src="js/register.js"></script>
+  <script type="module" src="js/firebase-register.js"></script>
+  <script type="module" src="js/firebase-login.js"></script>
 </body>
 
 </html>

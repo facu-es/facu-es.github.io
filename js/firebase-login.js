@@ -17,7 +17,7 @@ const firebaseConfig = {
     measurementId: "G-ZZS723TP0W"
 };
 
-// Inicializa Firebase (aplicacion y acceso a base de datos en tiempo real)
+// Inicializa aplicacion Firebase
 const app = initializeApp(firebaseConfig);
 
 // Inicializa autenticacion mediante Firebase
@@ -143,7 +143,6 @@ onAuthStateChanged(auth, (user) => {
 
         // Redirecciona a pagina principal
         window.location.href = "index.html";
-
     }
 });
 

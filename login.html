@@ -8,6 +8,7 @@
   <link href="css/font-raleway.css" rel="stylesheet">
   <link href="css/font-awesome.min.css" rel="stylesheet">
   <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-social.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
 </head>
 
@@ -22,40 +23,66 @@
             </div>
             <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
               <div class="row text-center">
-                <h3 class="mb-5">Inicio de sesión</h3>
+                <h3 class="mb-3">Inicio de sesión</h3>
               </div>
 
               <hr />
 
               <div class="align-items-center">
-                  <!--
-                  <button type="button" class="btn btn-link btn-floating mx-1" id="inicia-con-facebook">
-                    <i class="fab fa-facebook-f"></i>
+                <div class="row">
+
+                  <!-- Intento de estilo responsive (aun necesita ajustes)
+                <div class="d-flex justify-content-between">
+                  <div class="row col-md-2 col-lg-4 col-xl-6">
+                    <button type="button" class="btn btn-block btn-social btn-md btn-google mb-2 mt-2"
+                      id="inicia-con-google">
+                      <i class="fab fa-google"></i><span>Iniciar sesión con Google</span>
+                    </button>
+                    <button type="button" class="btn btn-block btn-social btn-md btn-facebook mb-2 mt-2"
+                      id="inicia-con-facebook">
+                      <i class="fab fa-facebook-f"></i><span>Iniciar sesión con Facebook</span>
+                    </button>
+                  </div>
+                  <div class="row col-md-2 col-lg-4 col-xl-6">
+                    <button type="button" class="btn btn-block btn-social btn-md btn-github mb-2 mt-2"
+                      id="inicia-con-github">
+                      <i class="fab fa-github"></i><span>Iniciar sesión con Github</span>
+                    </button>
+                    <button type="button" class="btn btn-block btn-social btn-md btn-twitter mb-2 mt-2"
+                      id="inicia-con-twitter">
+                      <i class="fab fa-twitter"></i><span>Iniciar sesión con Twitter</span>
+                    </button>
+                  </div>
+              -->
+              <!-- Solo íconos
+                  <button type="button" class="btn btn-social-icon btn-lg btn-google mb-2 mt-2" id="inicia-con-google">
+                    <i class="fab fa-google"></i>
                   </button>
-                  <button type="button" class="btn btn-link btn-floating mx-1" id="inicia-con-twitter">
-                    <i class="fab fa-twitter"></i>
+
+                  <button type="button" class="btn btn-social-icon btn-lg btn-github mb-2 mt-2" id="inicia-con-github">
+                    <i class="fab fa-github"></i>
                   </button>
-                  <button type="button" class="btn btn-link btn-floating mx-1" id="inicia-con-microsoft">
-                    <i class="fab fa-microsoft"></i>
+              -->
+                  <button type="button" class="btn btn-block btn-social btn-lg btn-google mb-2 mt-2"
+                    id="inicia-con-google">
+                    <i class="fab fa-google"></i><span>Iniciar sesión con Google</span>
                   </button>
-                  -->
-                  <button type="button" class="btn btn-primary btn-lg btn-block w-100 mb-2" id="inicia-con-google">
-                    <i class="fab fa-google"><span> Iniciar sesión con Google</span></i>
+
+                  <button type="button" class="btn btn-block btn-social btn-lg btn-github mb-2 mt-2"
+                    id="inicia-con-github">
+                    <i class="fab fa-github"></i><span>Iniciar sesión con Github</span>
                   </button>
-                  
-                  <button type="button" class="btn btn-primary btn-lg btn-block w-100 mb-2 mt-2" id="inicia-con-github">
-                    <i class="fab fa-github"><span> Iniciar sesión con Github</span></i>
-                  </button>
+                </div>
               </div>
 
               <hr />
 
-              <div class="row text-center">
-                <p>¿Tienes una cuenta?</p>
+              <div class="row text-center mt-2">
+                <p>¿Ya tienes una cuenta?</p>
                 <span class="divider-line"></span>
               </div>
               <!-- Nombre de usuario -->
-              <input type="text" placeholder="Nombre de usuario" id="nombre-usuario"
+              <input type="text" placeholder="Correo electrónico" id="correo-usuario"
                 class="form-control form-control-lg mb-4">
 
               <!-- Contraseña -->
@@ -69,12 +96,14 @@
               </div>
 
               <!-- Boton de envío -->
-              <button type="button" class="btn btn-primary btn-lg btn-block w-100 mb-4" id="iniciar-sesion">Iniciar
+              <button type="button" class="btn btn-success btn-lg btn-block w-100 mb-1" id="iniciar-sesion">Iniciar
                 sesión</button>
+                <div class="row text-center">
+                  <a class="btn btn-link mb-1" href="">Olvidé mi contraseña</a>
+                </div>
 
               <!-- Boton de registro -->
-              <a href="register.html" class="btn btn-secondary btn-lg w-100">Quiero registrar una cuenta</a>
-
+              <a href="register.html" class="btn btn-dark btn-lg w-100 mt-2">¡Registrarse!</a>
 
             </div>
           </div>
