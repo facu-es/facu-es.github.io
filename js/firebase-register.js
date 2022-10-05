@@ -1,10 +1,6 @@
 // Importa scripts de Firebase
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "./firebase-9.9.2/firebase-auth.js";
-import { getDatabase, set, ref, child, get } from "./firebase-9.9.2/firebase-database.js";
-
-// Nueva implementacion del registro mediante Firebase
-// https://firebase.google.com/docs/auth/web/password-auth
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "./firebase-9.9.2/firebase-auth.js";
 
 // Inicializa configuracion de Firebase
 const firebaseConfig = {
@@ -20,9 +16,6 @@ const firebaseConfig = {
 
 // Inicializa aplicacion Firebase
 const app = initializeApp(firebaseConfig);
-
-// Inicializa acceso a base de datos en tiempo real
-const db = getDatabase();
 
 // Inicializa autenticacion mediante Firebase
 const auth = getAuth();
@@ -56,16 +49,10 @@ function validaCamposFormulario() {
     return false;
   }
   // Verifica que las contraseñas coincidan y tengan la longitud minima exigida por Firebase
-  if (contraRegistroPrimera !== contraRegistroSegunda) {
-    alert('Las contraseñas no coinciden');
+  if (contraRegistroPrimera !== contraRegistroSegunda || contraRegistroPrimera.length < 6) {
+    alert('Las contraseñas no coinciden o tiene menos de 6 caracteres');
     return false
-  } else {
-    if(contraRegistroPrimera.length < 6) {
-      alert('La contraseña deben tener por lo menos 6 caracteres');
-      return false
-    }
   }
-
 
   return true;
 }
@@ -79,58 +66,26 @@ function registrarUsuario() {
   
 createUserWithEmailAndPassword(auth, correoRegistro, contraRegistroPrimera)
   .then((userCredential) => {
-    // Signed in
-    const user = userCredential.user;
+    // Automáticamente se inicia sesion con el usuario registrado
+    const user = userCredential.user
     return user
   })
-  // Inicia sesion con el usuario registrado
-  .then((usuario) => {
-    console.log(usuario);
+  .then((user) => {
+    // Se agrega el nombre para mostrar elegido al perfil creado en Firebase
+    updateProfile(user, {
+      displayName: nombreRegistro,
+    })
   })
   .catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
 
-            // Imprime errores en la consola
-            // Aunque no hacemos nada con esta info por ahora
-            console.log(errorCode);
-            console.log(errorMessage);
+    // Imprime errores en la consola
+    // Aunque no hacemos nada con esta info por ahora
+    console.log(errorCode);
+    console.log(errorMessage);
   });
 }
-
-// TODO: Pendiente complementar la informacion del usuario
-// Mediante el guardado de datos en la la Base de Datos en Tiempo Real
-//
-//  // Busca un elemento con el nombre de usuario ingresado, si existe alerta al usuario y no registra
-//  get(child(referenciaBD, "ListadoUsuarios/" + nombreUsuarioRegistro)).then((intento) => {
-//    if (intento.exists()) {
-//      alert('El nombre de usuario ya existe intente con otro');
-//    }
-//    // Crea el usuario en la base de datos
-//    else {
-//      set(ref(db, "ListadoUsuarios/" + nombreUsuarioRegistro),
-//        {
-//          nombre_completo: nombreRegistro,
-//          correo: correoRegistro,
-//          nombre_usuario: nombreUsuarioRegistro,
-//          contra: cifrarContra()
-//        })
-//        // Inicia sesion con el usuario registrado
-//        .then(() => {
-//          alert('Usuario registrado correctamente');
-//          iniciarSesion({
-//            nombre_completo: nombreRegistro,
-//            correo: correoRegistro,
-//            nombre_usuario: nombreUsuarioRegistro,
-//            contra: cifrarContra()
-//          });
-//        })
-//        // En caso de error alerta al usuario con el codigo de error
-//        .catch((error) => {
-//          alert(error.message);
-//        })
-//    }
-//  });
 
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('registrarse').addEventListener('click', registrarUsuario);
