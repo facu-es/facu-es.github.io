@@ -1,11 +1,15 @@
 const ORDER_ASC_BY_PRICE = "Precio_Ascendente";
 const ORDER_DESC_BY_PRICE = "Precio_Descendente";
 const ORDER_DESC_BY_RELEVANCE = "Relevancia";
-let currentProductsArray = [];
-let currentSortCriteria = undefined;
+
+// Variables para filtros
 let minCount = undefined;
 let maxCount = undefined;
 let textoParaBuscar = undefined;
+let currentSortCriteria = undefined;
+
+// Variables para datos
+let currentProductsArray = [];
 
 // Ordena los elementos del array recibido
 // Cuando se define criterio la funcion de comparacion adecuada es utilizada
@@ -43,7 +47,7 @@ function sortProducts(criteria, array) {
     return result;
 }
 
-// Guarda el valor del producto elegido en el Almacen Local del navegador accesible por la página "product-info.html"
+// Guarda el ID del producto elegido en el Almacenamiento Local
 function setProdID(id) {
     localStorage.setItem("prodID", id);
     window.location = "product-info.html"
@@ -86,19 +90,19 @@ function showProductsList() {
 function sortAndShowProducts(sortCriteria, productsArray) {
     currentSortCriteria = sortCriteria;
 
+    // Si se establece un Array como parámetro lo guarda en la variable global currentProductsArray
     if (productsArray != undefined) {
         currentProductsArray = productsArray;
     }
 
+    // Remplaza el contenido en currentProductsArray con el listado ordenado bajo el criterio elegido
     currentProductsArray = sortProducts(currentSortCriteria, currentProductsArray);
 
-    //Muestro los productos ordenados
+    // Muestra los productos ordenados
     showProductsList();
 }
 
-//Función que se ejecuta una vez que se haya lanzado el evento de
-//que el documento se encuentra cargado, es decir, se encuentran todos los
-//elementos HTML presentes.
+// Espera a que se encuentren todos los elementos HTML cargados en el DOM.
 document.addEventListener("DOMContentLoaded", function (e) {
     // Verifica que se haya elegido una categoría
     let currentCategoryID = localStorage.getItem("catID");
@@ -110,29 +114,24 @@ document.addEventListener("DOMContentLoaded", function (e) {
         return
     }
     
+    // Descarga la información de los Productos y llama a la funcion que los muestra
     getJSONData(PRODUCTS_URL + currentCategoryID + EXT_TYPE).then(function (resultObj) {
         if (resultObj.status === "ok") {
             currentProductsArray = resultObj.data.products
+
+            // Agrega el texto para el título de la página
             document.getElementById('titulo-productos').innerHTML = "Verás aquí todos los productos de la categoría " + resultObj.data.catName;
+            
+            // Muestra los productos recibidos
             showProductsList()
-            //sortAndShowProducts(ORDER_ASC_BY_NAME, resultObj.data);
         }
 
     });
 
-    // Al llamar a esta funcion no se le pasa el parámetro productsArray ya que
-    // este fue inicializado con la escucha del evento "DOMContentLoaded"
-    document.getElementById("sortAscByPrice").addEventListener("click", function () {
-        sortAndShowProducts(ORDER_ASC_BY_PRICE);
-    });
-
-    document.getElementById("sortDescByPrice").addEventListener("click", function () {
-        sortAndShowProducts(ORDER_DESC_BY_PRICE);
-    });
-
-    document.getElementById("sortByRelevance").addEventListener("click", function () {
-        sortAndShowProducts(ORDER_DESC_BY_RELEVANCE);
-    });
+    // Eventos de escucha de clic en los botones para ordenar productos
+    document.getElementById("sortAscByPrice").addEventListener("click", function () {sortAndShowProducts(ORDER_ASC_BY_PRICE);});
+    document.getElementById("sortDescByPrice").addEventListener("click", function () {sortAndShowProducts(ORDER_DESC_BY_PRICE);});
+    document.getElementById("sortByRelevance").addEventListener("click", function () {sortAndShowProducts(ORDER_DESC_BY_RELEVANCE);});
 
     // Vacía los valores establecidos en el filtro de rango de cantidad de productos
     document.getElementById("clearRangeFilter").addEventListener("click", function () {
@@ -169,6 +168,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
         showProductsList();
     });
 
+    // Escucha la entrada de texto en el campo buscar de los productos
     document.getElementById("buscarTexto").addEventListener("input", function () {
         textoParaBuscar = document.getElementById("buscarTexto").value;
 

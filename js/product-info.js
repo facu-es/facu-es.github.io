@@ -4,12 +4,14 @@ const ORDER_DESC_BY_DATE = "Fecha_Descendente";
 const ORDER_ASC_BY_SCORE = "Calificacion_Ascendente";
 const ORDER_DESC_BY_SCORE = "Calificacion_Descendente";
 
+// Variables para filtros
 let minCount = undefined;
 let maxCount = undefined;
 let textoParaBuscar = undefined;
 let textoComentario = "";
 let puntosComentario = "";
 
+// Variables para datos
 let currentProdID = undefined;
 let currentProductInfo = [];
 let currentCommentsArray = [];
@@ -60,8 +62,20 @@ function sortComments(criteria, array) {
     return result;
 }
 
-function setPrincipalImage(imagen) {
-    document.getElementById("imagen-principal").src = imagen;
+// Ordena y muestra los comentarios
+function sortAndShowComments(sortCriteria, commentsArray) {
+    currentSortCriteria = sortCriteria;
+
+    // Si se establece un Array como parámetro lo guarda en la variable global currentCommentsArray
+    if (commentsArray != undefined) {
+        currentCommentsArray = commentsArray;
+    }
+
+    // Remplaza el contenido en currentCommentsArray con el listado ordenado bajo el criterio elegido
+    currentCommentsArray = sortComments(currentSortCriteria, currentCommentsArray);
+
+    // Muestra los comentarios ordenados
+    showCommentsList();
 }
 
 // Crea el contenido HTML del producto partiendo de currentProductInfo
@@ -101,7 +115,7 @@ function showProductInfo() {
         `
     }
 
-    // Crea ventana de detalles del producto
+    // Crea el contenido en HTML de los detalles del producto
     detallesProductoHTML = `
     <div><span class="fw-bold">Cantidades vendidas:</span> <span>${currentProductInfo.soldCount}</span></div>
     <div><span class="fw-bold">Precio: </span><span>${currentProductInfo.currency} ${currentProductInfo.cost}</span></div>
@@ -119,12 +133,12 @@ function showProductInfo() {
     document.getElementById("detallesProducto").innerHTML = detallesProductoHTML;
 }
 
-// Crea el contenido HTML que muestra los comentarios
+// Crea el contenido en HTML de los comentarios
 function showCommentsList() {
     // Variable para almacenar los comentarios a mostrar en este llamado
     let htmlContentToAppend = "";
 
-    // Establece idioma para los textos de Fecha
+    // Establece idioma para los textos calculados de fecha por moments.js
     moment.locale('es');
 
     for (let i = 0; i < currentCommentsArray.length; i++) {
@@ -133,7 +147,7 @@ function showCommentsList() {
         // Funciones de filtrado a los comentarios
         if (((minCount == undefined) || (minCount != undefined && parseInt(comment.score) >= minCount)) &&
             ((maxCount == undefined) || (maxCount != undefined && parseInt(comment.score) <= maxCount)) &&
-            // El campo de búsqueda coincide por texto en usuarios y comentarios 
+            // El campo de búsqueda coincide por texto en nombre de usuario y comentario
             ((textoParaBuscar == undefined || textoParaBuscar == '') || (comment.user.toLowerCase().includes(textoParaBuscar) || comment.description.toLowerCase().includes(textoParaBuscar)))) {
 
             htmlContentToAppend += `
@@ -151,7 +165,7 @@ function showCommentsList() {
                             <div class="star-ratings-sprite"><span style="width:${
                 // Con las siguientes clases de CSS se define una superposición de dos conjuntos de cinco estrellas
                 // el de abajo con estrellas grises, y el de arriba con estrellas amarillas.
-                // La longitud de la extensión de las estrellas amarillas la defino con la etiqueta style aplicada a span
+                // La longitud de la extensión de las estrellas amarillas se define con la etiqueta style aplicada a span
                 // Como el valor de extensión ( width ) es porcentual, se requiere un cambio de variable mediante el multiplicador 20
                 // Como el máximo valor en comment.score es 5 con ese multiplicador se establece incluso la posibilidad de puntuaciones fraccionarias.
                 comment.score * 20}%" class="star-ratings-sprite-rating"></span>
@@ -210,20 +224,6 @@ function adquiereProductoComentarios(prodID) {
     });
 };
 
-// Ordena y muestra los comentarios
-function sortAndShowComments(sortCriteria, commentsArray) {
-    currentSortCriteria = sortCriteria;
-
-    if (commentsArray != undefined) {
-        currentCommentsArray = commentsArray;
-    }
-
-    currentCommentsArray = sortComments(currentSortCriteria, currentCommentsArray);
-
-    // Muestro los comentarios ordenadas
-    showCommentsList();
-}
-
 // Limpia campos de filtros de los comentarios
 function limpiarFiltrosComentarios() {
     document.getElementById("rangeFilterCountMin").value = "";
@@ -234,10 +234,11 @@ function limpiarFiltrosComentarios() {
     maxCount = undefined;
     textoParaBuscar = undefined;
 
+    // Muestra los comentarios
     showCommentsList();
 }
 
-// Espera a que se encuentran todos los elementos HTML cargados en el DOM.
+// Espera a que se encuentren todos los elementos HTML cargados en el DOM.
 document.addEventListener("DOMContentLoaded", function (e) {
     // Descarga la información de los Productos y Comentarios y llama a las funciones que los muestran
     adquiereProductoComentarios();
@@ -256,10 +257,12 @@ document.addEventListener("DOMContentLoaded", function (e) {
         sortAndShowComments(ORDER_DESC_BY_SCORE);
     });
 
-    // Vacía los valores establecidos en el filtro de rango de calificaciones
+    // Eventos de escucha de clic en el botón para limpiar los valores establecidos los filtros
     document.getElementById("clearRangeFilter").addEventListener("click", limpiarFiltrosComentarios);
+
+    // Eventos de escucha de clic en el botón para filtrar por los rangos establecidos
     document.getElementById("rangeFilterCount").addEventListener("click", function () {
-        // Obtengo el mínimo y máximo de los intervalos para filtrar por puntaje en los comentarios del producto
+        // Obtiene intervalo mínimo y máximo definido para filtrar basado en puntaje de los comentarios del producto
         minCount = document.getElementById("rangeFilterCountMin").value;
         maxCount = document.getElementById("rangeFilterCountMax").value;
         if ((minCount != undefined) && (minCount != "") && (parseInt(minCount)) >= 0) {
@@ -276,6 +279,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
         showCommentsList();
     });
 
+    // Eventos de escucha de clic en el botón para enviar comentario
     document.getElementById("enviarComentario").addEventListener("click", enviaComentarioFirebase);
 
     // Escucha la entrada de texto en el campo buscar de los comentarios

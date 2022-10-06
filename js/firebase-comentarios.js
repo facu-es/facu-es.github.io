@@ -14,8 +14,10 @@ const firebaseConfig = {
     measurementId: "G-ZZS723TP0W"
 };
 
-// Inicializa Firebase (aplicación y acceso a base de datos en tiempo real)
+// Inicializa aplicación Firebase
 const app = initializeApp(firebaseConfig);
+
+// Inicializa Base de Datos de Firebase
 const db = getDatabase(app);
 
 // Busca comentarios en Firebase
@@ -28,6 +30,15 @@ function adquiereComentariosFirebase(prodID) {
             // Si no hay comentarios en Firebase devuelve un Array vacío
             return [];
         }
+    }).catch((error) => {
+        // Manejo de errores
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        // Imprime errores en la consola
+        // Aunque no hacemos nada con esta info por ahora
+        console.log(errorCode);
+        console.log(errorMessage);
     });
 };
 
@@ -57,10 +68,16 @@ function enviaComentarioFirebase() {
         };
 
         push(ref(db, "ListadoComentarios/" + currentProdID), comentario)
-            // En caso de error alerta al usuario con el codigo de error
             .catch((error) => {
-                alert(error.message);
-            })
+                // Manejo de errores
+                const errorCode = error.code;
+                const errorMessage = error.message;
+        
+                // Imprime errores en la consola
+                // Aunque no hacemos nada con esta info por ahora
+                console.log(errorCode);
+                console.log(errorMessage);
+            });
     }
     // Agrega comentario al array actual
     currentCommentsArray.push(comentario);
