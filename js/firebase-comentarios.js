@@ -35,7 +35,7 @@ function adquiereComentariosFirebase(prodID) {
 function enviaComentarioFirebase() {
     let comentario = {};
 
-    if (usuarioActual === null || usuarioActual.nombre_usuario === "" || usuarioActual.nombre_usuario === undefined) {
+    if (usuarioActual === null || usuarioActual === "" || usuarioActual === undefined) {
         alert("Debe iniciar sesión para poder comentar")
         return
     }
@@ -52,7 +52,7 @@ function enviaComentarioFirebase() {
             product: parseInt(currentProdID),
             score: parseInt(puntosComentario.value),
             description: textoComentario.value,
-            user: usuarioActual.nombre_usuario,
+            user: usuarioActual.displayName,
             dateTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
         };
 
