@@ -7,6 +7,7 @@ const CART_INFO_URL = "https://japceibal.github.io/emercado-api/user_cart/";
 const CART_BUY_URL = "https://japceibal.github.io/emercado-api/cart/buy.json";
 const EXT_TYPE = ".json";
 
+// Variable global que contendrá al objeto del usuario iniciado
 let usuarioActual = undefined;
 
 let showSpinner = function () {
@@ -46,15 +47,14 @@ let getJSONData = function (url) {
 document.addEventListener("DOMContentLoaded", function (e) {
   const inicioRegistroCuenta = document.getElementById("inicio-registro-cuenta");
   const mantenerSesionIniciada = localStorage.getItem("mantenersesioniniciada");
-  let usuario = undefined;
 
   if (mantenerSesionIniciada) {
-    usuario = JSON.parse(localStorage.getItem("usuario"));
+    usuarioActual = JSON.parse(localStorage.getItem("usuario"));
   } else {
-    usuario = JSON.parse(sessionStorage.getItem("usuario"));
+    usuarioActual = JSON.parse(sessionStorage.getItem("usuario"));
   }
   
-  if (usuario === undefined || usuario === null) {
+  if (usuarioActual === undefined || usuarioActual === null) {
     // Cuando no hay usuario iniciado se crea el botón de crear cuenta y el de iniciar sesión
     inicioRegistroCuenta.innerHTML += `
           <a class="btn btn-danger" href="register.html" id="crear-cuenta">Crear cuenta</a>
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
   } else {
     // Cuando hay un usuario iniciado se crea el menu desplegable con el nombre de usuario o su correo
     inicioRegistroCuenta.innerHTML += `
-          <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">${usuario.displayName}</button>
+          <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">${usuarioActual.displayName}</button>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="cart.html">Mi carrito</a></li>
               <li><a class="dropdown-item" href="my-profile.html">Mi perfil</a></li>
