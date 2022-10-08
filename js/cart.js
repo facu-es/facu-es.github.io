@@ -47,7 +47,7 @@ function sortCartList(criteria, array) {
 // Gestiona el incremento de un Item
 function aumentaCantidad(itemID) {
     // Actualiza la cantidad en el Array de Items
-    currentCartListArray[itemID].count = parseInt(currentCartListArray[itemID].count) + 1;
+    currentCartListArray[itemID].count = Math.round(parseInt(currentCartListArray[itemID].count) + 1);
 
     // Actualiza cantidad en Firebase si el objeto contiene un ID de Objeto de Firebase
     if(currentCartListArray[itemID].hasOwnProperty('fid')) {
@@ -61,7 +61,7 @@ function aumentaCantidad(itemID) {
 // Gestiona el decremento de un Item
 function reduceCantidad(itemID) {
     // Actualiza la cantidad en el Array de Items
-    currentCartListArray[itemID].count = parseInt(currentCartListArray[itemID].count) - 1;
+    currentCartListArray[itemID].count = Math.round(parseInt(currentCartListArray[itemID].count) - 1);
 
     // Actualiza cantidad en Firebase si el objeto contiene un ID de Objeto de Firebase
     if(currentCartListArray[itemID].hasOwnProperty('fid')) {
@@ -72,17 +72,32 @@ function reduceCantidad(itemID) {
     showCartListInfo()
 }
 
+// Actualiza la cantidad en el Array de Items
 function actualizaCantidad(itemID, cantidad) {
-    // Actualiza la cantidad en el Array de Items
-    currentCartListArray[itemID].count = cantidad;
+    // Define el parámetro como la cantidad de producto
+    currentCartListArray[itemID].count = Math.round(cantidad);
 
     // Actualiza cantidad en Firebase
     if(currentCartListArray[itemID].hasOwnProperty('fid')) {
-        actualizaElementoCarrito(currentCartListArray[itemID].fid, cantidad);
+        actualizaElementoCarrito(currentCartListArray[itemID].fid, Math.round(cantidad));
     }
 
     // Muestra los valores actualizados
     showCartListInfo()
+}
+
+// Elimina un elemento del carrito, propaga el cambio a Firebase y actualiza la lista de items en pantalla
+function quitarDelCarrito(itemID) {
+    // Elimina item en Array actual
+    currentCartListArray.splice(itemID, 1)
+
+    // Elimina item en Firebase si el objeto contiene un ID de Objeto de Firebase
+    if(currentCartListArray[itemID].hasOwnProperty('fid')) {
+        eliminarElementoCarrito(currentCartListArray[itemID].fid);
+    }
+
+    // Actualiza la vista de elementos del carrito
+    showCartListInfo();
 }
 
 // Crea el contenido HTML del carrito partiendo de currentCartListArray
@@ -163,7 +178,7 @@ function showCartListInfo() {
                     <p class="mb-0" name="subtotal">${subtotalArticulo}</p>
                 </td>
                 <td class="align-middle">
-                    <button class="btn btn-link border px-2" onclick="quitarDelCarrito('${articulo.fid}')">
+                    <button class="btn btn-link border px-2" onclick="quitarDelCarrito('${i}')">
                         <i class="fas fa-times"></i>
                     </button>
                 </td>
@@ -236,20 +251,6 @@ function sortAndShowCartList(sortCriteria, cartListArray) {
     currentCartListArray = sortCartList(currentSortCriteria, currentCartListArray);
 
     // Muestro el carrito del usuario
-    showCartListInfo();
-}
-
-// Elimina un elemento del carrito, propaga el cambio a Firebase y actualiza la lista de items en pantalla
-function quitarDelCarrito(firebaseID) {
-    // Elimina item en Array actual
-    currentCartListArray.splice(currentCartListArray.findIndex(elemento => elemento.fid === firebaseID), 1)
-
-    // Elimina item en Firebase si el objeto contiene un ID de Objeto de Firebase
-    if(currentCartListArray[itemID].hasOwnProperty('fid')) {
-        eliminarElementoCarrito(firebaseID);
-    }
-
-    // Actualiza la vista de elementos del carrito
     showCartListInfo();
 }
 
