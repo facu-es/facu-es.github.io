@@ -39,10 +39,9 @@ function adquiereComentariosFirebase(prodID) {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        // Imprime errores en la consola
-        // Aunque no hacemos nada con esta info por ahora
-        console.log(errorCode);
-        console.log(errorMessage);
+        // Informa al usuario del error
+        // No se considera inseguro ya que la validacion misma ocurre en el cliente
+        alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
     });
 };
 
@@ -51,7 +50,7 @@ function enviaComentarioFirebase() {
     let comentario = {};
 
     if (usuarioActual === null || usuarioActual === "" || usuarioActual === undefined) {
-        alert("Debe iniciar sesión para poder comentar")
+        alertaUsuario("Acceso denegado", "Debe iniciar sesión para poder comentar", "warning");
         return
     }
 
@@ -59,7 +58,7 @@ function enviaComentarioFirebase() {
     puntosComentario = document.getElementById("puntosComentario");
 
     if (textoComentario === "") {
-        alert("Debe escribir un comentario")
+        alertaUsuario("Formulario incompleto", "El comentario no puede estar vacío", "warning");
     } else {
 
         // Agrega el comentario en la base de datos de Firebase
@@ -81,6 +80,10 @@ function enviaComentarioFirebase() {
                 // Aunque no hacemos nada con esta info por ahora
                 console.log(errorCode);
                 console.log(errorMessage);
+
+                // Informa al usuario del error
+                // No se considera inseguro ya que la validacion misma ocurre en el cliente
+                alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
             });
     }
     // Agrega comentario al array actual

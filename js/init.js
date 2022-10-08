@@ -43,6 +43,23 @@ let getJSONData = function (url) {
     });
 };
 
+// Alertas al usuario
+function alertaUsuario(titulo, mensaje, tipo) {
+  const alertaAnclaDOM = document.getElementById('alertaAnclaDOM')
+
+  const alertaHTML = document.createElement('div')
+  alertaHTML.innerHTML = [
+    `<div class="alert alert-${tipo} alert-dismissible fade show" role="alert">`,
+    `   <h4 class="alert-heading">${titulo}</h4>`,
+    `   <hr>`,
+    `   <div>${mensaje}</div>`,
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>',
+    '</div>'
+  ].join('')
+
+  alertaAnclaDOM.append(alertaHTML)
+}
+
 // Gestión de menus de usuario
 document.addEventListener("DOMContentLoaded", function (e) {
   const inicioRegistroCuenta = document.getElementById("inicio-registro-cuenta");
@@ -53,16 +70,18 @@ document.addEventListener("DOMContentLoaded", function (e) {
   } else {
     usuarioActual = JSON.parse(sessionStorage.getItem("usuario"));
   }
-  
-  if (usuarioActual === undefined || usuarioActual === null) {
-    // Cuando no hay usuario iniciado se crea el botón de crear cuenta y el de iniciar sesión
-    inicioRegistroCuenta.innerHTML += `
+
+  // Si existe el ancla en el DOM modifica la página
+  if (inicioRegistroCuenta) {
+    if (usuarioActual === undefined || usuarioActual === null) {
+      // Cuando no hay usuario iniciado se crea el botón de crear cuenta y el de iniciar sesión
+      inicioRegistroCuenta.innerHTML += `
           <a class="btn btn-danger" href="register.html" id="crear-cuenta">Crear cuenta</a>
           <a class="btn btn-success" href="login.html" id="cuenta-usuario">Iniciar sesión</a>
         `
-  } else {
-    // Cuando hay un usuario iniciado se crea el menu desplegable con el nombre de usuario o su correo
-    inicioRegistroCuenta.innerHTML += `
+    } else {
+      // Cuando hay un usuario iniciado se crea el menu desplegable con el nombre de usuario o su correo
+      inicioRegistroCuenta.innerHTML += `
           <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">${usuarioActual.displayName}</button>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="cart.html">Mi carrito</a></li>
@@ -71,5 +90,6 @@ document.addEventListener("DOMContentLoaded", function (e) {
               <li><a class="dropdown-item" href="javascript:cerrarSesion()">Cerrar sesión</a></li>
             </ul>
         `
-  };
+    };
+  }
 });

@@ -35,10 +35,9 @@ function adquierePerfilUsuario() {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        // Imprime errores en la consola
-        // Aunque no hacemos nada con esta info por ahora
-        console.log(errorCode);
-        console.log(errorMessage);
+        // Informa al usuario del error
+        // No se considera inseguro ya que la validacion misma ocurre en el cliente
+        alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
     });
 };
 
@@ -46,16 +45,15 @@ function adquierePerfilUsuario() {
 function actualizaPerfilUsuario(usuario) {
     // Actualiza los datos en Firebase
     update(ref(db, "ListadoUsuarios/" + usuarioActual.uid + "/profile"), usuario)
-    .then(() => alert("Datos actualizados"))
+    .then(() => alertaUsuario("Correcto", "¡El perfil ha sido actualizado!", "success");)
     .catch((error) => {
         // Manejo de errores
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        // Imprime errores en la consola
-        // Aunque no hacemos nada con esta info por ahora
-        console.log(errorCode);
-        console.log(errorMessage);
+        // Informa al usuario del error
+        // No se considera inseguro ya que la validacion misma ocurre en el cliente
+        alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
     });
 }
 

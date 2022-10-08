@@ -39,10 +39,9 @@ function adquiereCarritoFirebase(userID) {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        // Imprime errores en la consola
-        // Aunque no hacemos nada con esta info por ahora
-        console.log(errorCode);
-        console.log(errorMessage);
+        // Informa al usuario del error
+        // No se considera inseguro ya que la validacion misma ocurre en el cliente
+        alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
     });
 };
 
@@ -51,7 +50,7 @@ function enviaCarritoFirebase(prodID, prodName, prodImg, prodCost, prodCurrency,
     let articulo = {};
 
     if (usuarioActual === null || usuarioActual === "" || usuarioActual === undefined) {
-        alert("Debe iniciar sesión para poder comprar")
+        alertaUsuario("Acceso denegado", "Debe iniciar sesión para poder comprar", "warning");
         return
     }
 
@@ -77,7 +76,7 @@ function enviaCarritoFirebase(prodID, prodName, prodImg, prodCost, prodCurrency,
                 console.log(errorMessage);
             });
 
-    alert("Producto agregado");
+    alertaUsuario("Correcto", "¡El producto fue agregado!", "success");
 }
 
 
@@ -88,10 +87,9 @@ function eliminarElementoCarrito(firebaseItemID) {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        // Imprime errores en la consola
-        // Aunque no hacemos nada con esta info por ahora
-        console.log(errorCode);
-        console.log(errorMessage);
+        // Informa al usuario del error
+        // No se considera inseguro ya que la validacion misma ocurre en el cliente
+        alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
     });
 }
 
@@ -102,10 +100,9 @@ function actualizaElementoCarrito(firebaseItemID, cantidad) {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        // Imprime errores en la consola
-        // Aunque no hacemos nada con esta info por ahora
-        console.log(errorCode);
-        console.log(errorMessage);
+        // Informa al usuario del error
+        // No se considera inseguro ya que la validacion misma ocurre en el cliente
+        alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
     });
 }
 

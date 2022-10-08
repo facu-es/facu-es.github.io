@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
     
     // Si no fue elegida ninguna redirige a categories
     if (currentCategoryID === null) {
-        alert("Debe elegir una categoría");
+        alertaUsuario("Requisito incumplido", "Debe elegir una categoría", "warning");
         window.location.href = "categories.html";
         return
     }

@@ -40,17 +40,17 @@ function validaCamposFormulario() {
 
   // Si el nombre completo no cumple con la expresion regular, muestra un mensaje de error
   if (!nombreRegEx.test(nombreRegistro)) {
-    alert('El nombre completo solo puede contener caracteres alfabeticos y espacios');
+    alertaUsuario("Entrada incorrecta", "El nombre completo solo puede contener caracteres alfabeticos y espacios", "warning");
     return false;
   }
   // Si el correo electronico no cumple con la expresion regular, muestra un mensaje de error
   if (!correoRegEx.test(correoRegistro)) {
-    alert('El correo electronico debe ser válido');
+    alertaUsuario("Entrada incorrecta", "El correo electronico debe ser válido", "warning");
     return false;
   }
   // Verifica que las contraseñas coincidan y tengan la longitud minima exigida por Firebase
   if (contraRegistroPrimera !== contraRegistroSegunda || contraRegistroPrimera.length < 6) {
-    alert('Las contraseñas no coinciden o tiene menos de 6 caracteres');
+    alertaUsuario("Entrada incorrecta", "Las contraseñas no coinciden o tienen menos de 6 caracteres", "warning");
     return false
   }
 
@@ -84,6 +84,10 @@ createUserWithEmailAndPassword(auth, correoRegistro, contraRegistroPrimera)
     // Aunque no hacemos nada con esta info por ahora
     console.log(errorCode);
     console.log(errorMessage);
+
+    // Informa al usuario del error
+    // No se considera inseguro ya que la validacion misma ocurre en el cliente
+    alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
   });
 }
 

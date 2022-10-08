@@ -15,7 +15,7 @@ function autenticarUsuario() {
   // Si el nombre de usuario no cumple con la expresion regular
   // muestra un mensaje de error y termina la funcion
   if (!correoRegEx.test(correoUsuario)) {
-    alert('El nombre de usuario debe ser un correo electrónico');
+    alertaUsuario("Entrada incorrecta", "El nombre de usuario debe ser un correo electrónico", "warning");
     return;
   }
 

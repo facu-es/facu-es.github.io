@@ -64,6 +64,10 @@ function iniciarSesionGoogle() {
                     // Aunque no hacemos nada con esta info por ahora
                     console.log(errorCode);
                     console.log(errorMessage);
+
+                    // Informa al usuario del error
+                    // No se considera inseguro ya que la validacion misma ocurre en el cliente
+                    alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
                 });
 //        });
 }
@@ -92,6 +96,10 @@ function iniciarSesionGithub() {
                     // Aunque no hacemos nada con esta info por ahora
                     console.log(errorCode);
                     console.log(errorMessage);
+
+                    // Informa al usuario del error
+                    // No se considera inseguro ya que la validacion misma ocurre en el cliente
+                    alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
                 });
 //        });
 }
@@ -111,14 +119,14 @@ function iniciarSesionCorreo(email, password) {
                     const errorCode = error.code;
                     const errorMessage = error.message;
 
-                    if (errorCode === "auth/user-not-found") {
-                        alert("El usuario no está registrado")
-                    }
-
                     // Imprime errores en la consola
                     // Aunque no hacemos nada con esta info por ahora
                     console.log(errorCode);
                     console.log(errorMessage);
+
+                    // Informa al usuario del error
+                    // No se considera inseguro ya que la validacion misma ocurre en el cliente
+                    alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
                 });
 //        });
 }

@@ -191,7 +191,7 @@ function adquiereProductoComentarios(prodID) {
     // Si no fue elegido ninguno redirige a products
     if (currentProdID === null || currentProdID === "" | currentProdID === undefined) {
         if (localStorage.getItem("prodID") === null) {
-            alert("Debe elegir un producto");
+            alertaUsuario("Requisito incumplido", "Debe elegir un producto", "warning");
             window.location.href = "products.html";
             return
         } else {

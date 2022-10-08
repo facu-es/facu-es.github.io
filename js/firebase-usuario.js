@@ -36,10 +36,9 @@ function cerrarSesion() {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        // Imprime errores en la consola
-        // Aunque no hacemos nada con esta info por ahora
-        console.log(errorCode);
-        console.log(errorMessage);
+        // Informa al usuario del error
+        // No se considera inseguro ya que la validacion misma ocurre en el cliente
+        alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
     });
 
     // Recarga la página actual
