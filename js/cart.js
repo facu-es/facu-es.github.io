@@ -46,8 +46,8 @@ function sortCartList(criteria, array) {
 
 // Gestiona el incremento de un Item
 function aumentaCantidad(itemID) {
-    // Actualiza la cantidad en el Array de Items
-    currentCartListArray[itemID].count = Math.round(parseInt(currentCartListArray[itemID].count) + 1);
+    // Aumenta la cantidad en 1, redondea al entero más cercano y se asegura de que el valor no crece por debajo de 0
+    currentCartListArray[itemID].count = Math.max(Math.round(parseInt(currentCartListArray[itemID].count) + 1), 0);
 
     // Actualiza cantidad en Firebase si el objeto contiene un ID de Objeto de Firebase
     if(currentCartListArray[itemID].hasOwnProperty('fid')) {
@@ -60,8 +60,8 @@ function aumentaCantidad(itemID) {
 
 // Gestiona el decremento de un Item
 function reduceCantidad(itemID) {
-    // Actualiza la cantidad en el Array de Items
-    currentCartListArray[itemID].count = Math.round(parseInt(currentCartListArray[itemID].count) - 1);
+    // Reduce la cantidad en 1, redondea al entero más cercano y se asegura de que el valor no cae por debajo de 0
+    currentCartListArray[itemID].count = Math.max(Math.round(parseInt(currentCartListArray[itemID].count) - 1), 0);
 
     // Actualiza cantidad en Firebase si el objeto contiene un ID de Objeto de Firebase
     if(currentCartListArray[itemID].hasOwnProperty('fid')) {
@@ -74,8 +74,8 @@ function reduceCantidad(itemID) {
 
 // Actualiza la cantidad en el Array de Items
 function actualizaCantidad(itemID, cantidad) {
-    // Define el parámetro como la cantidad de producto
-    currentCartListArray[itemID].count = Math.round(cantidad);
+    // Establece la cantidad en base al valor provisto, redondea al entero más cercano y se asegura de que el valor no se establece por debajo de 0
+    currentCartListArray[itemID].count = Math.max(Math.round(cantidad), 0);
 
     // Actualiza cantidad en Firebase
     if(currentCartListArray[itemID].hasOwnProperty('fid')) {
