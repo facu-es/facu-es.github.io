@@ -1,48 +1,44 @@
-// Inicializa variables globales
+// Inicializa variable global con datos del usuario
 let usuario = {};
+
+// Prepara un objeto con los elementos del formulario
+function cargaDatosUsuario() {
+    // Validacion de campos del formulario
+    // PENDIENTE
+
+    // Carga de valores en Objeto de usuario
+    cargaAtributosDOM = [ "fullname", "firstaddress", "secondaddress", "postalcode", "state", "city", "country" ];
+    cargaAtributosDOM.forEach(elemento => { usuario[elemento] = document.getElementById("profile-" + elemento).value });    
+
+    // Elimina elementos que pertenecen al objeto de sesion
+    eliminarAtributos = [ "provider", "site", "displayName", "email", "photoURL", "emailVerified", "uid", "nid" ];
+    eliminarAtributos.forEach(atributoSesion => delete usuario[atributoSesion]);
+
+    // Actualiza objeto de Firebase
+    actualizaPerfilUsuario(usuario)
+}
 
 // Espera a que se encuentren todos los elementos HTML cargados en el DOM.
 document.addEventListener("DOMContentLoaded", function (e) {
-    // Adquiere elementos de DOM
-    const username = document.getElementById("profile-username");
-    const provider = document.getElementById("profile-provider");
-    const email = document.getElementById("profile-email");
-    const fullname = document.getElementById("profile-fullname");
-    const firstaddress = document.getElementById("profile-firstaddress");
-    const secondaddress = document.getElementById("profile-secondaddress");
-    const postalcode = document.getElementById("profile-postalcode");
-    const state = document.getElementById("profile-state");
-    const city = document.getElementById("profile-city");
-    const country = document.getElementById("profile-country");
+    // Adquiere objeto de usuario desde Firebase
+    adquierePerfilUsuario(usuarioActual).then((datosFirebase) => {
 
-    // Llama funcion de Firebase
-    adquierePerfilUsuario(usuarioActual).then((e) => {
-        city.value = e.city;
-        country.value = e.country;
+        // Asignacion de atributos a DOM y al objeto del usuario
+        Object.keys(datosFirebase).forEach(elemento => {
+            usuario[elemento] = datosFirebase[elemento];
+            document.getElementById("profile-" + elemento).value = datosFirebase[elemento];
+        });
+
+        // Carga informacion disponible desde objeto de sesión del usuario
+        document.getElementById("profile-fullname").innerHTML = usuarioActual.displayName;
+        document.getElementById("profile-username").innerHTML = usuarioActual.uid;
+        document.getElementById("profile-provider").innerHTML = usuarioActual.provider;
+        document.getElementById("profile-email").innerHTML = usuarioActual.email;
+        if (usuarioActual.photoURL !== null) {
+            document.getElementById("profile-img").src = usuarioActual.photoURL.split("=")[0];
+        }
     });
-
-    // Carga informacion disponible
-    username.innerHTML = usuarioActual.uid;
-    provider.innerHTML = usuarioActual.provider;
-    email.innerHTML = usuarioActual.email;
-
-    if(usuarioActual.photoURL !== null) {
-        document.getElementById("profile-img").src = usuarioActual.photoURL.split("=")[0];
-    }
-
-    
-    fullname.value = usuarioActual.displayName;
-    firstaddress.value = usuarioActual.firstaddress
-    secondaddress.value = usuarioActual.secondaddress
-    postalcode.value = usuarioActual.postalcode;
-    state.value = usuarioActual.state;
-    /*
-    city.value = usuarioActual.city;
-    country.value = usuarioActual.country;
-    */
 
     // Agrega escucha de evento clic
-    document.getElementById("profile-guardar").addEventListener("clic", function () {
-        actualizaPerfilUsuario(usuario);
-    });
+    document.getElementById("profile-guardar").addEventListener("click", cargaDatosUsuario);
 });

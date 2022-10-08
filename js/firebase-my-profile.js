@@ -1,6 +1,6 @@
 // Importa scripts de Firebase
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
-import { getDatabase, set, ref, child, get, push, update, remove } from "./firebase-9.9.2/firebase-database.js";
+import { getDatabase, ref, child, get, update } from "./firebase-9.9.2/firebase-database.js";
 
 // Inicializa configuración de Firebase
 const firebaseConfig = {
@@ -24,8 +24,8 @@ const db = getDatabase(app);
 let perfilUsuario = undefined;
 
 // Adquiere informacion del usuario
-function adquierePerfilUsuario(usuario) {
-    return get(child(ref(db), "ListadoUsuarios/" + usuario.uid + "/profile")).then(function (perfil) {
+function adquierePerfilUsuario() {
+    return get(child(ref(db), "ListadoUsuarios/" + usuarioActual.uid + "/profile")).then(function (perfil) {
         if (perfil.exists()) {
             perfilUsuario = perfil.val();
             return perfilUsuario;
@@ -43,29 +43,20 @@ function adquierePerfilUsuario(usuario) {
 };
 
 // Formulario de envío de comentarios nuevos
-function actualizaPerfilUsuario() {  
+function actualizaPerfilUsuario(usuario) {
+    // Actualiza los datos en Firebase
+    update(ref(db, "ListadoUsuarios/" + usuarioActual.uid + "/profile"), usuario)
+    .then(() => alert("Datos actualizados"))
+    .catch((error) => {
+        // Manejo de errores
+        const errorCode = error.code;
+        const errorMessage = error.message;
 
-    if (textoComentario === "") {
-        alert("Debe escribir un comentario")
-    } else {
-
-        // Agrega el comentario en la base de datos de Firebase
-        comentario = {
-            product: parseInt(currentProdID),
-            score: parseInt(puntosComentario.value),
-            description: textoComentario.value,
-            user: usuarioActual.displayName,
-            dateTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-        };
-
-        push(ref(db, "ListadoComentarios/" + currentProdID), comentario)
-            // En caso de error alerta al usuario con el codigo de error
-            .catch((error) => {
-                alert(error.message);
-            })
-    }
-
-
+        // Imprime errores en la consola
+        // Aunque no hacemos nada con esta info por ahora
+        console.log(errorCode);
+        console.log(errorMessage);
+    });
 }
 
 // Permite que las funciones necesarias sean accesibles desde otros script
