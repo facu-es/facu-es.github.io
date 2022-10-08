@@ -25,7 +25,11 @@ function adquiereComentariosFirebase(prodID) {
     return get(child(ref(db), "ListadoComentarios/" + prodID)).then(function (comentariosFirebase) {
         if (comentariosFirebase.exists()) {
             // Aquí se convierte el Objeto de Objetos en un Array de Objetos y se devuelve eso
-            return Object.keys(comentariosFirebase.val()).map(key => comentariosFirebase.val()[key]);
+            return Object.keys(comentariosFirebase.val()).map(function(key) {
+                let item = comentariosFirebase.val()[key];
+                item.fid = key;
+                return item
+            });
         } else {
             // Si no hay comentarios en Firebase devuelve un Array vacío
             return [];
@@ -91,6 +95,17 @@ function enviaComentarioFirebase() {
 
 }
 
+function eliminaComentarioFirebase(firebaseID) {
+
+}
+
+function actualizaComentarioFirebase(firebaseID) {
+
+}
+
+
 // Permite que las funciones necesarias sean accesibles desde otros script
 window.adquiereComentariosFirebase = adquiereComentariosFirebase;
 window.enviaComentarioFirebase = enviaComentarioFirebase;
+window.eliminaComentarioFirebase = eliminaComentarioFirebase;
+window.actualizaComentarioFirebase = actualizaComentarioFirebase;
