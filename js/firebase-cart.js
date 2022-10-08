@@ -1,6 +1,6 @@
 // Importa scripts de Firebase
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
-import { getDatabase, set, ref, child, get, push, update, remove } from "./firebase-9.9.2/firebase-database.js";
+import { getDatabase, ref, child, get, push, update, remove } from "./firebase-9.9.2/firebase-database.js";
 
 // Inicializa configuración de Firebase
 const firebaseConfig = {
@@ -93,7 +93,22 @@ function eliminarElementoCarrito(firebaseItemID) {
     });
 }
 
+function actualizaElementoCarrito(firebaseItemID, cantidad) {
+    update(ref(db, "ListadoUsuarios/" + usuarioActual.uid + "/cart/" + firebaseItemID), {count : parseInt(cantidad) })
+    .catch((error) => {
+        // Manejo de errores
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        // Imprime errores en la consola
+        // Aunque no hacemos nada con esta info por ahora
+        console.log(errorCode);
+        console.log(errorMessage);
+    });
+}
+
 // Permite que las funciones necesarias sean accesibles desde otros script
 window.adquiereCarritoFirebase = adquiereCarritoFirebase;
 window.enviaCarritoFirebase = enviaCarritoFirebase;
 window.eliminarElementoCarrito = eliminarElementoCarrito;
+window.actualizaElementoCarrito = actualizaElementoCarrito;

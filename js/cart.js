@@ -44,22 +44,79 @@ function sortCartList(criteria, array) {
     return result;
 }
 
+// Gestiona el incremento de un Item
+function aumentaCantidad(itemID) {
+    // Actualiza la cantidad en el Array de Items
+    currentCartListArray[itemID].count = parseInt(currentCartListArray[itemID].count) + 1;
+
+    // Actualiza cantidad en Firebase si el objeto contiene un ID de Objeto de Firebase
+    if(currentCartListArray[itemID].hasOwnProperty('fid')) {
+        actualizaElementoCarrito(currentCartListArray[itemID].fid, currentCartListArray[itemID].count);
+    }
+    
+    // Muestra los valores actualizados
+    showCartListInfo()
+}
+
+// Gestiona el decremento de un Item
+function reduceCantidad(itemID) {
+    // Actualiza la cantidad en el Array de Items
+    currentCartListArray[itemID].count = parseInt(currentCartListArray[itemID].count) - 1;
+
+    // Actualiza cantidad en Firebase si el objeto contiene un ID de Objeto de Firebase
+    if(currentCartListArray[itemID].hasOwnProperty('fid')) {
+        actualizaElementoCarrito(currentCartListArray[itemID].fid, currentCartListArray[itemID].count);
+    }
+
+    // Muestra los valores actualizados
+    showCartListInfo()
+}
+
+function actualizaCantidad(itemID, cantidad) {
+    // Actualiza la cantidad en el Array de Items
+    currentCartListArray[itemID].count = cantidad;
+
+    // Actualiza cantidad en Firebase
+    if(currentCartListArray[itemID].hasOwnProperty('fid')) {
+        actualizaElementoCarrito(currentCartListArray[itemID].fid, cantidad);
+    }
+
+    // Muestra los valores actualizados
+    showCartListInfo()
+}
+
 // Crea el contenido HTML del carrito partiendo de currentCartListArray
 function showCartListInfo() {
+    // Inicializa constantes para formato de valores monetarios
+    const moneda_formato_usd = new Intl.NumberFormat('es-UY', { style: 'currency', currency: 'USD' });
+    const moneda_formato_uyu = new Intl.NumberFormat('es-UY', { style: 'currency', currency: 'UYU' });
+
+    // Inicializa variable para los datos HTML a mostrar
     let carritoElementosHTML = "";
+
+    // Inicializa variables para calcular cantidades numericas
     let subtotalArticulosPesos = 0;
     let subtotalArticulosDolares = 0;
+    let costoEnvioArticulosPesos = 0;
+    let costoEnvioArticulosDolares = 0;
+    let totalPesos = 0;
+    let totalDolares = 0;
 
     // Construye HTML con los productos del listado del carrito
     for (let i = 0; i < currentCartListArray.length; i++) {
+        // Item actual del recorrido por el Array
         const articulo = currentCartListArray[i];
         
+        // Suma de costos totales en Pesos y Dólares y configuracion de formato para cada costo individual
         if(articulo.currency === 'USD') {
-            subtotalArticulosDolares += articulo.unitCost
+            subtotalArticulosDolares += articulo.count * articulo.unitCost;
+            costoArticulo = moneda_formato_usd.format(articulo.unitCost);
         } else {
-            subtotalArticulosPesos += articulo.unitCost
+            subtotalArticulosPesos += articulo.count * articulo.unitCost;
+            costoArticulo = moneda_formato_uyu.format(articulo.unitCost);
         }
 
+        // Solo construye HTML para los elementos a mostrar
         if (
             textoParaBuscar === undefined ||
             textoParaBuscar === '' ||
@@ -80,22 +137,19 @@ function showCartListInfo() {
                 <td class="align-middle">
                     <div class="d-flex flex-row">
                         <button class="btn btn-link border px-2"
-                            onclick="this.parentNode.querySelector('input[name=cantidad]').stepDown(); this.parentNode.parentNode.parentNode.querySelector('p[name=subtotal]').innerHTML=this.parentNode.querySelector('input[name=cantidad]').value * this.parentNode.parentNode.parentNode.querySelector('p[name=costoUnidad]').innerHTML; currentCartListArray[${i}].count = this.parentNode.querySelector('input[name=cantidad]').value">
+                            onclick="reduceCantidad(${i})">
                             <i class="fas fa-minus"></i>
                         </button>
-                        <input id="form1" name="cantidad" value="${articulo.count}" type="number"
-                            class="form-control form-control-sm" min="0" style="width: 50px;" />
+                        <input name="cantidad" value="${articulo.count}" type="number"
+                            onchange="actualizaCantidad(${i}, this.value)" class="form-control form-control-sm cantidad-producto" min="0" />
                         <button class="btn btn-link border px-2"
-                            onclick="this.parentNode.querySelector('input[name=cantidad]').stepUp(); this.parentNode.parentNode.parentNode.querySelector('p[name=subtotal]').innerHTML=this.parentNode.querySelector('input[name=cantidad]').value * this.parentNode.parentNode.parentNode.querySelector('p[name=costoUnidad]').innerHTML; currentCartListArray[${i}].count = this.parentNode.querySelector('input[name=cantidad]').value">
+                            onclick="aumentaCantidad(${i})">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
                 </td>
                 <td class="align-middle">
-                    <p class="mb-0" name="costoUnidad">${articulo.unitCost}</p>
-                </td>
-                <td class="align-middle">
-                    <p class="mb-0">${articulo.currency}</p>
+                    <p class="mb-0" name="costoUnidad">${costoArticulo}</p>
                 </td>
                 <td class="align-middle">
                     <p class="mb-0" name="subtotal">${articulo.count * articulo.unitCost}</p>
@@ -110,14 +164,33 @@ function showCartListInfo() {
             }
     }
 
-    // Subtotal en Pesos
-    console.log(subtotalArticulosPesos);
+    // Calcula costo de envío
+    if (document.getElementById("envioPremium").checked) {
+        // Calcula costos para el envío Premium (15 %)
+        costoEnvioArticulosPesos = Math.round(subtotalArticulosPesos * 0.15);
+        costoEnvioArticulosDolares = Math.round(subtotalArticulosDolares * 0.15);
+    } else if (document.getElementById("envioExpress").checked) {
+        // Calcula costos para el envío Express (7 %)
+        costoEnvioArticulosPesos = Math.round(subtotalArticulosPesos * 0.07);
+        costoEnvioArticulosDolares = Math.round(subtotalArticulosDolares * 0.07);
+    } else if (document.getElementById("envioStandard").checked) {
+        // Calcula costos para el envío Standard (5 %)
+        costoEnvioArticulosPesos = Math.round(subtotalArticulosPesos * 0.05);
+        costoEnvioArticulosDolares = Math.round(subtotalArticulosDolares * 0.05);
+    }
 
-    // Subtotal en Dolares
-    console.log(subtotalArticulosDolares);
+    // Calcula costo total
+    totalPesos = subtotalArticulosPesos + costoEnvioArticulosPesos;
+    totalDolares = subtotalArticulosDolares + costoEnvioArticulosDolares;
 
     // Inserta HTML dentro de los identificadores correspondientes desde DOM
     document.getElementById("lista-carrito").innerHTML = carritoElementosHTML;
+    document.getElementById("carrito-subtotal-pesos").innerHTML = moneda_formato_uyu.format(subtotalArticulosPesos);
+    document.getElementById("carrito-subtotal-dolares").innerHTML = moneda_formato_usd.format(subtotalArticulosDolares);
+    document.getElementById("carrito-costo-envio-pesos").innerHTML = moneda_formato_uyu.format(costoEnvioArticulosPesos);
+    document.getElementById("carrito-costo-envio-dolares").innerHTML = moneda_formato_usd.format(costoEnvioArticulosDolares);
+    document.getElementById("carrito-costo-total-pesos").innerHTML = moneda_formato_uyu.format(totalPesos);
+    document.getElementById("carrito-costo-total-dolares").innerHTML = moneda_formato_usd.format(totalDolares);
 }
 
 // Adquiere el listado de productos en el carrito desde JSON de JaP y Firebase
@@ -160,18 +233,17 @@ function sortAndShowCartList(sortCriteria, cartListArray) {
 
 // Elimina un elemento del carrito, propaga el cambio a Firebase y actualiza la lista de items en pantalla
 function quitarDelCarrito(firebaseID) {
-    console.log(currentCartListArray.findIndex(elemento => elemento.fid === firebaseID));
-    
-    // Elimina item en array actual
+    // Elimina item en Array actual
     currentCartListArray.splice(currentCartListArray.findIndex(elemento => elemento.fid === firebaseID), 1)
 
-    // Elimina item en Firebase
-    eliminarElementoCarrito(firebaseID);
+    // Elimina item en Firebase si el objeto contiene un ID de Objeto de Firebase
+    if(currentCartListArray[itemID].hasOwnProperty('fid')) {
+        eliminarElementoCarrito(firebaseID);
+    }
 
     // Actualiza la vista de elementos del carrito
     showCartListInfo();
 }
-
 
 // Espera a que se encuentren todos los elementos HTML cargados en el DOM.
 document.addEventListener("DOMContentLoaded", function (e) {
@@ -200,44 +272,8 @@ document.addEventListener("DOMContentLoaded", function (e) {
         showCartListInfo();
     });
 
-//    // Escucha de evento de cambio sobre los campos de los item del producto
-//    document.getElementsByClassName("productCountInput").addEventListener("change", function(){
-//        productCount = this.value;
-//        updateTotalCosts();
-//    });
-//
-//    document.getElementById("productcount").addEventListener("change", function() {
-//        this.parentNode.parentNode.parentNode.querySelector('p[name=subtotal]').innerHTML=this.parentNode.querySelector('input[name=cantidad]').value * this.parentNode.parentNode.parentNode.querySelector('p[name=costoUnidad]').innerHTML;
-//        
-//        currentCartListArray[].count = this.parentNode.querySelector('input[name=cantidad]').value
-//        updateTotalCosts();
-//    });
-//
-//    document.getElementById("goldradio").addEventListener("change", function(){
-//        comissionPercentage = 0.13;
-//        updateTotalCosts();
-//    });
-//    
-//    document.getElementById("premiumradio").addEventListener("change", function(){
-//        comissionPercentage = 0.07;
-//        updateTotalCosts();
-//    });
-//
-//    document.getElementById("standardradio").addEventListener("change", function(){
-//        comissionPercentage = 0.03;
-//        updateTotalCosts();
-//    });
-//
-//    document.getElementById("productCurrency").addEventListener("change", function(){
-//        if (this.value == DOLLAR_CURRENCY)
-//        {
-//            MONEY_SYMBOL = DOLLAR_SYMBOL;
-//        } 
-//        else if (this.value == PESO_CURRENCY)
-//        {
-//            MONEY_SYMBOL = PESO_SYMBOL;
-//        }
-//
-//        updateTotalCosts();
-//    });
+    // Escucha cambios en la seleccion del tipo de envio
+    document.getElementById("envioPremium").addEventListener("change", showCartListInfo);
+    document.getElementById("envioExpress").addEventListener("change", showCartListInfo);
+    document.getElementById("envioStandard").addEventListener("change", showCartListInfo);
 });

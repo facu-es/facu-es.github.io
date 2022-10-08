@@ -93,7 +93,6 @@
                           <th scope="col">Producto</th>
                           <th scope="col">Cantidad</th>
                           <th scope="col">Precio</th>
-                          <th scope="col">Moneda</th>
                           <th scope="col">Subtotal</th>
                           <th scope="col">Accion</th>
                         </tr>
@@ -112,7 +111,7 @@
                           <form>
                             <div class="d-flex flex-row pb-3">
                               <div class="d-flex align-items-center pe-2">
-                                <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1v"
+                                <input class="form-check-input" type="radio" name="radioNoLabel" id="envioPremium"
                                   value="" aria-label="..." checked />
                               </div>
                               <div class="rounded border w-100 p-3">
@@ -123,7 +122,7 @@
                             </div>
                             <div class="d-flex flex-row pb-3">
                               <div class="d-flex align-items-center pe-2">
-                                <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel2v"
+                                <input class="form-check-input" type="radio" name="radioNoLabel" id="envioExpress"
                                   value="" aria-label="..." />
                               </div>
                               <div class="rounded border w-100 p-3">
@@ -135,7 +134,7 @@
                             </div>
                             <div class="d-flex flex-row">
                               <div class="d-flex align-items-center pe-2">
-                                <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel3v"
+                                <input class="form-check-input" type="radio" name="radioNoLabel" id="envioStandard"
                                   value="" aria-label="..." />
                               </div>
                               <div class="rounded border w-100 p-3">
@@ -171,24 +170,36 @@
                         <div class="col-lg-4 col-xl-3">
                           <div class="d-flex justify-content-between">
                             <p class="mb-2">Subtotal en Pesos</p>
-                            <p class="mb-2" id="carrito-subtotal"> UYU</p>
+                            <p id="carrito-subtotal-pesos"></p>
                           </div>
 
                           <div class="d-flex justify-content-between">
                             <p class="mb-2">Subtotal en Dólares</p>
-                            <p class="mb-2" id="carrito-subtotal"> USD</p>
-                          </div>
-
-                          <div class="d-flex justify-content-between">
-                            <p class="mb-0">Costo de envío</p>
-                            <p class="mb-0" id="carrito-costoenvio"></p>
+                            <p id="carrito-subtotal-dolares"></p>
                           </div>
 
                           <hr class="my-4">
 
-                          <div class="d-flex justify-content-between mb-4">
-                            <p class="mb-2">Total (con impuestos)</p>
-                            <p class="mb-2" id="carrito-total"></p>
+                          <div class="d-flex justify-content-between">
+                            <p class="mb-2">Costo de envío en Pesos</p>
+                            <p id="carrito-costo-envio-pesos" class="mb-0"></p>
+                          </div>
+
+                          <div class="d-flex justify-content-between">
+                            <p class="mb-2">Costo de envío en Dolares</p>
+                            <p id="carrito-costo-envio-dolares" class="mb-0"></p>
+                          </div>
+
+                          <hr class="my-4">
+
+                          <div class="d-flex justify-content-between">
+                            <p class="mb-2">Total en Pesos (c/imp.)</p>
+                            <p id="carrito-costo-total-pesos" class="mb-0"></p>
+                          </div>
+
+                          <div class="d-flex justify-content-between">
+                            <p class="mb-2">Total en Dolares (c/imp.)</p>
+                            <p id="carrito-costo-total-dolares" class="mb-0"></p>
                           </div>
 
                           <button type="button" class="btn btn-primary btn-block btn-lg" id="carrito-pago">
@@ -203,7 +214,24 @@
 
                     </div>
                   </div>
-
+                <!-- HTML parap posible funcionalidad de "Comprar más tarde"
+                  <div class="mt-5 mb-2"><h3>Productos guardados</h3></div>
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Producto</th>
+                          <th scope="col">Cantidad</th>
+                          <th scope="col">Precio</th>
+                          <th scope="col">Subtotal</th>
+                          <th scope="col">Accion</th>
+                        </tr>
+                      </thead>
+                      <tbody id="lista-carrito-comprar-luego">
+                      </tbody>
+                    </table>
+                  </div>
+                -->
                 </div>
               </div>
             </div>
