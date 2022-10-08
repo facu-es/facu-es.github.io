@@ -49,7 +49,7 @@ function adquiereCarritoFirebase(userID) {
 // Formulario de envío de comentarios nuevos
 function enviaCarritoFirebase(prodID, prodName, prodImg, prodCost, prodCurrency, prodCount) {
     let articulo = {};
-    console.log(prodID, prodName, prodImg, prodCost, prodCurrency, prodCount);
+
     if (usuarioActual === null || usuarioActual === "" || usuarioActual === undefined) {
         alert("Debe iniciar sesión para poder comprar")
         return
