@@ -76,6 +76,8 @@ function enviaCarritoFirebase(prodID, prodName, prodImg, prodCost, prodCurrency,
                 console.log(errorCode);
                 console.log(errorMessage);
             });
+
+    alert("Producto agregado");
 }
 
 
