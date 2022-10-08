@@ -88,13 +88,13 @@ function actualizaCantidad(itemID, cantidad) {
 
 // Elimina un elemento del carrito, propaga el cambio a Firebase y actualiza la lista de items en pantalla
 function quitarDelCarrito(itemID) {
-    // Elimina item en Array actual
-    currentCartListArray.splice(itemID, 1)
-
     // Elimina item en Firebase si el objeto contiene un ID de Objeto de Firebase
     if(currentCartListArray[itemID].hasOwnProperty('fid')) {
         eliminarElementoCarrito(currentCartListArray[itemID].fid);
     }
+
+    // Elimina item en Array actual
+    currentCartListArray.splice(itemID, 1)
 
     // Actualiza la vista de elementos del carrito
     showCartListInfo();
