@@ -102,6 +102,7 @@ function showProductInfo() {
     // Construye HTML con los productos relacionados al producto principal
     // NOTA: Podría haber utilizado la notación directa de no ser porque la API no define explícitamente
     // que solo se presenten dos relacionados, aunque ese ha sido el caso.
+    
     for (let i = 0; i < currentProductInfo.relatedProducts.length; i++) {
         relacionadosProductoHTML += `
         <div onclick="adquiereProductoComentarios(${currentProductInfo.relatedProducts[i].id})" class="col-md-6">
@@ -117,10 +118,10 @@ function showProductInfo() {
 
     // Crea el contenido en HTML de los detalles del producto
     detallesProductoHTML = `
-    <div><span class="fw-bold">Cantidades vendidas:</span> <span>${currentProductInfo.soldCount}</span></div>
-    <div><span class="fw-bold">Precio: </span><span>${currentProductInfo.currency} ${currentProductInfo.cost}</span></div>
+    <div><span class="fw-bold fs-6">Cantidades vendidas:</span> <span>${currentProductInfo.soldCount}</span></div>
+    <div><span class="fw-bold fs-6">Precio: </span><span>${currentProductInfo.currency} ${currentProductInfo.cost}</span></div>
     <hr class="singleline">
-    <span>${currentProductInfo.description}</span>
+    <span class="fst-italic text-center text-wrap text-break fs-5">${currentProductInfo.description}</span>
     `
 
     // Inserta HTML dentro de los identificadores correspondientes desde DOM
