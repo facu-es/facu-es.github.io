@@ -81,130 +81,161 @@
                                 <hr class="singleline">
                                 <div class="mt-2 mb-2" id="detallesProducto">
                                 </div>
+                                <hr class="singleline">
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 ">
+                                    <div class="d-flex flex-row pb-3">
+                                        <div class="d-flex align-items-center pe-2">
+                                            <span class="text-center px-1 fs-5">Cantidad </span>
+                                            <button class="btn btn-link border"
+                                                onclick="this.parentNode.querySelector('input[id=cantidad]').stepDown();">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input class="form-control" id="cantidad" type="number" pattern="[0-9]*"
+                                                min="1" value="1">
+                                            <button class="btn btn-link border"
+                                                onclick="this.parentNode.querySelector('input[id=cantidad]').stepUp();">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="w-50">
+                                            <button type="button" class="btn btn-success w-100 mb-3 mt-3"
+                                                onclick="enviaCarritoFirebase(currentProductInfo.id, currentProductInfo.name, currentProductInfo.images[0], currentProductInfo.cost, currentProductInfo.currency, this.parentNode.parentNode.querySelector('input[id=cantidad]').value)">Agregar
+                                                al Carrito</button>
+                                        </div>
+                                    </div>
+                                    <!--
+                                        <button type="button" class="btn btn-success">Comprar ahora</button>
+                                    -->
+                                </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Productos relacionados -->
-                        <div class="row mt-4">
-                            <div class="row row-underline">
-                                <div class="col-md-6">
-                                    <h3>Productos relacionados</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-2 mb-2" id="relacionadosProducto">
-                        </div>
-                        <!-- Comentarios -->
+                </div>
+
+            </div>
+            <!-- Productos relacionados -->
+            <div class="row mt-4">
+                <div class="row row-underline">
+                    <div class="col-md-6">
+                        <h3>Productos relacionados</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2 mb-2" id="relacionadosProducto">
+            </div>
+            <!-- Comentarios -->
+            <div class="row">
+                <div class="row row-underline">
+                    <div class="col-md-6">
+                        <h3>Comentarios</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        <!-- Comentarios existentes -->
+        <section class="container-fluid">
+            <div class="container my-1 py-1">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-12 col-lg-10 col-xl-10">
                         <div class="row">
-                            <div class="row row-underline">
-                                <div class="col-md-6">
-                                    <h3>Comentarios</h3>
+                            <div class="col text-end">
+                                <div class="btn-group btn-group-toggle mb-4" data-bs-toggle="buttons">
+                                    <input type="radio" class="btn-check" name="options" id="sortAscByDate">
+                                    <label class="btn btn-light" for="sortAscByDate"><i
+                                            class="fas fa-sort-amount-down-alt"> Fecha</i></label>
+                                    <input type="radio" class="btn-check" name="options" id="sortDescByDate">
+                                    <label class="btn btn-light" for="sortDescByDate"><i
+                                            class="fas fa-sort-amount-down"> Fecha</i></label>
+                                    <input type="radio" class="btn-check" name="options" id="sortAscByScore">
+                                    <label class="btn btn-light" for="sortAscByScore"><i
+                                            class="fas fa-sort-amount-down-alt"> Star</i></label>
+                                    <input type="radio" class="btn-check" name="options" id="sortDescByScore">
+                                    <label class="btn btn-light" for="sortDescByScore"><i
+                                            class="fas fa-sort-amount-down"> Star</i></label>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 offset-lg-6 col-md-12 mb-1 container">
+                                <div class="row container p-0 m-0 mb-2">
+                                    <div class="col">
+                                        <p class="font-weight-normal text-end my-2">Calificacion </p>
+                                    </div>
+                                    <div class="col">
+                                        <input class="form-control" type="number" placeholder="min."
+                                            id="rangeFilterCountMin">
+                                    </div>
+                                    <div class="col">
+                                        <input class="form-control" type="number" placeholder="máx."
+                                            id="rangeFilterCountMax">
+                                    </div>
+                                    <div class="col-3 p-0">
+                                        <div class="btn-group" role="group">
+                                            <button class="btn btn-light btn-block"
+                                                id="rangeFilterCount">Filtrar</button>
+                                            <button class="btn btn-link btn-sm" id="clearRangeFilter">Limpiar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row container p-0 m-0">
+                                    <div class="col-3 p-0">
+                                        <p class="font-weight-normal text-end my-2">Busqueda</p>
+                                    </div>
+                                    <div class="col">
+                                        <input class="form-control" type="search"
+                                            placeholder="Buscar en los comentarios..." id="buscarTexto">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card text-dark" id="comentarios">
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Comentarios existentes -->
-            <section class="container-fluid">
-                <div class="container my-1 py-1">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-md-12 col-lg-10 col-xl-10">
-                            <div class="row">
-                                <div class="col text-end">
-                                    <div class="btn-group btn-group-toggle mb-4" data-bs-toggle="buttons">
-                                        <input type="radio" class="btn-check" name="options" id="sortAscByDate">
-                                        <label class="btn btn-light" for="sortAscByDate"><i
-                                                class="fas fa-sort-amount-down-alt"> Fecha</i></label>
-                                        <input type="radio" class="btn-check" name="options" id="sortDescByDate">
-                                        <label class="btn btn-light" for="sortDescByDate"><i
-                                                class="fas fa-sort-amount-down"> Fecha</i></label>
-                                        <input type="radio" class="btn-check" name="options" id="sortAscByScore">
-                                        <label class="btn btn-light" for="sortAscByScore"><i
-                                                class="fas fa-sort-amount-down-alt"> Star</i></label>
-                                        <input type="radio" class="btn-check" name="options" id="sortDescByScore">
-                                        <label class="btn btn-light" for="sortDescByScore"><i
-                                                class="fas fa-sort-amount-down"> Star</i></label>
+        </section>
+        <!-- Comentarios nuevos -->
+        <section class="container-fluid">
+            <div class="container my-1 py-1">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-12 col-lg-10 col-xl-10">
+                        <div class="card card-body p-4">
+                            <div class="d-flex flex-start w-100">
+                                <img class="rounded-circle shadow-1-strong me-3" src="img/img_perfil.png" alt="avatar"
+                                    width="65" height="65" />
+                                <div class="w-100">
+                                    <h5>Publicar un comentario</h5>
+                                    <ul class="rating mb-3" data-mdb-toggle="rating">
+                                    </ul>
+                                    <div class="form-outline">
+                                        <label class="form-label mt-2" for="puntosComentario">Calificación:</label>
+                                        <select class="form-control" id="puntosComentario" name="puntos" size="1">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3" selected>3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                        <textarea class="form-control mt-2" id="textoComentario" rows="4"
+                                            placeholder="¿Cual es tu opinion?"></textarea>
+                                        <label class="form-label" for="textoComentario"></label>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn btn-success" id="enviarComentario">Enviar<i
+                                                class="fas fa-long-arrow-alt-right ms-1"></i></button>
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6 offset-lg-6 col-md-12 mb-1 container">
-                                    <div class="row container p-0 m-0 mb-2">
-                                        <div class="col">
-                                            <p class="font-weight-normal text-end my-2">Calificacion </p>
-                                        </div>
-                                        <div class="col">
-                                            <input class="form-control" type="number" placeholder="min."
-                                                id="rangeFilterCountMin">
-                                        </div>
-                                        <div class="col">
-                                            <input class="form-control" type="number" placeholder="máx."
-                                                id="rangeFilterCountMax">
-                                        </div>
-                                        <div class="col-3 p-0">
-                                            <div class="btn-group" role="group">
-                                                <button class="btn btn-light btn-block"
-                                                    id="rangeFilterCount">Filtrar</button>
-                                                <button class="btn btn-link btn-sm"
-                                                    id="clearRangeFilter">Limpiar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row container p-0 m-0">
-                                        <div class="col-3 p-0">
-                                            <p class="font-weight-normal text-end my-2">Busqueda</p>
-                                        </div>
-                                        <div class="col">
-                                            <input class="form-control" type="search"
-                                                placeholder="Buscar en los comentarios..." id="buscarTexto">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card text-dark" id="comentarios">
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-            <!-- Comentarios nuevos -->
-            <section class="container-fluid">
-                <div class="container my-1 py-1">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-md-12 col-lg-10 col-xl-10">
-                            <div class="card card-body p-4">
-                                <div class="d-flex flex-start w-100">
-                                    <img class="rounded-circle shadow-1-strong me-3" src="img/img_perfil.png"
-                                        alt="avatar" width="65" height="65" />
-                                    <div class="w-100">
-                                        <h5>Publicar un comentario</h5>
-                                        <ul class="rating mb-3" data-mdb-toggle="rating">
-                                        </ul>
-                                        <div class="form-outline">
-                                            <label class="form-label mt-2" for="puntosComentario">Calificación:</label>
-                                            <select class="form-control" id="puntosComentario" name="puntos" size="1">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3" selected>3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                            </select>
-                                            <textarea class="form-control mt-2" id="textoComentario" rows="4"
-                                                placeholder="¿Cual es tu opinion?"></textarea>
-                                            <label class="form-label" for="textoComentario"></label>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <button type="button" class="btn btn-success" id="enviarComentario">Enviar<i
-                                                    class="fas fa-long-arrow-alt-right ms-1"></i></button>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            </section>
+        </section>
     </main>
     <footer class="text-muted">
         <div class="container">
@@ -230,6 +261,7 @@
     <script type="module" src="js/firebase-usuario.js"></script>
     <script src="js/init.js"></script>
     <script type="module" src="js/firebase-comentarios.js"></script>
+    <script type="module" src="js/firebase-cart.js"></script>
     <script src="js/product-info.js"></script>
 </body>
 
