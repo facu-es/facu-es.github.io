@@ -189,11 +189,7 @@ a.custom-card:hover {
   color: orange;
 }
 
-/*
-
-Inicio de sesión
-
-*/
+/* Inicio de sesión */
 
 .logos-login {
   height: 40px;
@@ -206,25 +202,7 @@ Inicio de sesión
   background-color: rgb(248, 249, 250);
 }
 
-/*
-
-Product-Info Comentarios
-
-*/
-
-.estrella-marcada {
-  color: orange;
-}
-
-.estrella-sin-marcar {
-  color: rgb(24, 24, 24);
-}
-
-/*
-
-Product-Info Productos
-
-*/
+/* Product-Info Productos */
 
 .breadcrumb-item+.breadcrumb-item::before {
   content: ">"
@@ -251,6 +229,25 @@ Product-Info Productos
   margin-top: 15px
 }
 
+
+input[type=number] {
+  width: 50px;
+  text-align: center;
+}
+
+/* Esconde flachas de input tipo numero */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
 /* Calificación con estrellas */
 
 .star-ratings-sprite {
@@ -261,7 +258,6 @@ Product-Info Productos
   overflow: hidden;
   text-indent: -999em;
   width: 110px;
-/*  margin: 0 auto; */
 }
 
 .star-ratings-sprite-rating {
@@ -270,4 +266,21 @@ Product-Info Productos
     float: left;
     height: 21px;
     display:block;
+}
+
+/* Estilo en Mi Perfil */
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
 }
