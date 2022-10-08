@@ -109,11 +109,19 @@ function showCartListInfo() {
         
         // Suma de costos totales en Pesos y Dólares y configuracion de formato para cada costo individual
         if(articulo.currency === 'USD') {
+            // Suma de todos los valores
             subtotalArticulosDolares += articulo.count * articulo.unitCost;
+            
+            // Valores calculados para el elemento a mostrar
             costoArticulo = moneda_formato_usd.format(articulo.unitCost);
+            subtotalArticulo = moneda_formato_usd.format(articulo.count * articulo.unitCost);
         } else {
+            // Suma de todos los valores
             subtotalArticulosPesos += articulo.count * articulo.unitCost;
+
+            // Valores calculados para el elemento a mostrar
             costoArticulo = moneda_formato_uyu.format(articulo.unitCost);
+            subtotalArticulo = moneda_formato_uyu.format(articulo.count * articulo.unitCost);
         }
 
         // Solo construye HTML para los elementos a mostrar
@@ -152,7 +160,7 @@ function showCartListInfo() {
                     <p class="mb-0" name="costoUnidad">${costoArticulo}</p>
                 </td>
                 <td class="align-middle">
-                    <p class="mb-0" name="subtotal">${articulo.count * articulo.unitCost}</p>
+                    <p class="mb-0" name="subtotal">${subtotalArticulo}</p>
                 </td>
                 <td class="align-middle">
                     <button class="btn btn-link border px-2" onclick="quitarDelCarrito('${articulo.fid}')">
