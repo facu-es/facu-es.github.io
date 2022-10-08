@@ -8,22 +8,12 @@
   <link href="css/font-raleway.css" rel="stylesheet">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
-  <style>
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
+  <script>
+    if (localStorage.getItem("usuario") === null && sessionStorage.getItem("usuario") === null ) {
+        alert("Debe iniciar sesión para ver su perfil");
+        window.location.href = "login.html";
     }
-
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
-    }
-  </style>
+  </script>
 </head>
 
 <body>
@@ -56,7 +46,13 @@
     <div class="container rounded bg-white mt-5 mb-5">
       <div class="row">
           <div class="col-md-3 border-right">
-              <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="img/usuario.webp"><span class="font-weight-bold">Usuario</span><span class="text-black-50">correo@correo.com</span><span> </span></div>
+              <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="rounded-circle mt-5" width="150px" src="img/usuario.webp" id="profile-img">
+                <span class="font-weight-bold">ID: <span class="text-black-50" id="profile-username"></span></span>
+                <span class="font-weight-bold">Correo: <span class="text-black-50" id="profile-email"></span></span>
+                <span class="font-weight-bold">Provedor: <span class="text-black-50" id="profile-provider"></span></span>
+                <span> </span>
+              </div>
           </div>
           <div class="col-md-5 border-right">
               <div class="p-3 py-5">
@@ -64,25 +60,27 @@
                       <h4 class="text-right">Perfil de usuario</h4>
                   </div>
                   <div class="row mt-2">
-                      <div class="col-md-6"><label class="labels">Nombre</label><input type="text" class="form-control" placeholder="Nombre" value=""></div>
-                      <div class="col-md-6"><label class="labels">Apellido</label><input type="text" class="form-control" value="" placeholder="Apellidos"></div>
+                      <div class="col-md-6"><label class="labels">Nombre completo</label><input type="text" class="form-control" placeholder="Nombre completo" value="" id="profile-fullname"></div>
                   </div>
                   <div class="row mt-3">
                       <!-- <div class="col-md-12 mb-2"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="enter phone number" value=""></div> -->
-                      <div class="col-md-12 mb-2"><label class="labels">Direccion</label><input type="text" class="form-control" placeholder="Direccion" value=""></div>
-                      <div class="col-md-12 mb-2"><label class="labels">Esquina o numero de puerta</label><input type="text" class="form-control" placeholder="Esquina o numero de puerta" value=""></div>
-                      <div class="col-md-12 mb-2"><label class="labels">Codigo postal</label><input type="text" class="form-control" placeholder="Codigo postal" value=""></div>
-                      <div class="col-md-12 mb-2"><label class="labels">Departamento</label><input type="text" class="form-control" placeholder="Departamento" value=""></div>
-                      <div class="col-md-12 mb-2"><label class="labels">Ciudad</label><input type="text" class="form-control" placeholder="Ciudad" value=""></div>
-                      <div class="col-md-12 mb-2"><label class="labels">Correo electronico</label><input type="text" class="form-control" placeholder="Correo electronico" value=""></div>
+                      <div class="col-md-12 mb-2"><label class="labels">Direccion</label><input type="text" class="form-control" placeholder="Direccion" value="" id="profile-firstaddress"></div>
+                      <div class="col-md-12 mb-2"><label class="labels">Esquina o numero de puerta</label><input type="text" class="form-control" placeholder="Esquina o numero de puerta" value="" id="profile-secondaddress"></div>
+                      <div class="col-md-12 mb-2"><label class="labels">Codigo postal</label><input type="text" class="form-control" placeholder="Codigo postal" value="" id="profile-postalcode"></div>
+                      <div class="col-md-12 mb-2"><label class="labels">Departamento</label><input type="text" class="form-control" placeholder="Departamento" value="" id="profile-state"></div>
+                      <div class="col-md-12 mb-2"><label class="labels">Ciudad</label><input type="text" class="form-control" placeholder="Ciudad" value="" id="profile-city"></div>
+                    <!--
+                      <div class="col-md-12 mb-2"><label class="labels">Correo electronico</label><input type="text" class="form-control" placeholder="Correo electronico" value="" id="profile-email"></div>
+                    -->
                   </div>
-                  <!--
                   <div class="row mt-3">
-                      <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
-                      <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
+                      <div class="col-md-6"><label class="labels">País</label><input type="text" class="form-control" placeholder="País" value="" id="profile-country"></div>
+                      <!--                      
+                      <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state" id="profile-state"></div>
+                      -->
                   </div>
-                  -->
-                  <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Guardar cambios</button></div>
+
+                  <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button" id="profile-guardar">Guardar cambios</button></div>
               </div>
           </div>
           <div class="col-md-4">
@@ -109,10 +107,19 @@
       <p>Clickea <a target="_blank" href="Letra.pdf">aquí</a> para descargar la letra del obligatorio.</p>
     </div>
   </footer>
+  <div id="spinner-wrapper">
+    <div class="lds-ring">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
   <script src="js/bootstrap.bundle.min.js"></script>
   <script type="module" src="js/firebase-usuario.js"></script>
   <script src="js/init.js"></script>
   <script src="js/my-profile.js"></script>
+  <script type="module" src="js/firebase-my-profile.js"></script>
 </body>
 
 </html>
