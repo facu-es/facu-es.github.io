@@ -230,7 +230,7 @@ a.custom-card:hover {
 }
 
 
-input[type=number] {
+.cantidad-producto {
   width: 50px;
   text-align: center;
 }
@@ -283,4 +283,9 @@ input[type=number] {
   .bd-placeholder-img-lg {
     font-size: 3.5rem;
   }
+}
+
+/* Alertas por encima de todo */
+.alert {
+  z-index: 99999;
 }
