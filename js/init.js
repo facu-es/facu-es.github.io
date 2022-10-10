@@ -49,15 +49,21 @@ function alertaUsuario(titulo, mensaje, tipo) {
 
   const alertaHTML = document.createElement('div')
   alertaHTML.innerHTML = [
-    `<div class="alert alert-${tipo} alert-dismissible fade show" role="alert">`,
+    `<div class="alert alert-${tipo} fade show" role="alert" id="alerta">`,
     `   <h4 class="alert-heading">${titulo}</h4>`,
     `   <hr>`,
     `   <div>${mensaje}</div>`,
-    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>',
+//    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>',
     '</div>'
   ].join('')
 
   alertaAnclaDOM.append(alertaHTML)
+
+  // Esconde y luego elimina la alerta tras 2 segundos
+  setTimeout(function() {
+    document.getElementById('alerta').classList.remove("show");
+    document.getElementById('alerta').remove();
+  }, 2000);
 }
 
 // Gestión de menus de usuario
