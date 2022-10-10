@@ -151,19 +151,40 @@ function showCommentsList() {
             // El campo de búsqueda coincide por texto en nombre de usuario y comentario
             ((textoParaBuscar == undefined || textoParaBuscar == '') || (comment.user.toLowerCase().includes(textoParaBuscar) || comment.description.toLowerCase().includes(textoParaBuscar)))) {
 
+            // Construye menú de edicion de comentario
+            if(comment.fid !== null && comment.user === usuarioActual.nid && !comment.eliminado) {
+                bloqueEdicionComentario = `
+                <a class="link-muted" href="javascript:actualizaComentarioFirebase('${comment.product}', '${i}', '${comment.fid}')"><i class="fas fa-pencil-alt ms-2"></i></a>
+                <a class="link-muted" href="javascript:eliminaComentarioFirebase('${comment.product}', '${i}', '${comment.fid}')"><i class="fas fa-redo-alt ms-2"></i></a>
+                `;
+            } else {
+                bloqueEdicionComentario = "";
+            };
+
+            // Avisa si el comentario fue eliminado
+            if(comment.eliminado) {
+                comment.description = `<span class="text-muted">-- Comentario eliminado el ${moment(comment.eliminado, moment.ISO_8601).format('LLLL')} --</span>`;
+                comment.score = '0';
+            }
+
+            // Avisa si el comentario fue actualizado
+            if(comment.actualizado && !comment.eliminado) {
+                comment.description = `<span class="text-muted">-- Comentario actualizado el ${moment(comment.actualizado, moment.ISO_8601).format('LLLL')} --</span><br /><br />${comment.description}`;
+            }
+            
             htmlContentToAppend += `
             <div class="card-body p-4">
                 <div class="d-flex flex-start">
-                    <img class="rounded-circle shadow-1-strong me-3" src="img/img_perfil.png" alt="avatar" width="60"
-                        height="60" />
+                    <img class="rounded-circle shadow-1-strong me-3" src="img/img_perfil.png" alt="avatar" width="60" height="60" />
                     <div>
                         <h6 class="fw-bold mb-1">${comment.user}</h6>
                         <div class="d-flex align-items-center mb-1">
-                            <p class="mb-0"><span>Fecha: </span>${moment(comment.dateTime, moment.ISO_8601).format('LLLL')}</p>
+                            <p class="mb-0 fst-italic"><span class="fst-italic">Fecha: </span>${moment(comment.dateTime, moment.ISO_8601).format('LLLL')}</p>
+                            ${bloqueEdicionComentario}
                         </div>
                         <div class="d-flex align-items-center mb-3">
-                            <span>Calificación: </span>
-                            <div class="star-ratings-sprite"><span style="width:${
+                            <span class="fst-italic">Calificación: </span>
+                            <div class="star-ratings-sprite ms-2"><span style="width:${
                 // Con las siguientes clases de CSS se define una superposición de dos conjuntos de cinco estrellas
                 // el de abajo con estrellas grises, y el de arriba con estrellas amarillas.
                 // La longitud de la extensión de las estrellas amarillas se define con la etiqueta style aplicada a span
