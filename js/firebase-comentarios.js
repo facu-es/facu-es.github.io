@@ -1,6 +1,6 @@
 // Importa scripts de Firebase
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
-import { getDatabase, set, ref, child, get, push, update, remove } from "./firebase-9.9.2/firebase-database.js";
+import { getDatabase, ref, child, get, push, update } from "./firebase-9.9.2/firebase-database.js";
 
 // Inicializa configuración de Firebase
 const firebaseConfig = {
@@ -25,7 +25,7 @@ function adquiereComentariosFirebase(prodID) {
     return get(child(ref(db), "ListadoComentarios/" + prodID)).then(function (comentariosFirebase) {
         if (comentariosFirebase.exists()) {
             // Aquí se convierte el Objeto de Objetos en un Array de Objetos y se devuelve eso
-            return Object.keys(comentariosFirebase.val()).map(function(key) {
+            return Object.keys(comentariosFirebase.val()).map(function (key) {
                 let item = comentariosFirebase.val()[key];
                 item.fid = key;
                 return item
@@ -45,65 +45,133 @@ function adquiereComentariosFirebase(prodID) {
     });
 };
 
-// Formulario de envío de comentarios nuevos
+// Envío de comentarios nuevos
 function enviaComentarioFirebase() {
+    // Inicializa objeto de trabajo
     let comentario = {};
 
+    // Verifica si hay un usuario con sesion iniciada
     if (usuarioActual === null || usuarioActual === "" || usuarioActual === undefined) {
         alertaUsuario("Acceso denegado", "Debe iniciar sesión para poder comentar", "warning");
         return
     }
 
-    textoComentario = document.getElementById("textoComentario");
-    puntosComentario = document.getElementById("puntosComentario");
+    // Guarda en constantes las referencias al DOM a campos en el formulario
+    const textoComentario = document.getElementById("textoComentario");
+    const puntosComentario = document.getElementById("puntosComentario");
 
-    if (textoComentario === "") {
+    // Si el campo de texto para el comentario está vacío notifica al usuario para que lo complete
+    if (textoComentario.value === "") {
         alertaUsuario("Formulario incompleto", "El comentario no puede estar vacío", "warning");
     } else {
-
-        // Agrega el comentario en la base de datos de Firebase
+        // Completa objeto de Comentario
         comentario = {
             product: parseInt(currentProdID),
             score: parseInt(puntosComentario.value),
             description: textoComentario.value,
-            user: usuarioActual.displayName,
+            user: usuarioActual.nid,
             dateTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
         };
 
+        // Agrega el comentario en la base de datos de Firebase
         push(ref(db, "ListadoComentarios/" + currentProdID), comentario)
             .catch((error) => {
                 // Manejo de errores
                 const errorCode = error.code;
                 const errorMessage = error.message;
-        
-                // Imprime errores en la consola
-                // Aunque no hacemos nada con esta info por ahora
-                console.log(errorCode);
-                console.log(errorMessage);
 
                 // Informa al usuario del error
                 // No se considera inseguro ya que la validacion misma ocurre en el cliente
                 alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
             });
     }
-    // Agrega comentario al array actual
+    // Agrega comentario al array actual de comentarios
     currentCommentsArray.push(comentario);
 
     // Limpia los campos
     textoComentario.value = "";
     puntosComentario.value = 3;
-
     limpiarFiltrosComentarios();
+
+    // Actualiza el listado de comentarios
     sortAndShowComments(ORDER_ASC_BY_DATE);
-
 }
 
-function eliminaComentarioFirebase(firebaseID) {
+// Funcionalidad para eliminar comentarios
+function eliminaComentarioFirebase(prodID, arrID, firebaseID) {
+    // Verifica que se definió firebaseID y si no termina la función
+    if(!firebaseID) {
+        return
+    }
 
+    // Agrega atributo de eliminado con la fecha en que se realiza
+    update(ref(db, "ListadoComentarios/" + prodID + "/" + firebaseID), {
+        eliminado: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    })
+    .catch((error) => {
+        // Manejo de errores
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        // Informa al usuario del error
+        // No se considera inseguro ya que la validacion misma ocurre en el cliente
+        alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
+    });
+
+    // Actualiza la vista actual
+    sortAndShowComments(ORDER_ASC_BY_DATE);
 }
 
-function actualizaComentarioFirebase(firebaseID) {
+// Funcionalidad para modificar comentarios
+function actualizaComentarioFirebase(prodID, arrID, firebaseID) {
+    // Verifica que se definió firebaseID y si no termina la función
+    if(!firebaseID) {
+        return
+    }
 
+    // Inicializa variables
+    let fecha = undefined;
+
+    // Guarda en constantes las referencias al DOM a campos en el formulario
+    const textoComentario = document.getElementById("textoComentario");
+    const puntosComentario = document.getElementById("puntosComentario");
+
+    // Si el campo de texto para el comentario está vacío notifica al usuario para que lo complete
+    if (textoComentario.value === "") {
+        alertaUsuario("Formulario incompleto", "El comentario no puede estar vacío", "warning");
+    } else {
+        // Fecha del cambio
+        fecha = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+
+        // Actualiza comentario
+        update(ref(db, "ListadoComentarios/" + prodID + "/" + firebaseID), {
+            score: parseInt(puntosComentario.value),
+            description: textoComentario.value,
+            actualizado: fecha
+        })
+        .catch((error) => {
+            // Manejo de errores
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            // Informa al usuario del error
+            // No se considera inseguro ya que la validacion misma ocurre en el cliente
+            alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
+        });
+    };
+
+    // Actualiza el array actual de comentarios
+    currentCommentsArray[arrID].actualizado = fecha;
+    currentCommentsArray[arrID].description = textoComentario.value;
+    currentCommentsArray[arrID].score = puntosComentario.value;
+
+    // Limpia los campos
+    textoComentario.value = "";
+    puntosComentario.value = 3;
+    limpiarFiltrosComentarios();
+
+    // Actualiza el listado de comentarios
+    sortAndShowComments(ORDER_ASC_BY_DATE);
 }
 
 
