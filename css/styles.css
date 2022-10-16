@@ -235,7 +235,7 @@ a.custom-card:hover {
   text-align: center;
 }
 
-/* Esconde flachas de input tipo numero */
+/* Esconde flechas de input tipo numero */
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
