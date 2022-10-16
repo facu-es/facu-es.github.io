@@ -94,7 +94,7 @@
                                                 onclick="this.parentNode.querySelector('input[id=cantidad]').stepDown();">
                                                 <i class="fas fa-minus"></i>
                                             </button>
-                                            <input class="form-control" id="cantidad" type="number" pattern="[0-9]*"
+                                            <input class="form-control cantidad-producto" id="cantidad" type="number" pattern="[0-9]*"
                                                 min="1" value="1">
                                             <button class="btn btn-link border"
                                                 onclick="this.parentNode.querySelector('input[id=cantidad]').stepUp();">
@@ -259,9 +259,10 @@
         </div>
     </div>
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/purify.min.js"></script>
+    <script src="js/init.js"></script>
     <script src="js/moment-with-locales.js"></script>
     <script type="module" src="js/firebase-usuario.js"></script>
-    <script src="js/init.js"></script>
     <script type="module" src="js/firebase-comentarios.js"></script>
     <script type="module" src="js/firebase-cart.js"></script>
     <script src="js/product-info.js"></script>
