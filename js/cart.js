@@ -125,8 +125,17 @@ function showCartListInfo() {
 
     // Construye HTML con los productos del listado del carrito
     for (let i = 0; i < currentCartListArray.length; i++) {
-        // Item actual del recorrido por el Array
-        const articulo = currentCartListArray[i];
+        // Inicializa variable para almacenar objeto del producto actualmente iterado
+        let articulo;
+
+        // Se sanitizan los campos alterables
+        articulo = {
+            count : DOMPurify.sanitize(currentCartListArray[i].count, { USE_PROFILES: { html: true } }),
+            unitCost : DOMPurify.sanitize(currentCartListArray[i].unitCost, { USE_PROFILES: { html: true } }),
+            name : DOMPurify.sanitize(currentCartListArray[i].name, { USE_PROFILES: { html: true } }),
+            image : DOMPurify.sanitize(currentCartListArray[i].image, { USE_PROFILES: { html: true } }),
+            currency : DOMPurify.sanitize(currentCartListArray[i].currency, { USE_PROFILES: { html: true } }),
+        }
         
         // Suma de costos totales en Pesos y Dólares y configuracion de formato para cada costo individual
         if(articulo.currency === 'USD') {
