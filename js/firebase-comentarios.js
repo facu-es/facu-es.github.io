@@ -24,10 +24,15 @@ const db = getDatabase(app);
 function adquiereComentariosFirebase(prodID) {
     return get(child(ref(db), "ListadoComentarios/" + prodID)).then(function (comentariosFirebase) {
         if (comentariosFirebase.exists()) {
-            // Aquí se convierte el Objeto de Objetos en un Array de Objetos y se devuelve eso
+            // Se convierte el Objeto de Objetos en un Array de Objetos, se realizan validaciones y se devuelve el resultado
             return Object.keys(comentariosFirebase.val()).map(function (key) {
-                let item = comentariosFirebase.val()[key];
+                // Inicializa objeto nuevo para el comentario
+                let item = comentariosFirebase.val()[key]
+                
+                // Añade la referencia al comentario en Firebase como un conjunto atributo/valor
                 item.fid = key;
+                
+                // Devuelve el listado de objetos
                 return item
             });
         } else {
@@ -104,9 +109,12 @@ function eliminaComentarioFirebase(prodID, arrID, firebaseID) {
         return
     }
 
+    // Construye constante con la fecha y hora actual
+    const fechaeliminado = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+
     // Agrega atributo de eliminado con la fecha en que se realiza
     update(ref(db, "ListadoComentarios/" + prodID + "/" + firebaseID), {
-        eliminado: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+        eliminado: fechaeliminado,
     })
     .catch((error) => {
         // Manejo de errores
@@ -117,6 +125,9 @@ function eliminaComentarioFirebase(prodID, arrID, firebaseID) {
         // No se considera inseguro ya que la validacion misma ocurre en el cliente
         alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
     });
+
+    // Añade atributo de eliminado en el Array actual
+    currentCommentsArray[arrID].eliminado = fechaeliminado;
 
     // Actualiza la vista actual
     sortAndShowComments(ORDER_ASC_BY_DATE);
