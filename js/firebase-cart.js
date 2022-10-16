@@ -24,7 +24,9 @@ const db = getDatabase(app);
 function adquiereCarritoFirebase(userID) {
     return get(child(ref(db), "ListadoUsuarios/" + userID + "/cart/")).then(function (carritoFirebase) {
         if (carritoFirebase.exists()) {
-            // Aquí se convierte el Objeto de Objetos en un Array de Objetos y se devuelve eso
+            // Aquí se convierte el Objeto de Objetos en un Array de Objetos,
+            // se añade un atributo llamado fid con el identificador del objeto en Firebase como valor
+            // luego se devuelve eso
             return Object.keys(carritoFirebase.val()).map(function(key) {
                 let item = carritoFirebase.val()[key];
                 item.fid = key;
@@ -79,7 +81,7 @@ function enviaCarritoFirebase(prodID, prodName, prodImg, prodCost, prodCurrency,
     alertaUsuario("Correcto", "¡El producto fue agregado!", "success");
 }
 
-
+// Elimina el objeto del producto en el carrito del usuario en Firebase
 function eliminarElementoCarrito(firebaseItemID) {
     remove(ref(db, "ListadoUsuarios/" + usuarioActual.uid + "/cart/" + firebaseItemID))
     .catch((error) => {
@@ -93,8 +95,9 @@ function eliminarElementoCarrito(firebaseItemID) {
     });
 }
 
+// Actualiza la cantidad de un producto en el objeto en Firebase
 function actualizaElementoCarrito(firebaseItemID, cantidad) {
-    update(ref(db, "ListadoUsuarios/" + usuarioActual.uid + "/cart/" + firebaseItemID), {count : parseInt(cantidad) })
+    update(ref(db, "ListadoUsuarios/" + usuarioActual.uid + "/cart/" + firebaseItemID), {count : Math.max(Math.round(parseInt(cantidad)), 0)})
     .catch((error) => {
         // Manejo de errores
         const errorCode = error.code;
