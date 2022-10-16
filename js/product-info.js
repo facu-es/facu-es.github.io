@@ -143,7 +143,20 @@ function showCommentsList() {
     moment.locale('es');
 
     for (let i = 0; i < currentCommentsArray.length; i++) {
-        let comment = currentCommentsArray[i];
+        // Inicializa variable para almacenar objeto del comentario actualmente iterado
+        let comment;
+        
+        // Se sanitizan los campos alterables (evita inyección XSS)
+        comment = {
+            dateTime : DOMPurify.sanitize(currentCommentsArray[i].dateTime, { USE_PROFILES: { html: true } }),
+            description : DOMPurify.sanitize(currentCommentsArray[i].description, { USE_PROFILES: { html: true } }),
+            product : DOMPurify.sanitize(currentCommentsArray[i].product, { USE_PROFILES: { html: true } }),
+            score : DOMPurify.sanitize(currentCommentsArray[i].score, { USE_PROFILES: { html: true } }),
+            user : DOMPurify.sanitize(currentCommentsArray[i].user, { USE_PROFILES: { html: true } }),
+            eliminado : DOMPurify.sanitize(currentCommentsArray[i].eliminado, { USE_PROFILES: { html: true } }),
+            actualizado : DOMPurify.sanitize(currentCommentsArray[i].actualizado, { USE_PROFILES: { html: true } }),
+            fid : DOMPurify.sanitize(currentCommentsArray[i].fid, { USE_PROFILES: { html: true } }),
+        }
 
         // Funciones de filtrado a los comentarios
         if (((minCount == undefined) || (minCount != undefined && parseInt(comment.score) >= minCount)) &&
@@ -163,13 +176,13 @@ function showCommentsList() {
 
             // Avisa si el comentario fue eliminado
             if(comment.eliminado) {
-                comment.description = `<span class="text-muted">-- Comentario eliminado el ${moment(comment.eliminado, moment.ISO_8601).format('LLLL')} --</span>`;
+                comment.description = `<span class="text-muted">- Comentario eliminado el ${moment(comment.eliminado, moment.ISO_8601).format('LLLL')} -</span>`;
                 comment.score = '0';
             }
 
             // Avisa si el comentario fue actualizado
             if(comment.actualizado && !comment.eliminado) {
-                comment.description = `<span class="text-muted">-- Comentario actualizado el ${moment(comment.actualizado, moment.ISO_8601).format('LLLL')} --</span><br /><br />${comment.description}`;
+                comment.description = `<span class="text-muted">- Comentario actualizado el ${moment(comment.actualizado, moment.ISO_8601).format('LLLL')} -</span><br /><br />${comment.description}`;
             }
             
             htmlContentToAppend += `
