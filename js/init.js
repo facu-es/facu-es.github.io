@@ -45,22 +45,28 @@ let getJSONData = function (url) {
 
 // Alertas al usuario
 function alertaUsuario(titulo, mensaje, tipo) {
+  // Adquiere elemento contenedor para la etiqueta
   const alertaAnclaDOM = document.getElementById('alertaAnclaDOM')
 
+  // Si la pagina actual no contiene un contenedor esta funcion termina aquí
+  if (!alertaAnclaDOM) {
+    return;
+  }
+  // Crea la etiqueta
   const alertaHTML = document.createElement('div')
   alertaHTML.innerHTML = [
     `<div class="alert alert-${tipo} fade show" role="alert" id="alerta">`,
     `   <h4 class="alert-heading">${titulo}</h4>`,
     `   <hr>`,
     `   <div>${mensaje}</div>`,
-//    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>',
+    //    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>',
     '</div>'
   ].join('')
 
   alertaAnclaDOM.append(alertaHTML)
 
   // Esconde y luego elimina la alerta tras 2 segundos
-  setTimeout(function() {
+  setTimeout(function () {
     document.getElementById('alerta').classList.remove("show");
     document.getElementById('alerta').remove();
   }, 2000);
@@ -68,7 +74,10 @@ function alertaUsuario(titulo, mensaje, tipo) {
 
 // Gestión de menus de usuario
 document.addEventListener("DOMContentLoaded", function (e) {
+  // Adquiere elemento contenedor para las opciones de usuario
   const inicioRegistroCuenta = document.getElementById("inicio-registro-cuenta");
+
+  // Adquiere bandera de persistencia de la sesion desde el Almacenamiento Local
   const mantenerSesionIniciada = localStorage.getItem("mantenersesioniniciada");
 
   if (mantenerSesionIniciada) {
