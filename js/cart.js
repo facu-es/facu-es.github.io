@@ -42,7 +42,7 @@ function sortCartList(criteria, array) {
     }
 
     return result;
-}
+};
 
 // Gestiona el incremento de un Item
 function aumentaCantidad(itemID) {
@@ -56,7 +56,7 @@ function aumentaCantidad(itemID) {
     
     // Muestra los valores actualizados
     showCartListInfo()
-}
+};
 
 // Gestiona el decremento de un Item
 function reduceCantidad(itemID) {
@@ -70,21 +70,21 @@ function reduceCantidad(itemID) {
 
     // Muestra los valores actualizados
     showCartListInfo()
-}
+};
 
 // Actualiza la cantidad en el Array de Items
 function actualizaCantidad(itemID, cantidad) {
     // Establece la cantidad en base al valor provisto, redondea al entero más cercano y se asegura de que el valor no se establece por debajo de 0
-    currentCartListArray[itemID].count = Math.max(Math.round(cantidad), 0);
+    currentCartListArray[itemID].count = Math.max(Math.round(parseInt(cantidad)), 0);
 
     // Actualiza cantidad en Firebase
     if(currentCartListArray[itemID].hasOwnProperty('fid')) {
-        actualizaElementoCarrito(currentCartListArray[itemID].fid, Math.round(cantidad));
+        actualizaElementoCarrito(currentCartListArray[itemID].fid, Math.max(Math.round(parseInt(cantidad)), 0));
     }
 
     // Muestra los valores actualizados
     showCartListInfo()
-}
+};
 
 // Elimina un elemento del carrito, propaga el cambio a Firebase y actualiza la lista de items en pantalla
 function quitarDelCarrito(itemID) {
@@ -98,13 +98,13 @@ function quitarDelCarrito(itemID) {
 
     // Actualiza la vista de elementos del carrito
     showCartListInfo();
-}
+};
 
 // Permite al usuario ver el producto del carrito mediante una redireccion
 function verProducto(itemID) {
     localStorage.setItem("prodID", currentCartListArray[itemID].id);
     window.location = "product-info.html"
-}
+};
 
 // Crea el contenido HTML del carrito partiendo de currentCartListArray
 function showCartListInfo() {
@@ -115,7 +115,7 @@ function showCartListInfo() {
     // Inicializa variable para los datos HTML a mostrar
     let carritoElementosHTML = "";
 
-    // Inicializa variables para calcular cantidades numericas
+    // Inicializa variables para calcular cantidades numéricas
     let subtotalArticulosPesos = 0;
     let subtotalArticulosDolares = 0;
     let costoEnvioArticulosPesos = 0;
@@ -145,7 +145,7 @@ function showCartListInfo() {
             subtotalArticulo = moneda_formato_uyu.format(articulo.count * articulo.unitCost);
         }
 
-        // Solo construye HTML para los elementos a mostrar
+        // Solo construye HTML para los elementos a mostrar definidos por la función de búsqueda
         if (
             textoParaBuscar === undefined ||
             textoParaBuscar === '' ||
@@ -159,7 +159,7 @@ function showCartListInfo() {
                     <div class="d-flex align-items-center">
                         <img src="${articulo.image}" class="img-fluid rounded-3" style="width: 120px;" alt="Imagen de ${articulo.name}">
                         <div class="flex-column ms-4">
-                            <a class="mb-2 link-secondary" href="javascript:verProducto(${i})">${articulo.name}</a>
+                        <button class="btn btn-link mb-2" onclick="verProducto(${i})">${articulo.name}</button>
                         </div>
                     </div>
                 </th>
@@ -220,7 +220,24 @@ function showCartListInfo() {
     document.getElementById("carrito-costo-envio-dolares").innerHTML = moneda_formato_usd.format(costoEnvioArticulosDolares);
     document.getElementById("carrito-costo-total-pesos").innerHTML = moneda_formato_uyu.format(totalPesos);
     document.getElementById("carrito-costo-total-dolares").innerHTML = moneda_formato_usd.format(totalDolares);
-}
+};
+
+// Ordena y muestra los productos
+function sortAndShowCartList(sortCriteria, cartListArray) {
+    // Se guarda en una variable global el criterio actual de ordenamiento
+    currentSortCriteria = sortCriteria;
+
+    // Si por parámetro se define un Array a ordenar, se asigna ese a la variable global
+    if (cartListArray != undefined) {
+        currentCartListArray = cartListArray;
+    }
+
+    // Guarda en la variable global el Array ordenado en base al criterio
+    currentCartListArray = sortCartList(currentSortCriteria, currentCartListArray);
+
+    // Muestra el carrito del usuario
+    showCartListInfo();
+};
 
 // Adquiere el listado de productos en el carrito desde JSON de JaP y Firebase
 function adquiereCarritoCompras(userID) {
@@ -240,25 +257,14 @@ function adquiereCarritoCompras(userID) {
         }).then(function (firebaseArrayCarrito) {
             // Combina los productos
             firebaseArrayCarrito.forEach(elemento => currentCartListArray.push(elemento))
+
+            // Sanitiza valores de salida
+            currentCartListArray.forEach(comentario => Object.entries(comentario).map(atributo => comentario[atributo[0]] = DOMPurify.sanitize(atributo[1], { USE_PROFILES: { html: true } })));
         }).then(function () {
             // Muestra los productos
             sortAndShowCartList(ORDER_ASC_BY_NAME)
         });
 };
-
-// Ordena y muestra los productos
-function sortAndShowCartList(sortCriteria, cartListArray) {
-    currentSortCriteria = sortCriteria;
-
-    if (cartListArray != undefined) {
-        currentCartListArray = cartListArray;
-    }
-
-    currentCartListArray = sortCartList(currentSortCriteria, currentCartListArray);
-
-    // Muestro el carrito del usuario
-    showCartListInfo();
-}
 
 // Espera a que se encuentren todos los elementos HTML cargados en el DOM.
 document.addEventListener("DOMContentLoaded", function (e) {
