@@ -1,7 +1,6 @@
 // Importa scripts de Firebase
 import { initializeApp } from "./firebase-9.9.2/firebase-app.js";
 import { getAuth, signInWithPopup, onAuthStateChanged, GoogleAuthProvider, GithubAuthProvider, signInWithEmailAndPassword } from "./firebase-9.9.2/firebase-auth.js";
-// import {  setPersistence, browserSessionPersistence } from "./firebase-9.9.2/firebase-auth.js";
 
 // Inicializa configuracion de Firebase
 const firebaseConfig = {
@@ -27,11 +26,6 @@ auth.languageCode = 'es';
 // Agrega autenticacion con Google
 const google = new GoogleAuthProvider();
 
-// Configura menu de login (agrega casilla de ejemplo)
-google.setCustomParameters({
-    'login_hint': 'usuario@google.com'
-});
-
 // Agrega autenticacion con Github
 const github = new GithubAuthProvider();
 
@@ -42,121 +36,114 @@ github.setCustomParameters({
 
 // Inicia sesion con Google
 function iniciarSesionGoogle() {
-//    setPersistence(auth, browserSessionPersistence)
-//        .then(() => {
-            signInWithPopup(auth, google)
-                .then((result) => {
-                    // Se adquiere un Token de Acceso
-                    const credential = GithubAuthProvider.credentialFromResult(result);
-                    // const token = credential.accessToken;
+    signInWithPopup(auth, google)
+        .then((result) => {
+            // Se adquiere un Token de Acceso
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            // const token = credential.accessToken;
 
-                    // Aqui se obtine la informacion del usuario que inició sesión
-                    const user = result.user;
+            // Aqui se obtine la informacion del usuario que inició sesión
+            const user = result.user;
 
-                }).catch((error) => {
-                    // Manejo de errores
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    const email = error.customData.email;
-                    const credential = GoogleAuthProvider.credentialFromError(error);
+        }).catch((error) => {
+            // Manejo de errores
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const email = error.customData.email;
+            const credential = GoogleAuthProvider.credentialFromError(error);
 
-                    // Imprime errores en la consola
-                    // Aunque no hacemos nada con esta info por ahora
-                    console.log(errorCode);
-                    console.log(errorMessage);
+            // Imprime errores en la consola
+            // Aunque no hacemos nada con esta info por ahora
+            console.log(errorCode);
+            console.log(errorMessage);
 
-                    // Informa al usuario del error
-                    // No se considera inseguro ya que la validacion misma ocurre en el cliente
-                    alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
-                });
-//        });
+            // Informa al usuario del error
+            // No se considera inseguro ya que la validacion misma ocurre en el cliente
+            alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
+        });
 }
 
 // Inicia sesion con Github
 function iniciarSesionGithub() {
-//    setPersistence(auth, browserSessionPersistence)
-//        .then(() => {
-            signInWithPopup(auth, github)
-                .then((result) => {
-                    // Se adquiere un Token de Acceso
-                    const credential = GoogleAuthProvider.credentialFromResult(result);
-                    // const token = credential.accessToken;
+    signInWithPopup(auth, github)
+        .then((result) => {
+            // Se adquiere un Token de Acceso
+            const credential = GithubAuthProvider.credentialFromResult(result);
+            // const token = credential.accessToken;
 
-                    // Aqui se obtine la informacion del usuario que inició sesión
-                    const user = result.user;
+            // Aqui se obtine la informacion del usuario que inició sesión
+            const user = result.user;
 
-                }).catch((error) => {
-                    // Manejo de errores
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    const email = error.customData.email;
-                    const credential = GoogleAuthProvider.credentialFromError(error);
+        }).catch((error) => {
+            // Manejo de errores
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            const email = error.customData.email;
+            const credential = GithubAuthProvider.credentialFromError(error);
 
-                    // Imprime errores en la consola
-                    // Aunque no hacemos nada con esta info por ahora
-                    console.log(errorCode);
-                    console.log(errorMessage);
+            // Imprime errores en la consola
+            // Aunque no hacemos nada con esta info por ahora
+            console.log(errorCode);
+            console.log(errorMessage);
 
-                    // Informa al usuario del error
-                    // No se considera inseguro ya que la validacion misma ocurre en el cliente
-                    alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
-                });
-//        });
+            // Informa al usuario del error
+            // No se considera inseguro ya que la validacion misma ocurre en el cliente
+            alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
+        });
 }
 
 // Inicia sesion con Email
 function iniciarSesionCorreo(email, password) {
-//    setPersistence(auth, browserSessionPersistence)
-//        .then(() => {
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // Aqui se obtine la informacion del usuario que inició sesión
-                    const user = userCredential.user;
-                    // ...
-                })
-                .catch((error) => {
-                    // Manejo de errores
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Aqui se obtine la informacion del usuario que inició sesión
+            const user = userCredential.user;
+        })
+        .catch((error) => {
+            // Manejo de errores
+            const errorCode = error.code;
+            const errorMessage = error.message;
 
-                    // Imprime errores en la consola
-                    // Aunque no hacemos nada con esta info por ahora
-                    console.log(errorCode);
-                    console.log(errorMessage);
+            // Imprime errores en la consola
+            // Aunque no hacemos nada con esta info por ahora
+            console.log(errorCode);
+            console.log(errorMessage);
 
-                    // Informa al usuario del error
-                    // No se considera inseguro ya que la validacion misma ocurre en el cliente
-                    alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
-                });
-//        });
+            // Informa al usuario del error
+            // No se considera inseguro ya que la validacion misma ocurre en el cliente
+            alertaUsuario("Error de Firebase", errorCode.split("/")[1], "danger");
+        });
 }
 
 // Escucha por un evento de inicio de sesion basado en Firebase
 onAuthStateChanged(auth, (user) => {
+    // Inicializa objeto para datos del usuario
     let usuario = undefined;
+
     if (user) {
         // Se crea el objeto que alberga la informacion del usuario
+        // Se sanitizan los campos alterables por el usuario
         if (user.displayName !== null) {
             usuario = {
-                provider: user.providerId,
-                site: user.providerData[0].providerId,
-                displayName: user.displayName,
-                email: user.email,
-                photoURL: user.photoURL,
-                emailVerified: user.emailVerified,
-                uid: user.uid,
-                nid: user.displayName.toLowerCase().replace(/[^a-zA-Z0-9]+/gmi, '_'),
+                provider: DOMPurify.sanitize(user.providerId, { USE_PROFILES: { html: true } }),
+                site: DOMPurify.sanitize(user.providerData[0].providerId, { USE_PROFILES: { html: true } }),
+                displayName: DOMPurify.sanitize(user.displayName, { USE_PROFILES: { html: true } }),
+                email: DOMPurify.sanitize(user.email, { USE_PROFILES: { html: true } }),
+                photoURL: DOMPurify.sanitize(user.photoURL, { USE_PROFILES: { html: true } }),
+                emailVerified: DOMPurify.sanitize(user.emailVerified, { USE_PROFILES: { html: true } }),
+                uid: DOMPurify.sanitize(user.uid, { USE_PROFILES: { html: true } }),
+                nid: DOMPurify.sanitize(user.displayName.toLowerCase().replace(/[^a-zA-Z0-9]+/gmi, '_'), { USE_PROFILES: { html: true } }),
             };
         } else {
             usuario = {
-                provider: user.providerId,
-                site: user.providerData[0].providerId,
-                displayName: user.email.split("@")[0].toLowerCase().replace(/[^a-zA-Z0-9]+/gmi, '_'),
-                email: user.email,
-                photoURL: user.photoURL,
-                emailVerified: user.emailVerified,
-                uid: user.uid,
-                nid: "user_" + user.email.split("@")[0].toLowerCase().split("@")[0].replace(/[^a-zA-Z0-9]+/gmi, '_'),
+                provider: DOMPurify.sanitize(user.providerId, { USE_PROFILES: { html: true } }),
+                site: DOMPurify.sanitize(user.providerData[0].providerId, { USE_PROFILES: { html: true } }),
+                displayName: DOMPurify.sanitize(user.email.split("@")[0].toLowerCase().replace(/[^a-zA-Z0-9]+/gmi, '_'), { USE_PROFILES: { html: true } }),
+                email: DOMPurify.sanitize(user.email, { USE_PROFILES: { html: true } }),
+                photoURL: DOMPurify.sanitize(user.photoURL, { USE_PROFILES: { html: true } }),
+                emailVerified: DOMPurify.sanitize(user.emailVerified, { USE_PROFILES: { html: true } }),
+                uid: DOMPurify.sanitize(user.uid, { USE_PROFILES: { html: true } }),
+                nid: DOMPurify.sanitize("user_" + user.email.split("@")[0].toLowerCase().replace(/[^a-zA-Z0-9]+/gmi, '_'), { USE_PROFILES: { html: true } }),
             };
         }
 
@@ -169,6 +156,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
+// Se hacen globales las funciones disponible en este script de tipo modulo
 window.iniciarSesionGoogle = iniciarSesionGoogle;
 window.iniciarSesionGithub = iniciarSesionGithub;
 window.iniciarSesionCorreo = iniciarSesionCorreo;
