@@ -5,8 +5,6 @@ const ORDER_BY_COUNT = "Cantidad";
 let currentSortCriteria = undefined
 
 // Variables para filtros
-let minCount = undefined;
-let maxCount = undefined;
 let textoParaBuscar = undefined;
 
 // Variables para datos
