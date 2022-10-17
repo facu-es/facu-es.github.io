@@ -268,7 +268,7 @@ function adquiereCarritoCompras(userID) {
             firebaseArrayCarrito.forEach(elemento => currentCartListArray.push(elemento))
 
             // Sanitiza valores de salida
-            currentCartListArray.forEach(comentario => Object.entries(comentario).map(atributo => comentario[atributo[0]] = DOMPurify.sanitize(atributo[1], { USE_PROFILES: { html: true } })));
+            currentCartListArray.forEach(elemento => Object.entries(elemento).map(atributo => elemento[atributo[0]] = DOMPurify.sanitize(atributo[1], { USE_PROFILES: { html: true } })));
         }).then(function () {
             // Muestra los productos
             sortAndShowCartList(ORDER_ASC_BY_NAME)
