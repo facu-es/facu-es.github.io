@@ -12,6 +12,117 @@ let currentUserID = undefined;
 let currentCartListArray = [];
 let firebaseCartListArray = [];
 
+// Cotizacion de precios
+const PESOS_POR_DOLAR = 41;
+
+// Inicializa el uso de Mercado Pago
+const mp = new MercadoPago('TEST-d326b969-adb9-4767-98c2-84d3519a0f91', {
+    locale: 'es-UY',
+});
+
+
+// Configuracion Mercado Pago
+const cardForm = mp.cardForm({
+    amount: '100.5',
+    autoMount: true,
+    processingMode: 'aggregator',
+    form: {
+        id: 'form-checkout',
+        cardholderName: {
+            id: 'form-checkout__cardholderName',
+            placeholder: 'Cardholder name',
+        },
+        cardholderEmail: {
+            id: 'form-checkout__cardholderEmail',
+            placeholder: 'Email',
+        },
+        cardNumber: {
+            id: 'form-checkout__cardNumber',
+            placeholder: 'Card number',
+        },
+        expirationDate: {
+            id: 'form-checkout__expirationDate',
+            placeholder: 'MM/YYYY'
+        },
+        securityCode: {
+            id: 'form-checkout__securityCode',
+            placeholder: 'CVV',
+        },
+        installments: {
+            id: 'form-checkout__installments',
+            placeholder: 'Total installments'
+        },
+        identificationType: {
+            id: 'form-checkout__identificationType',
+            placeholder: 'Document type'
+        },
+        identificationNumber: {
+            id: 'form-checkout__identificationNumber',
+            placeholder: 'Document number'
+        },
+        issuer: {
+            id: 'form-checkout__issuer',
+            placeholder: 'Issuer'
+        }
+    },
+    callbacks: {
+        onFormMounted: error => {
+            if (error) return console.warn('Form Mounted handling error: ', error)
+            console.log('Form mounted')
+        },
+        onFormUnmounted: error => {
+            if (error) return console.warn('Form Unmounted handling error: ', error)
+            console.log('Form unmounted')
+        },
+        onIdentificationTypesReceived: (error, identificationTypes) => {
+            if (error) return console.warn('identificationTypes handling error: ', error)
+            console.log('Identification types available: ', identificationTypes)
+        },
+        onPaymentMethodsReceived: (error, paymentMethods) => {
+            if (error) return console.warn('paymentMethods handling error: ', error)
+            console.log('Payment Methods available: ', paymentMethods)
+        },
+        onIssuersReceived: (error, issuers) => {
+            if (error) return console.warn('issuers handling error: ', error)
+            console.log('Issuers available: ', issuers)
+        },
+        onInstallmentsReceived: (error, installments) => {
+            if (error) return console.warn('installments handling error: ', error)
+            console.log('Installments available: ', installments)
+        },
+        onCardTokenReceived: (error, token) => {
+            if (error) return console.warn('Token handling error: ', error)
+            console.log('Token available: ', token)
+        },
+        onSubmit: (event) => {
+            event.preventDefault();
+            const cardData = cardForm.getCardFormData();
+            console.log('CardForm data available: ', cardData)
+        },
+        onFetching:(resource) => {
+            console.log('Fetching resource: ', resource)
+
+            // Animate progress bar
+            const progressBar = document.querySelector('.progress-bar')
+            progressBar.removeAttribute('value')
+
+            return () => {
+                progressBar.setAttribute('value', '0')
+            }
+        },
+        onError: (error, event) => {
+            console.log(event, error);
+        },
+        onValidityChange: (error, field) => {
+            if (error) return error.forEach(e => console.log(`${field}: ${e.message}`));
+            console.log(`${field} is valid`);
+        },
+        onReady: () => {
+            console.log("CardForm ready");
+        }
+    }
+});
+
 // Ordena los elementos del array recibido
 // Cuando se define criterio la función de comparación adecuada es utilizada
 function sortCartList(criteria, array) {
@@ -48,10 +159,10 @@ function aumentaCantidad(itemID) {
     currentCartListArray[itemID].count = Math.max(Math.round(parseInt(currentCartListArray[itemID].count) + 1), 0);
 
     // Actualiza cantidad en Firebase si el objeto contiene un ID de Objeto de Firebase
-    if(currentCartListArray[itemID].hasOwnProperty('fid')) {
+    if (currentCartListArray[itemID].hasOwnProperty('fid')) {
         actualizaElementoCarrito(currentCartListArray[itemID].fid, currentCartListArray[itemID].count);
     }
-    
+
     // Muestra los valores actualizados
     showCartListInfo()
 };
@@ -62,7 +173,7 @@ function reduceCantidad(itemID) {
     currentCartListArray[itemID].count = Math.max(Math.round(parseInt(currentCartListArray[itemID].count) - 1), 0);
 
     // Actualiza cantidad en Firebase si el objeto contiene un ID de Objeto de Firebase
-    if(currentCartListArray[itemID].hasOwnProperty('fid')) {
+    if (currentCartListArray[itemID].hasOwnProperty('fid')) {
         actualizaElementoCarrito(currentCartListArray[itemID].fid, currentCartListArray[itemID].count);
     }
 
@@ -76,7 +187,7 @@ function actualizaCantidad(itemID, cantidad) {
     currentCartListArray[itemID].count = Math.max(Math.round(parseInt(cantidad)), 0);
 
     // Actualiza cantidad en Firebase
-    if(currentCartListArray[itemID].hasOwnProperty('fid')) {
+    if (currentCartListArray[itemID].hasOwnProperty('fid')) {
         actualizaElementoCarrito(currentCartListArray[itemID].fid, Math.max(Math.round(parseInt(cantidad)), 0));
     }
 
@@ -87,7 +198,7 @@ function actualizaCantidad(itemID, cantidad) {
 // Elimina un elemento del carrito, propaga el cambio a Firebase y actualiza la lista de items en pantalla
 function quitarDelCarrito(itemID) {
     // Elimina item en Firebase si el objeto contiene un ID de Objeto de Firebase
-    if(currentCartListArray[itemID].hasOwnProperty('fid')) {
+    if (currentCartListArray[itemID].hasOwnProperty('fid')) {
         eliminarElementoCarrito(currentCartListArray[itemID].fid);
     }
 
@@ -114,12 +225,11 @@ function showCartListInfo() {
     let carritoElementosHTML = "";
 
     // Inicializa variables para calcular cantidades numéricas
+    let subtotalArticulos = 0;
     let subtotalArticulosPesos = 0;
     let subtotalArticulosDolares = 0;
-    let costoEnvioArticulosPesos = 0;
-    let costoEnvioArticulosDolares = 0;
-    let totalPesos = 0;
-    let totalDolares = 0;
+    let costoEnvioArticulos = 0;
+    let totalArticulos = 0;
 
     // Construye HTML con los productos del listado del carrito
     for (let i = 0; i < currentCartListArray.length; i++) {
@@ -128,18 +238,18 @@ function showCartListInfo() {
 
         // Se sanitizan los campos alterables
         articulo = {
-            count : DOMPurify.sanitize(currentCartListArray[i].count, { USE_PROFILES: { html: true } }),
-            unitCost : DOMPurify.sanitize(currentCartListArray[i].unitCost, { USE_PROFILES: { html: true } }),
-            name : DOMPurify.sanitize(currentCartListArray[i].name, { USE_PROFILES: { html: true } }),
-            image : DOMPurify.sanitize(currentCartListArray[i].image, { USE_PROFILES: { html: true } }),
-            currency : DOMPurify.sanitize(currentCartListArray[i].currency, { USE_PROFILES: { html: true } }),
+            count: DOMPurify.sanitize(currentCartListArray[i].count, { USE_PROFILES: { html: true } }),
+            unitCost: DOMPurify.sanitize(currentCartListArray[i].unitCost, { USE_PROFILES: { html: true } }),
+            name: DOMPurify.sanitize(currentCartListArray[i].name, { USE_PROFILES: { html: true } }),
+            image: DOMPurify.sanitize(currentCartListArray[i].image, { USE_PROFILES: { html: true } }),
+            currency: DOMPurify.sanitize(currentCartListArray[i].currency, { USE_PROFILES: { html: true } }),
         }
-        
+
         // Suma de costos totales en Pesos y Dólares y configuracion de formato para cada costo individual
-        if(articulo.currency === 'USD') {
+        if (articulo.currency === 'USD') {
             // Suma de todos los valores
             subtotalArticulosDolares += articulo.count * articulo.unitCost;
-            
+
             // Valores calculados para el elemento a mostrar
             costoArticulo = moneda_formato_usd.format(articulo.unitCost);
             subtotalArticulo = moneda_formato_usd.format(articulo.count * articulo.unitCost);
@@ -197,36 +307,32 @@ function showCartListInfo() {
                 </td>
             <tr>
             `
-            }
+        }
     }
+
+    // Consolida costos a dólares
+    subtotalArticulos = subtotalArticulosDolares + (subtotalArticulosPesos / PESOS_POR_DOLAR);
 
     // Calcula costo de envío
     if (document.getElementById("envioPremium").checked) {
         // Calcula costos para el envío Premium (15 %)
-        costoEnvioArticulosPesos = Math.round(subtotalArticulosPesos * 0.15);
-        costoEnvioArticulosDolares = Math.round(subtotalArticulosDolares * 0.15);
+        costoEnvioArticulos = Math.round(subtotalArticulos * 0.15);
     } else if (document.getElementById("envioExpress").checked) {
         // Calcula costos para el envío Express (7 %)
-        costoEnvioArticulosPesos = Math.round(subtotalArticulosPesos * 0.07);
-        costoEnvioArticulosDolares = Math.round(subtotalArticulosDolares * 0.07);
+        costoEnvioArticulos = Math.round(subtotalArticulos * 0.07);
     } else if (document.getElementById("envioStandard").checked) {
         // Calcula costos para el envío Standard (5 %)
-        costoEnvioArticulosPesos = Math.round(subtotalArticulosPesos * 0.05);
-        costoEnvioArticulosDolares = Math.round(subtotalArticulosDolares * 0.05);
+        costoEnvioArticulos = Math.round(subtotalArticulos * 0.05);
     }
 
     // Calcula costo total
-    totalPesos = subtotalArticulosPesos + costoEnvioArticulosPesos;
-    totalDolares = subtotalArticulosDolares + costoEnvioArticulosDolares;
+    totalArticulos = subtotalArticulos + costoEnvioArticulos;
 
     // Inserta HTML dentro de los identificadores correspondientes desde DOM
     document.getElementById("lista-carrito").innerHTML = carritoElementosHTML;
-    document.getElementById("carrito-subtotal-pesos").innerHTML = moneda_formato_uyu.format(subtotalArticulosPesos);
-    document.getElementById("carrito-subtotal-dolares").innerHTML = moneda_formato_usd.format(subtotalArticulosDolares);
-    document.getElementById("carrito-costo-envio-pesos").innerHTML = moneda_formato_uyu.format(costoEnvioArticulosPesos);
-    document.getElementById("carrito-costo-envio-dolares").innerHTML = moneda_formato_usd.format(costoEnvioArticulosDolares);
-    document.getElementById("carrito-costo-total-pesos").innerHTML = moneda_formato_uyu.format(totalPesos);
-    document.getElementById("carrito-costo-total-dolares").innerHTML = moneda_formato_usd.format(totalDolares);
+    document.getElementById("carrito-subtotal").innerHTML = moneda_formato_usd.format(subtotalArticulos);
+    document.getElementById("carrito-costo-envio").innerHTML = moneda_formato_usd.format(costoEnvioArticulos);
+    document.getElementById("carrito-costo-total").innerHTML = moneda_formato_usd.format(totalArticulos);
 };
 
 // Ordena y muestra los productos
@@ -265,8 +371,8 @@ function adquiereCarritoCompras(userID) {
             // Combina los productos
             firebaseArrayCarrito.forEach(elemento => currentCartListArray.push(elemento))
 
-//            // Sanitiza valores de salida
-//            currentCartListArray.forEach(elemento => Object.entries(elemento).map(atributo => elemento[atributo[0]] = DOMPurify.sanitize(atributo[1], { USE_PROFILES: { html: true } })));
+            // Sanitiza valores de salida
+            // currentCartListArray.forEach(elemento => Object.entries(elemento).map(atributo => elemento[atributo[0]] = DOMPurify.sanitize(atributo[1], { USE_PROFILES: { html: true } })));
         }).then(function () {
             // Muestra los productos
             sortAndShowCartList(ORDER_ASC_BY_NAME)

@@ -18,6 +18,38 @@
 </head>
 
 <body>
+  <!-- Modal -->
+  <div class="modal fade" id="modal-medio-pago" tabindex="-1" aria-labelledby="modal-seleccion-medio-pago"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-seleccion-medio-pago">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form-checkout">
+            <input type="text" name="cardNumber" id="form-checkout__cardNumber" />
+            <input type="text" name="expirationDate" id="form-checkout__expirationDate" />
+            <input type="text" name="cardholderName" id="form-checkout__cardholderName" />
+            <input type="email" name="cardholderEmail" id="form-checkout__cardholderEmail" />
+            <input type="text" name="securityCode" id="form-checkout__securityCode" />
+            <select name="issuer" id="form-checkout__issuer"></select>
+            <select name="identificationType" id="form-checkout__identificationType"></select>
+            <input type="text" name="identificationNumber" id="form-checkout__identificationNumber" />
+            <select name="installments" id="form-checkout__installments"></select>
+            <button type="submit" id="form-checkout__submit">Pay</button>
+
+            <progress value="0" class="progress-bar">loading...</progress>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Contenedor para alertas -->
   <div id="alertaAnclaDOM"></div>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-1">
@@ -169,38 +201,24 @@
                           </div>
                         </div>
                         <div class="col-lg-4 col-xl-3">
+                          <div></div>
                           <div class="d-flex justify-content-between">
-                            <p class="mb-2">Subtotal en Pesos</p>
-                            <p id="carrito-subtotal-pesos"></p>
+                            <p>Subtotal</p>
+                            <p id="carrito-subtotal"></p>
                           </div>
 
+                          <hr class="my-2">
+
                           <div class="d-flex justify-content-between">
-                            <p class="mb-2">Subtotal en Dólares</p>
-                            <p id="carrito-subtotal-dolares"></p>
+                            <p>Costo de envío</p>
+                            <p id="carrito-costo-envio"></p>
                           </div>
 
-                          <hr class="my-4">
+                          <hr class="my-2">
 
                           <div class="d-flex justify-content-between">
-                            <p class="mb-2">Costo de envío en Pesos</p>
-                            <p id="carrito-costo-envio-pesos" class="mb-0"></p>
-                          </div>
-
-                          <div class="d-flex justify-content-between">
-                            <p class="mb-2">Costo de envío en Dolares</p>
-                            <p id="carrito-costo-envio-dolares" class="mb-0"></p>
-                          </div>
-
-                          <hr class="my-4">
-
-                          <div class="d-flex justify-content-between">
-                            <p class="mb-2">Total en Pesos</p>
-                            <p id="carrito-costo-total-pesos" class="mb-0"></p>
-                          </div>
-
-                          <div class="d-flex justify-content-between">
-                            <p class="mb-2">Total en Dolares</p>
-                            <p id="carrito-costo-total-dolares" class="mb-0"></p>
+                            <p>Total</p>
+                            <p id="carrito-costo-total"></p>
                           </div>
 
                           <button type="button" class="btn btn-success btn-block btn-lg w-100 justify-content-between"
@@ -208,6 +226,16 @@
                             <span>Pagar</span>
                           </button>
 
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12">
+                          <!-- Button trigger modal -->
+                          <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#modal-medio-pago">
+                            Elegir medio de pago
+                          </button>
                         </div>
                       </div>
 
@@ -260,6 +288,8 @@
   <script src="js/init.js"></script>
   <script type="module" src="js/firebase-usuario.js"></script>
   <script type="module" src="js/firebase-cart.js"></script>
+  <!-- Mercado Pago -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
   <script src="js/cart.js"></script>
 </body>
 
