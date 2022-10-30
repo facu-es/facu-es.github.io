@@ -419,15 +419,15 @@ function eligeMedioPago() {
             mensajeModal.setAttribute("hidden", "");
         }
     } else if (document.getElementById("pago-cc").checked) {
+        // Habilita Transferencia
+        trfNumero.setAttribute("disabled", "");
+
         // Deshabilita Tarjeta de Crédito
         ccNombre.removeAttribute("disabled");
         ccNumero.removeAttribute("disabled");
         ccVmes.removeAttribute("disabled");
         ccVanio.removeAttribute("disabled");
         ccCVV.removeAttribute("disabled");
-
-        // Habilita Transferencia
-        trfNumero.setAttribute("disabled", "");
 
         // Si faltan campos a completar
         // Muestra el mensaje de que hay datos pendientes
@@ -438,19 +438,10 @@ function eligeMedioPago() {
             ccCVV.value === "") {
             mensajeBoton.removeAttribute("hidden");
             mensajeModal.removeAttribute("hidden");
-            return false
         } else {
             mensajeBoton.setAttribute("hidden", "");
             mensajeModal.setAttribute("hidden", "");
-            return true
         }
-    } else {
-        // Ningun medio seleccionado
-        mensajeBoton.removeAttribute("hidden");
-        mensajeModal.removeAttribute("hidden");
-        console.log("Estamos aqui")
-        return false
-    }
 }
 
 // Valida cantidad de productos en el Carrito
