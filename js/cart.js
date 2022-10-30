@@ -15,11 +15,11 @@ let firebaseCartListArray = [];
 // Cotizacion de precios
 const PESOS_POR_DOLAR = 41;
 
+/*
 // Inicializa el uso de Mercado Pago
 const mp = new MercadoPago('TEST-d326b969-adb9-4767-98c2-84d3519a0f91', {
     locale: 'es-UY',
 });
-
 
 // Configuracion Mercado Pago
 const cardForm = mp.cardForm({
@@ -122,6 +122,7 @@ const cardForm = mp.cardForm({
         }
     }
 });
+*/
 
 // Ordena los elementos del array recibido
 // Cuando se define criterio la función de comparación adecuada es utilizada
@@ -225,6 +226,7 @@ function showCartListInfo() {
     let carritoElementosHTML = "";
 
     // Inicializa variables para calcular cantidades numéricas
+    let subtotalArticulo = 0;
     let subtotalArticulos = 0;
     let subtotalArticulosPesos = 0;
     let subtotalArticulosDolares = 0;
@@ -379,6 +381,100 @@ function adquiereCarritoCompras(userID) {
         });
 };
 
+// Ajusta interfaz de Medio de Pago y alertas de usuario en el botón de elección
+function eligeMedioPago() {
+    // Campos de input para Tarjeta de Crédito
+    const ccNombre = document.getElementById("pago-cc-nombre");
+    const ccNumero = document.getElementById("pago-cc-numero");
+    const ccVmes = document.getElementById("pago-cc-v-mes");
+    const ccVanio = document.getElementById("pago-cc-v-anio");
+    const ccCVV = document.getElementById("pago-cc-cvv");
+
+    // Campos de input para Transferencia Bancaria
+    const trfNumero = document.getElementById("pago-trf-numero");
+
+    // Elementos de alerta para el usuario
+    const mensajeBoton = document.getElementById("mediopago-mensaje-boton");
+    const mensajeModal = document.getElementById("mediopago-mensaje-modal");
+
+    if (document.getElementById("pago-trf").checked) {
+        // Deshabilita Tarjeta de Crédito
+        ccNombre.setAttribute("disabled", "");
+        ccNumero.setAttribute("disabled", "");
+        ccVmes.setAttribute("disabled", "");
+        ccVanio.setAttribute("disabled", "");
+        ccCVV.setAttribute("disabled", "");
+
+        // Habilita Transferencia
+        trfNumero.removeAttribute("disabled");
+
+        // Si faltan campos a completar
+        // Muestra el mensaje de que hay datos pendientes
+        if (trfNumero.value === "") {
+            mensajeBoton.removeAttribute("hidden");
+            mensajeModal.removeAttribute("hidden");
+        } else {
+            mensajeBoton.setAttribute("hidden", "");
+            mensajeModal.setAttribute("hidden", "");
+        }
+    } else if (document.getElementById("pago-cc").checked) {
+        // Deshabilita Tarjeta de Crédito
+        ccNombre.removeAttribute("disabled");
+        ccNumero.removeAttribute("disabled");
+        ccVmes.removeAttribute("disabled");
+        ccVanio.removeAttribute("disabled");
+        ccCVV.removeAttribute("disabled");
+
+        // Habilita Transferencia
+        trfNumero.setAttribute("disabled", "");
+
+        // Si faltan campos a completar
+        // Muestra el mensaje de que hay datos pendientes
+        if (ccNombre.value === "" ||
+            ccNumero.value === "" ||
+            ccVmes.value === "" ||
+            ccVanio.value === "" ||
+            ccCVV.value === "") {
+            mensajeBoton.removeAttribute("hidden");
+            mensajeModal.removeAttribute("hidden");
+            return false
+        } else {
+            mensajeBoton.setAttribute("hidden", "");
+            mensajeModal.setAttribute("hidden", "");
+            return true
+        }
+    } else {
+        // Ningun medio seleccionado
+        mensajeBoton.removeAttribute("hidden");
+        mensajeModal.removeAttribute("hidden");
+        console.log("Estamos aqui")
+        return false
+    }
+}
+
+// Valida cantidad de productos en el Carrito
+function validaProductosCarrito() {
+    // Inicializa variable para guardar productos a corregir
+    corregirProductos = "";
+
+    // Verifica que ningun item contiene cantidad cero 
+    for (let i = 0; i < currentCartListArray.length; i++) {
+        producto = currentCartListArray[i];
+        if (producto.count <= 0) {
+            corregirProductos += `<br />${producto.name}`
+        }
+    }
+
+    // Si se hayaron productos a corregir, notifica al usuario y retorna false
+    // De lo contrario retorna true
+    if (corregirProductos === "") {
+        return true
+    } else {
+        alertaUsuario("Cantidad incorrecta de productos en carrito", "Hay productos con menos de 1 unidad en el Carrito.<br />Corríjalos primero<br /><br />Productos con problemas: " + corregirProductos, "warning", 0);
+        return false
+    }
+}
+
 // Espera a que se encuentren todos los elementos HTML cargados en el DOM.
 document.addEventListener("DOMContentLoaded", function (e) {
     // Descarga el carrito de compras del usuario y llama a la funcion que lo muestra
@@ -410,4 +506,39 @@ document.addEventListener("DOMContentLoaded", function (e) {
     document.getElementById("envioPremium").addEventListener("change", showCartListInfo);
     document.getElementById("envioExpress").addEventListener("change", showCartListInfo);
     document.getElementById("envioStandard").addEventListener("change", showCartListInfo);
+
+    // Gestiona formulario de pago
+    let form = document.getElementById('pagar-carrito')
+
+    // Loop over them and prevent submission
+    form.addEventListener('submit', function (event) {
+        // Emite mensajes al usuario
+        eligeMedioPago();
+
+        // Si se valida el formulario, el medio de pago y las cantidades de producto en el carrito
+        // Envía el formulario y avisa al usuario, de lo contrario detiene el envío y muestra los campos/productos a corregir
+        if (!form.checkValidity() || !validaProductosCarrito()) {
+            // Detiene comportamiento por defecto
+            event.preventDefault();
+            event.stopPropagation();  
+        } else {
+            alert("¡Compra realizada!")
+            // alertaUsuario("¡Compra realizada!", "Su compra ha sido realizada con éxito", "success", 4000)
+        }
+
+        form.classList.add('was-validated')
+    }, false)
+
+    // Eventos de escucha para seleccion de Medio de Pago
+    document.getElementById('pago-trf').addEventListener('change', eligeMedioPago);
+    document.getElementById('pago-cc').addEventListener('change', eligeMedioPago);
+    // document.getElementById('pago-mp').addEventListener('change', eligeMedioPago);
+
+    // Eventos de escucha en campos de Medios de Pago
+    document.getElementById("pago-cc-nombre").addEventListener('change', eligeMedioPago);
+    document.getElementById("pago-cc-numero").addEventListener('change', eligeMedioPago);
+    document.getElementById("pago-cc-v-mes").addEventListener('change', eligeMedioPago);
+    document.getElementById("pago-cc-v-anio").addEventListener('change', eligeMedioPago);
+    document.getElementById("pago-cc-cvv").addEventListener('change', eligeMedioPago);
+    document.getElementById("pago-trf-numero").addEventListener('change', eligeMedioPago);
 });

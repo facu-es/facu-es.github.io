@@ -18,34 +18,132 @@
 </head>
 
 <body>
+  <!--
+        El formulario abarca todo el sitio para poder aceptar las recomendaciones de Bootstrap 
+        sobre la posición del Modal y a la vez poder validarlo mediante HTML5
+  -->
+  <form id="pagar-carrito" action="#" novalidate>
+
   <!-- Modal -->
   <div class="modal fade" id="modal-medio-pago" tabindex="-1" aria-labelledby="modal-seleccion-medio-pago"
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modal-seleccion-medio-pago">Modal title</h5>
+          <h5 class="modal-title" id="modal-seleccion-medio-pago">Elige tu medio de pago</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="form-checkout">
-            <input type="text" name="cardNumber" id="form-checkout__cardNumber" />
-            <input type="text" name="expirationDate" id="form-checkout__expirationDate" />
-            <input type="text" name="cardholderName" id="form-checkout__cardholderName" />
-            <input type="email" name="cardholderEmail" id="form-checkout__cardholderEmail" />
-            <input type="text" name="securityCode" id="form-checkout__securityCode" />
-            <select name="issuer" id="form-checkout__issuer"></select>
-            <select name="identificationType" id="form-checkout__identificationType"></select>
-            <input type="text" name="identificationNumber" id="form-checkout__identificationNumber" />
-            <select name="installments" id="form-checkout__installments"></select>
-            <button type="submit" id="form-checkout__submit">Pay</button>
+          <input form="pagar-carrito" id="pago-cc" name="medioPago" type="radio" required checked>
+          <label for="pago-trf">Pagar mediante Tarjeta de Crédito</label>
+                <div id="tarjeta-credito" class="pt-3">
+                        <div class="form-group">
+                            <label for="nombreUsuario">
+                                <h6>Nombre de titular</h6>
+                            </label>
+                            <input form="pagar-carrito" id="pago-cc-nombre" type="text" name="nombreUsuario" placeholder="Nombre de titular" required
+                                class="form-control ">
+                            <div class="valid-feedback">
+                              ¡Parece correcto!
+                            </div>
+                            <div class="invalid-feedback">
+                              Escriba el nombre del titular...
+                            </div>
+                        </div>
+                        <div class="form-group"> <label for="numeroTarjeta">
+                                <h6>Número de tarjeta</h6>
+                            </label>
+                            <div class="input-group">
+                                <input form="pagar-carrito" id="pago-cc-numero" type="text" name="numeroTarjeta" placeholder="Numero de tarjeta válido"
+                                    class="form-control " required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text text-muted">
+                                        <i class="fab fa-cc-visa mx-1"></i>
+                                        <i class="fab fa-cc-mastercard mx-1"></i>
+                                        <i class="fab fa-cc-amex mx-1"></i>
+                                    </span>
+                                </div>
+                                <div class="valid-feedback">
+                                  ¡Parece correcto!
+                                </div>
+                                <div class="invalid-feedback">
+                                  Escriba el numero de su tarjeta...
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <label>
+                                        <span class="hidden-xs">
+                                            <h6>Fecha de vencimiento</h6>
+                                        </span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input form="pagar-carrito" id="pago-cc-v-mes" type="number" placeholder="MM" min="1" max="12" name="" class="form-control" required>
+                                        <input form="pagar-carrito" id="pago-cc-v-anio" type="number" placeholder="YYYY" min="1000" max="9999" name="" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group mb-4">
+                                    <label data-toggle="tooltip" title="Three digit CV code on the back of your card">
+                                        <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
+                                    </label>
+                                    <input form="pagar-carrito" id="pago-cc-cvv" type="text" maxlength="4" required class="form-control">
+                                    <div class="valid-feedback">
+                                      ¡Parece correcto!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                      Escriba el CVV de su tarjeta...
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                </div>
+                <!-- Transferencia Bancaria -->
+                <input form="pagar-carrito" id="pago-trf" name="medioPago" type="radio" required>
+                <label for="pago-trf">Pagar mediante Transferencia Bancaria</label>
 
-            <progress value="0" class="progress-bar">loading...</progress>
-          </form>
+                <div id="trf-bancaria" class="pt-3">
+                    <div class="form-group">
+                        <label for="numeroCuenta">
+                          <h6 class="pb-2">Numero de cuenta</h6>
+                        </label>
+                        <input form="pagar-carrito" id="pago-trf-numero" type="text" name="numeroCuenta" placeholder="Numero de cuenta" required disabled
+                            class="form-control">
+                        <div class="valid-feedback">
+                          ¡Parece correcto!
+                        </div>
+                        <div class="invalid-feedback">
+                          Escriba el numero de cuenta...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TODO: Mercado Pago
+                <input form="pagar-carrito" id="pago-mp" type="radio" required>
+
+                <input type="text" name="cardNumber" id="pagar-carrito__cardNumber" />
+                <input type="text" name="expirationDate" id="pagar-carrito__expirationDate" />
+                <input type="text" name="cardholderName" id="pagar-carrito__cardholderName" />
+                <input type="email" name="cardholderEmail" id="pagar-carrito__cardholderEmail" />
+                <input type="text" name="securityCode" id="pagar-carrito__securityCode" />
+                <select name="issuer" id="pagar-carrito__issuer"></select>
+                <select name="identificationType" id="pagar-carrito__identificationType"></select>
+                <input type="text" name="identificationNumber" id="pagar-carrito__identificationNumber" />
+                <select name="installments" id="pagar-carrito__installments"></select>
+                <button type="submit" id="pagar-carrito__submit">Pay</bu                
+                <progress value="0" class="progress-bar">loading...</progress>
+
+                 -->
+          
+          <p id="mediopago-mensaje-modal" class="text-danger mt-2" hidden>
+            Debe elegir y completar un medio de pago
+          </p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary">Guardar cambios</button>
         </div>
       </div>
     </div>
@@ -114,6 +212,7 @@
             </div>
           </div>
         </div>
+        <!-- Listado de Productos -->
         <div class="container">
           <section class="h-100 h-custom">
             <div class="container h-100 py-5">
@@ -135,69 +234,87 @@
                       </tbody>
                     </table>
                   </div>
-
+                  
+                  <!-- Opciones de Tipo de envio, Dirección y Subtotal -->
                   <div class="card shadow-2-strong mb-5 mb-lg-0" style="border-radius: 16px;">
                     <div class="card-body p-4">
 
                       <div class="row">
 
                         <div class="col-md-6 col-lg-4 col-xl-3 mb-4 mb-md-0">
-                          <form>
-                            <div class="d-flex flex-row pb-3">
-                              <div class="d-flex align-items-center pe-2">
-                                <input class="form-check-input" type="radio" name="radioNoLabel" id="envioPremium"
-                                  value="" aria-label="..." checked />
-                              </div>
-                              <div class="d-flex align-items-center rounded border w-100 p-3">
-                                <p class="d-flex align-items-center mb-0">
-                                  <i class="fas fa-shipping-fast fa-2x text-dark pe-2"></i>
-                                </p>
-                                <div class="text-center"><span>Premium - 2 a 5 días</span><br /><span>(15%)</span></div>
+                          <div class="d-flex flex-row pb-3">
+                            <div class="d-flex align-items-center pe-2">
+                              <input class="form-check-input" type="radio" name="radioNoLabel" id="envioPremium"
+                                value="" aria-label="..." checked />
+                            </div>
+                            <div class="d-flex align-items-center rounded border w-100 p-3">
+                              <p class="d-flex align-items-center mb-0">
+                                <i class="fas fa-shipping-fast fa-2x text-dark pe-2"></i>
+                              </p>
+                              <div class="text-center"><span>Premium - 2 a 5 días</span><br /><span>(15%)</span></div>
+                            </div>
+                          </div>
+                          <div class="d-flex flex-row pb-3">
+                            <div class="d-flex align-items-center pe-2">
+                              <input class="form-check-input" type="radio" name="radioNoLabel" id="envioExpress"
+                                value="" aria-label="..." />
+                            </div>
+                            <div class="d-flex align-items-center rounded border w-100 p-3">
+                              <p class="d-flex align-items-center mb-0">
+                                <i class="fas fa-truck fa-2x text-dark pe-2"></i><i class="fas fa-shipping-timed"></i>
+                              </p>
+                              <div class="text-center"><span></span>Express - 5 a 8 días</span><br /><span>(7%)</span>
                               </div>
                             </div>
-                            <div class="d-flex flex-row pb-3">
-                              <div class="d-flex align-items-center pe-2">
-                                <input class="form-check-input" type="radio" name="radioNoLabel" id="envioExpress"
-                                  value="" aria-label="..." />
-                              </div>
-                              <div class="d-flex align-items-center rounded border w-100 p-3">
-                                <p class="d-flex align-items-center mb-0">
-                                  <i class="fas fa-truck fa-2x text-dark pe-2"></i><i class="fas fa-shipping-timed"></i>
-                                </p>
-                                <div class="text-center"><span></span>Express - 5 a 8 días</span><br /><span>(7%)</span>
-                                </div>
-                              </div>
+                          </div>
+                          <div class="d-flex flex-row">
+                            <div class="d-flex align-items-center pe-2">
+                              <input class="form-check-input" type="radio" name="radioNoLabel" id="envioStandard"
+                                value="" aria-label="..." />
                             </div>
-                            <div class="d-flex flex-row">
-                              <div class="d-flex align-items-center pe-2">
-                                <input class="form-check-input" type="radio" name="radioNoLabel" id="envioStandard"
-                                  value="" aria-label="..." />
-                              </div>
-                              <div class="d-flex align-items-center rounded border w-100 p-3">
-                                <p class="d-flex align-items-center mb-0">
-                                  <i class="fas fa-truck fa-2x text-dark pe-2"></i>
-                                </p>
-                                <div class="text-center"><span></span>Standard - 12 a 15
-                                  días</span><br /><span>(5%)</span></div>
-                              </div>
+                            <div class="d-flex align-items-center rounded border w-100 p-3">
+                              <p class="d-flex align-items-center mb-0">
+                                <i class="fas fa-truck fa-2x text-dark pe-2"></i>
+                              </p>
+                              <div class="text-center"><span></span>Standard - 12 a 15
+                                días</span><br /><span>(5%)</span></div>
                             </div>
-                          </form>
+                          </div>
                         </div>
                         <div class="col-md-6 col-lg-4 col-xl-6">
                           <p class="fa-5 text-align-center w-100">Direccion de envío</p>
                           <div class="row">
-                            <div class="form-outline mb-2 mb-xl-3 d-flex align-items-center">
-                              <input type="text" id="envio-calle" class="form-control form-control-lg"
-                                placeholder="Calle..." />
-                            </div>
-                            <div class="form-outline mb-2 mb-xl-3 d-flex align-items-center">
-                              <input type="text" id="envio-numero-puerta" class="form-control form-control-lg"
-                                placeholder="Número de puerta..." />
-                            </div>
-                            <div class="form-outline mb-2 mb-xl-3 d-flex align-items-center">
-                              <input type="text" id="envio-esquina" class="form-control form-control-lg" siez="17"
-                                placeholder="Esquina..." maxlength="19" />
-                            </div>
+                              <div class="form-outline mb-1 mb-xl-2 align-items-center">
+                                <input type="text" id="envio-calle" class="form-control form-control-lg"
+                                  placeholder="Calle..." required />
+                                <div class="valid-feedback">
+                                  ¡Parece correcto!
+                                </div>
+                                <div class="invalid-feedback">
+                                  Ingresa una calle...
+                                </div>
+                              </div>
+                              <div class="form-outline mb-1 mb-xl-2 align-items-center">
+                                <input type="number" id="envio-numero-puerta" class="form-control form-control-lg"
+                                  placeholder="Número de puerta..." required />
+                                <div class="valid-feedback">
+                                  ¡Parece correcto!
+                                </div>
+                                <div class="invalid-feedback">
+                                  Ingresa un número...
+                                </div>
+                              </div>
+                              <div class="form-outline mb-1 mb-xl-2 align-items-center">
+                                <input type="text" id="envio-esquina" class="form-control form-control-lg" size="17"
+                                  placeholder="Esquina..." maxlength="19" required />
+                                <div class="valid-feedback">
+                                  ¡Parece correcto!
+                                </div>
+                                <div class="invalid-feedback">
+                                  Ingresa una esquina...
+                                </div>
+                              </div>
+                            </form>
                           </div>
                         </div>
                         <div class="col-lg-4 col-xl-3">
@@ -221,21 +338,25 @@
                             <p id="carrito-costo-total"></p>
                           </div>
 
-                          <button type="button" class="btn btn-success btn-block btn-lg w-100 justify-content-between"
-                            id="carrito-pago">
+                          <div class="row">
+                            <div class="col-12">
+                              <!-- Botón para abrir el modal de Medio de Pago -->
+                              <button form="pagar-carrito" type="button"
+                                class="btn btn-primary btn-block btn-lg w-100 justify-content-between mb-2"
+                                data-bs-toggle="modal" data-bs-target="#modal-medio-pago">
+                                Elegir medio de pago
+                              </button>
+                            </div>
+                            <p id="mediopago-mensaje-boton" class="text-danger" hidden>
+                              Debe elegir y completar un medio de pago
+                            </p>
+                          </div>
+
+                          <button form="pagar-carrito" type="submit"
+                            class="btn btn-success btn-block btn-lg w-100 justify-content-between" id="carrito-pago">
                             <span>Pagar</span>
                           </button>
 
-                        </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col-12">
-                          <!-- Button trigger modal -->
-                          <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#modal-medio-pago">
-                            Elegir medio de pago
-                          </button>
                         </div>
                       </div>
 
@@ -270,7 +391,8 @@
       <p class="float-end">
         <a href="#">Volver arriba</a>
       </p>
-      <p>Este sitio forma parte de <a href="https://jovenesaprogramar.edu.uy/" target="_blank">Jovenes a Programar</a> -
+      <p>Este sitio forma parte de <a href="https://jovenesaprogramar.edu.uy/" target="_blank">Jovenes a Programar</a>
+        -
         2022</p>
       <p>Clickea <a target="_blank" href="Letra.pdf">aquí</a> para descargar la letra del obligatorio.</p>
     </div>
