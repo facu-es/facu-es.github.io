@@ -34,7 +34,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <input form="pagar-carrito" id="pago-cc" name="medioPago" type="radio" required checked>
+          <input form="pagar-carrito" id="pago-cc" name="medioPago" type="radio" value="cc" required checked>
           <label for="pago-trf">Pagar mediante Tarjeta de Crédito</label>
           <hr />
                 <div id="tarjeta-credito" class="pt-3">
@@ -42,13 +42,13 @@
                             <label for="nombreUsuario">
                                 <h6>Nombre de titular</h6>
                             </label>
-                            <input form="pagar-carrito" id="pago-cc-nombre" type="text" name="nombreUsuario" placeholder="Nombre de titular" required
+                            <input form="pagar-carrito" id="pago-cc-nombre" type="text" name="nombreTitular" placeholder="Nombre de titular" required
                                 class="form-control ">
                             <div class="valid-feedback">
                               ¡Parece correcto!
                             </div>
                             <div class="invalid-feedback">
-                              Escriba el nombre del titular...
+                              Debe escribir el nombre del titular
                             </div>
                         </div>
                         <div class="form-group"> <label for="numeroTarjeta">
@@ -68,7 +68,7 @@
                                   ¡Parece correcto!
                                 </div>
                                 <div class="invalid-feedback">
-                                  Escriba el numero de su tarjeta...
+                                  Debe escribir el número de su tarjeta
                                 </div>
                             </div>
                         </div>
@@ -81,17 +81,17 @@
                                         </span>
                                     </label>
                                     <div class="input-group">
-                                        <input form="pagar-carrito" id="pago-cc-v-mes" type="number" placeholder="MM" min="1" max="12" name="" class="form-control" required>
-                                        <input form="pagar-carrito" id="pago-cc-v-anio" type="number" placeholder="YYYY" min="1000" max="9999" name="" class="form-control" required>
+                                        <input form="pagar-carrito" id="pago-cc-v-mes" type="number" placeholder="MM" min="1" max="12" name="mesVence" class="form-control" required>
+                                        <input form="pagar-carrito" id="pago-cc-v-anio" type="number" placeholder="YYYY" min="1000" max="9999" name="anioVence" class="form-control" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group mb-4">
-                                    <label data-toggle="tooltip" title="Three digit CV code on the back of your card">
+                                    <label data-toggle="tooltip" title="Código de tres dígitos detras de la tarjeta">
                                         <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
                                     </label>
-                                    <input form="pagar-carrito" id="pago-cc-cvv" type="text" maxlength="4" required class="form-control">
+                                    <input form="pagar-carrito" id="pago-cc-cvv" type="text" maxlength="4" name="cvv" required class="form-control">
                                     <div class="valid-feedback">
                                       ¡Parece correcto!
                                     </div>
@@ -103,7 +103,7 @@
                         </div>
                 </div>
                 <!-- Transferencia Bancaria -->
-                <input form="pagar-carrito" id="pago-trf" name="medioPago" type="radio" required>
+                <input form="pagar-carrito" id="pago-trf" name="medioPago" type="radio" value="trf" required>
                 <label for="pago-trf">Pagar mediante Transferencia Bancaria</label>
                 <hr />
                 <div id="trf-bancaria" class="pt-3">
@@ -188,13 +188,13 @@
           <div class="row">
             <div class="col text-end mt-4">
               <div class="btn-group btn-group-toggle mb-4" data-bs-toggle="buttons">
-                <input type="radio" class="btn-check" name="options" id="sortAsc">
+                <input type="radio" class="btn-check" id="sortAsc">
                 <label class="btn btn-light " for="sortAsc"><i class="fas fa-sort-alpha-down"><span>
                     </span></i></label>
-                <input type="radio" class="btn-check" name="options" id="sortDesc">
+                <input type="radio" class="btn-check" id="sortDesc">
                 <label class="btn btn-light" for="sortDesc"><i class="fas fa-sort-alpha-down-alt mr-1"><span>
                     </span></i></label>
-                <input type="radio" class="btn-check" name="options" id="sortByCount" checked>
+                <input type="radio" class="btn-check" id="sortByCount" checked>
                 <label class="btn btn-light" for="sortByCount"><i class="fas fa-sort-amount-down mr-1"><span>
                       Cantidad</span></i></label>
               </div>
@@ -246,7 +246,7 @@
                           <div class="d-flex flex-row pb-3">
                             <div class="d-flex align-items-center pe-2">
                               <input class="form-check-input" type="radio" name="tipoEnvio" id="envioPremium"
-                                value="" aria-label="Envio Premium" checked required/>
+                                value="prem" aria-label="Envio Premium" checked required/>
                               <div class="invalid-feedback">
                                 Debe seleccionar un tipo de envío
                               </div>
@@ -261,7 +261,7 @@
                           <div class="d-flex flex-row pb-3">
                             <div class="d-flex align-items-center pe-2">
                               <input class="form-check-input" type="radio" name="tipoEnvio" id="envioExpress"
-                                value="" aria-label="Envio Express" required/>
+                                value="exp" aria-label="Envio Express" required/>
                               <div class="invalid-feedback">
                                 Debe seleccionar un tipo de envío
                               </div>
@@ -277,7 +277,7 @@
                           <div class="d-flex flex-row">
                             <div class="d-flex align-items-center pe-2">
                               <input class="form-check-input" type="radio" name="tipoEnvio" id="envioStandard"
-                                value="" aria-label="Envio Estándar" required/>
+                                value="std" aria-label="Envio Estándar" required/>
                               <div class="invalid-feedback">
                                 Debe seleccionar un tipo de envío
                               </div>
@@ -295,7 +295,7 @@
                           <p class="fa-5 text-align-center w-100">Direccion de envío</p>
                           <div class="row">
                               <div class="form-outline mb-1 mb-xl-2 align-items-center">
-                                <input type="text" id="envio-calle" class="form-control form-control-lg"
+                                <input type="text" id="envio-calle" class="form-control form-control-lg" name="calle"
                                   placeholder="Calle..." required />
                                 <div class="valid-feedback">
                                   ¡Parece correcto!
@@ -305,7 +305,7 @@
                                 </div>
                               </div>
                               <div class="form-outline mb-1 mb-xl-2 align-items-center">
-                                <input type="number" id="envio-numero-puerta" class="form-control form-control-lg"
+                                <input type="number" id="envio-numero-puerta" class="form-control form-control-lg" name="puerta"
                                   placeholder="Número de puerta..." required />
                                 <div class="valid-feedback">
                                   ¡Parece correcto!
@@ -315,8 +315,8 @@
                                 </div>
                               </div>
                               <div class="form-outline mb-1 mb-xl-2 align-items-center">
-                                <input type="text" id="envio-esquina" class="form-control form-control-lg" size="17"
-                                  placeholder="Esquina..." maxlength="19" required />
+                                <input type="text" id="envio-esquina" class="form-control form-control-lg" name="esquina"
+                                  placeholder="Esquina..." required />
                                 <div class="valid-feedback">
                                   ¡Parece correcto!
                                 </div>

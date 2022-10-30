@@ -283,12 +283,13 @@ function showCartListInfo() {
                     </div>
                 </th>
                 <td class="align-middle">
+                <input value="${articulo.name}-${articulo.count}" name="compraprod" type="text" hidden required>
                     <div class="d-flex flex-row">
                         <button class="btn btn-link border px-2"
                             onclick="reduceCantidad(${i})">
                             <i class="fas fa-minus"></i>
                         </button>
-                        <input name="cantidad" value="${articulo.count}" type="number"
+                        <input value="${articulo.count}" type="number"
                             onchange="actualizaCantidad(${i}, this.value)" class="form-control form-control-sm cantidad-producto" min="0" />
                         <button class="btn btn-link border px-2"
                             onclick="aumentaCantidad(${i})">
@@ -517,13 +518,13 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
         // Si se valida el formulario, el medio de pago y las cantidades de producto en el carrito
         // Envía el formulario y avisa al usuario, de lo contrario detiene el envío y muestra los campos/productos a corregir
-        if (!form.checkValidity() || !validaProductosCarrito()) {
+        if (!validaProductosCarrito() || !form.checkValidity()) {
             // Detiene comportamiento por defecto
             event.preventDefault();
-            event.stopPropagation();  
+            event.stopPropagation();
         } else {
-            alert("¡Compra realizada!")
-            // alertaUsuario("¡Compra realizada!", "Su compra ha sido realizada con éxito", "success", 4000)
+            alert("Compra realizada con éxito");
+            // alertaUsuario("¡Compra realizada!", "Su compra ha sido realizada con éxito", "success");
         }
 
         form.classList.add('was-validated')
@@ -535,10 +536,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
     // document.getElementById('pago-mp').addEventListener('change', eligeMedioPago);
 
     // Eventos de escucha en campos de Medios de Pago
-    document.getElementById("pago-cc-nombre").addEventListener('change', eligeMedioPago);
-    document.getElementById("pago-cc-numero").addEventListener('change', eligeMedioPago);
-    document.getElementById("pago-cc-v-mes").addEventListener('change', eligeMedioPago);
-    document.getElementById("pago-cc-v-anio").addEventListener('change', eligeMedioPago);
-    document.getElementById("pago-cc-cvv").addEventListener('change', eligeMedioPago);
-    document.getElementById("pago-trf-numero").addEventListener('change', eligeMedioPago);
+    document.getElementById("pago-cc-nombre").addEventListener('input', eligeMedioPago);
+    document.getElementById("pago-cc-numero").addEventListener('input', eligeMedioPago);
+    document.getElementById("pago-cc-v-mes").addEventListener('input', eligeMedioPago);
+    document.getElementById("pago-cc-v-anio").addEventListener('input', eligeMedioPago);
+    document.getElementById("pago-cc-cvv").addEventListener('input', eligeMedioPago);
+    document.getElementById("pago-trf-numero").addEventListener('input', eligeMedioPago);
 });
