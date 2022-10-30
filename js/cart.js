@@ -442,6 +442,7 @@ function eligeMedioPago() {
             mensajeBoton.setAttribute("hidden", "");
             mensajeModal.setAttribute("hidden", "");
         }
+    }
 }
 
 // Valida cantidad de productos en el Carrito
