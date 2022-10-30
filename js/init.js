@@ -44,7 +44,7 @@ let getJSONData = function (url) {
 };
 
 // Alertas al usuario
-function alertaUsuario(titulo, mensaje, tipo) {
+function alertaUsuario(titulo, mensaje, tipo, tiempo) {
   // Adquiere elemento contenedor para la etiqueta
   const alertaAnclaDOM = document.getElementById('alertaAnclaDOM')
 
@@ -52,24 +52,34 @@ function alertaUsuario(titulo, mensaje, tipo) {
   if (!alertaAnclaDOM) {
     return;
   }
+  
   // Crea la etiqueta
   const alertaHTML = document.createElement('div')
   alertaHTML.innerHTML = [
-    `<div class="alert alert-${tipo} fade show" role="alert" id="alerta">`,
+    `<div class="alert alert-${tipo} alert-dismissible fade show" role="alert" id="alerta">`,
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>',
     `   <h4 class="alert-heading">${titulo}</h4>`,
     `   <hr>`,
     `   <div>${mensaje}</div>`,
-    //    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>',
     '</div>'
   ].join('')
 
   alertaAnclaDOM.append(alertaHTML)
 
-  // Esconde y luego elimina la alerta tras 2 segundos
+  // Si no se configura un tiempo, esconde y luego elimina la alerta tras 2 segundos 
+  if (tiempo === null || tiempo === undefined) {
+    tiempo = 2000;
+  }
+
+  // Si tiempo es igual a 0 la alerta no se esconde
+  if (tiempo === 0) {
+    return
+  }
+
   setTimeout(function () {
     document.getElementById('alerta').classList.remove("show");
     document.getElementById('alerta').remove();
-  }, 2000);
+  }, tiempo);
 }
 
 // Gestión de menus de usuario
