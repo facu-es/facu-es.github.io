@@ -9,9 +9,12 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
   <script>
-    if (localStorage.getItem("usuario") === null && sessionStorage.getItem("usuario") === null ) {
-        alert("Debe iniciar sesión para ver su perfil");
-        window.location.href = "login.html";
+    // Si no hay una sesion iniciada redirecciona al Login
+    if (localStorage.getItem("usuario") === null && sessionStorage.getItem("usuario") === null) {
+      // Guarda página actual y redirige a Login
+      sessionStorage.setItem("paganterior", window.location.href);
+      // Redirige a Login
+      window.location.href = "login.html";
     }
   </script>
 </head>
@@ -47,57 +50,111 @@
   <main>
     <div class="container rounded bg-white mt-5 mb-5">
       <div class="row">
-          <div class="col-md-3 border-right">
-              <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                <img class="rounded-circle mt-5" width="150px" src="img/usuario.webp" id="profile-img">
-                <span class="font-weight-bold">ID: <span class="text-black-50" id="profile-username"></span></span>
-                <span class="font-weight-bold">Correo: <span class="text-black-50" id="profile-email"></span></span>
-                <span class="font-weight-bold">Proveedor: <span class="text-black-50" id="profile-provider"></span></span>
-                <span> </span>
+        <div class="col-md-4 border-right">
+          <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+            <img class="rounded mt-5" width="200px" src="img/usuario.webp" id="profile-img">
+            <span class="font-weight-bold">ID: <span class="text-black-50" id="profile-uid"></span></span>
+            <span class="font-weight-bold">Correo: <span class="text-black-50" id="profile-email"></span></span>
+            <span class="font-weight-bold">Proveedor: <span class="text-black-50" id="profile-provider"></span></span>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-12 mb-2">
+          <div class="d-flex justify-content-between align-items-center mb-3"></div>
+          <span class="font-weight-bold">Cargar una imagen</span>
+          <input
+              class="form-control form-control-md"
+              id="profile-uploadIMG"
+              type="file"
+            />
+          </div>
+        </div>
+        </div>
+        <div class="col-md-5 border-right">
+          <div class="p-3 py-5">
+            <form id="profile-form" action="#" novalidate>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="text-right">Perfil de usuario</h4>
               </div>
-          </div>
-          <div class="col-md-5 border-right">
-              <div class="p-3 py-5">
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                      <h4 class="text-right">Perfil de usuario</h4>
+              <div class="row mt-2">
+                <div class="col-md-6">
+                  <label class="labels">Primer nombre</label>
+                  <input type="text" class="form-control" placeholder="Primer nombre" value="" id="profile-firstname" required>
+                  <div class="valid-feedback">
+                    ¡Parece correcto!
                   </div>
-                  <div class="row mt-2">
-                      <div class="col-md-6"><label class="labels">Nombre completo</label><input type="text" class="form-control" placeholder="Nombre completo" value="" id="profile-fullname"></div>
+                  <div class="invalid-feedback">
+                    Debe escribir almenos su primer nombre
                   </div>
-                  <div class="row mt-3">
-                      <!-- <div class="col-md-12 mb-2"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="enter phone number" value=""></div> -->
-                      <div class="col-md-12 mb-2"><label class="labels">Direccion</label><input type="text" class="form-control" placeholder="Direccion" value="" id="profile-firstaddress"></div>
-                      <div class="col-md-12 mb-2"><label class="labels">Esquina o numero de puerta</label><input type="text" class="form-control" placeholder="Esquina o numero de puerta" value="" id="profile-secondaddress"></div>
-                      <div class="col-md-12 mb-2"><label class="labels">Codigo postal</label><input type="text" class="form-control" placeholder="Codigo postal" value="" id="profile-postalcode"></div>
-                      <div class="col-md-12 mb-2"><label class="labels">Departamento</label><input type="text" class="form-control" placeholder="Departamento" value="" id="profile-state"></div>
-                      <div class="col-md-12 mb-2"><label class="labels">Ciudad</label><input type="text" class="form-control" placeholder="Ciudad" value="" id="profile-city"></div>
-                    <!--
-                      <div class="col-md-12 mb-2"><label class="labels">Correo electronico</label><input type="text" class="form-control" placeholder="Correo electronico" value="" id="profile-email"></div>
-                    -->
+                </div>
+                <div class="col-md-6">
+                  <label class="labels">Segundo nombre</label>
+                  <input type="text" class="form-control" placeholder="Segundo nombre" value="" id="profile-secondname">
+                </div>
+                <div class="col-md-6">
+                  <label class="labels">Primer apellido</label>
+                  <input type="text" class="form-control" placeholder="Primer apellido" value="" id="profile-lastname" required>
+                  <div class="valid-feedback">
+                    ¡Parece correcto!
                   </div>
-                  <div class="row mt-3">
-                      <div class="col-md-6"><label class="labels">País</label><input type="text" class="form-control" placeholder="País" value="" id="profile-country"></div>
-                      <!--                      
-                      <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state" id="profile-state"></div>
-                      -->
+                  <div class="invalid-feedback">
+                    Debe escribir almenos su primer apellido
                   </div>
-
-                  <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button" id="profile-guardar">Guardar cambios</button></div>
+                </div>
+                <div class="col-md-6">
+                  <label class="labels">Segundo apellido</label>
+                  <input type="text" class="form-control" placeholder="Segundo apellido" value=""
+                    id="profile-secondlastname">
+                </div>
               </div>
+              <div class="row mt-3">
+                <div class="col-md-12 mb-2">
+                  <label class="labels">Correo electrónico alternativo</label>
+                  <input type="text" class="form-control" placeholder="Correo electrónico alternativo" value=""
+                    id="profile-alternativeemail" required>
+                  <div class="valid-feedback">
+                    ¡Parece correcto!
+                  </div>
+                  <div class="invalid-feedback">
+                    Debe escribir su correo electrónico
+                  </div>
+                </div>
+                <div class="col-md-12 mb-2">
+                  <label class="labels">Direccion</label>
+                  <input type="text" class="form-control" placeholder="Direccion" value="" id="profile-firstaddress">
+                </div>
+                <div class="col-md-12 mb-2">
+                  <label class="labels">Esquina o numero de puerta</label>
+                  <input type="text" class="form-control" placeholder="Esquina o numero de puerta" value=""
+                    id="profile-secondaddress">
+                </div>
+                <div class="col-md-12 mb-2">
+                  <label class="labels">Codigo postal</label><input type="text" class="form-control"
+                    placeholder="Codigo postal" value="" id="profile-postalcode">
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-md-12 mb-2">
+                  <label class="labels">Departamento</label><input type="text" class="form-control"
+                    placeholder="Departamento" value="" id="profile-state">
+                </div>
+                <div class="col-md-12 mb-2">
+                  <label class="labels">Ciudad</label>
+                  <input type="text" class="form-control" placeholder="Ciudad" value="" id="profile-city">
+                </div>
+                <div class="col-md-12 mb-2">
+                  <label class="labels">País</label>
+                  <input type="text" class="form-control" placeholder="País" value="" id="profile-country">
+                </div>
+              </div>
+              <div class="mt-5 text-center">
+                <button class="btn btn-primary profile-button" type="submit" id="profile-guardar">Guardar cambios</button>
+              </div>
+            </form>
           </div>
-          <!--
-          <div class="col-md-4">
-              <div class="p-3 py-5">
-                  <div class="d-flex justify-content-between align-items-center"><h4 class="text-right">Perfil vendedor</h4></div><br>
-                  <div class="col-md-12 mb-2"><label class="labels">PEND</label><input type="text" class="form-control" placeholder="PEND" value="" id="profile-vendedor1"></div> <br>
-                  <div class="col-md-12 mb-2"><label class="labels">PEND</label><input type="text" class="form-control" placeholder="PEND" value="" id="profile-vendedor2"></div>
-            </div>
-          </div>
-          -->
-      </div>
-  </div>
-  </div>
-  </div>
+        </div>
+    </div>
+    </div>
+    </div>
   </main>
   <footer class="text-muted">
     <div class="container">
@@ -125,4 +182,5 @@
   <script src="js/my-profile.js"></script>
 
 </body>
+
 </html>

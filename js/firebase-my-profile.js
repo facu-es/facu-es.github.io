@@ -47,7 +47,7 @@ function adquierePerfilUsuario() {
 function actualizaPerfilUsuario(usuario) {
     // Actualiza los datos en Firebase
     update(ref(db, "ListadoUsuarios/" + usuarioActual.uid + "/profile"), usuario)
-    .then(() => alertaUsuario("Correcto", "¡El perfil ha sido actualizado!", "success"))
+    .then(() => alertaUsuario("¡Perfil actualizado!", "Datos enviados correctamente", "success", 2000))
     .catch((error) => {
         // Manejo de errores
         const errorCode = error.code;
