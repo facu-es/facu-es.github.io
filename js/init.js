@@ -77,8 +77,8 @@ function alertaUsuario(titulo, mensaje, tipo, tiempo) {
   }
 
   setTimeout(function () {
-    document.getElementById('alerta').classList.remove("show");
-    document.getElementById('alerta').remove();
+    alertaAnclaDOM.classList.remove("show");
+    alertaAnclaDOM.remove();
   }, tiempo);
 }
 
