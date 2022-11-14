@@ -1,5 +1,5 @@
 // Inicializa constantes de atributos de usuario
-const atributosDefinibles = ["firstname", "secondname", "lastname", "secondlastname", "alternativeemail", "firstaddress", "secondaddress", "postalcode", "state", "city", "country"];
+const atributosDefinibles = ["firstname", "secondname", "lastname", "secondlastname", "alternativeemail", "telephone", "firstaddress", "secondaddress", "postalcode", "state", "city", "country"];
 const attributosFirebase = ["provider", "site", "displayName", "email", "photoURL", "emailVerified", "uid", "nid"];
 
 // Inicializa variable global con datos del usuario
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
             if (usuarioActual.photoURL) {
                 document.getElementById("profile-img").src = usuarioActual.photoURL.split("=")[0];
             }
-        } 
+        }
     });
 
     // Gestiona formulario de perfil
