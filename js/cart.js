@@ -501,9 +501,9 @@ document.addEventListener("DOMContentLoaded", function (e) {
     document.getElementById("envioStandard").addEventListener("change", showCartListInfo);
 
     // Gestiona formulario de pago
-    let form = document.getElementById('pagar-carrito')
+    const form = document.getElementById('pagar-carrito')
 
-    // Loop over them and prevent submission
+    // Detiene evento por defecto de formulario
     form.addEventListener('submit', function (event) {
         // Emite mensajes al usuario
         eligeMedioPago();
