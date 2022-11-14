@@ -121,14 +121,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
         // Si no utiliza la imagen de la cuenta en el provedor de inicio de sesión
         // En caso de que no haya ninguna imagen disponible deja la imagen predeterminada
         if (usuario.photoIMG) {
-            console.log("elegida IMG")
             document.getElementById("profile-img").src = usuario.photoIMG;
         } else {
             if (usuarioActual.photoURL) {
-                console.log("elegida URL")
                 document.getElementById("profile-img").src = usuarioActual.photoURL.split("=")[0];
-            } else {
-                console.log("Ninguna elegida")
             }
         } 
     });
