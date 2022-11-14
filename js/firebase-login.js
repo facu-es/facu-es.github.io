@@ -151,8 +151,18 @@ onAuthStateChanged(auth, (user) => {
         localStorage.setItem('mantenersesioniniciada', true);
         localStorage.setItem('usuario', JSON.stringify(usuario));
 
-        // Redirecciona a pagina principal
-        window.location.href = "index.html";
+        // Redirecciona a pagina principal o a la pagina anterior
+        let paginaAnterior = sessionStorage.getItem("paganterior");
+        if (paginaAnterior) {
+            // Redirige a sitio anterior
+            window.location.href = paginaAnterior;
+
+            // Limpia el valor del Almacenamiento de Sesion
+            sessionStorage.removeItem('paganterior');
+        } else {
+            // Redirige a pagina principal
+            window.location.href = "index.html";
+        }
     }
 });
 

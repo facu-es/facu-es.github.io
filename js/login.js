@@ -23,8 +23,27 @@ function autenticarUsuario() {
   iniciarSesionCorreo(correoUsuario, contraUsuario);
 }
 
+// Evalua redirecciones hacia el Login y notifica al usuario
+function verificaRedirecionHaciaLogin() {
+  // Adquiere la clave desde el Almacenamiento de Sesion
+  let paginaAnterior = sessionStorage.getItem("paganterior");
+
+  // Evalúa razon de redireccion y notifica al usuario
+  if(paginaAnterior) {
+    if(paginaAnterior.includes("my-profile")) {
+      alertaUsuario("Debe iniciar sesión", "Debe iniciar sesión para acceder al Perfil de Usuario", "warning", 10000);
+    }
+    if(paginaAnterior.includes("cart")) {
+      alertaUsuario("Debe iniciar sesión", "Debe iniciar sesión para acceder al Carrito", "warning", 10000);
+    }
+  }
+}
+
 // Espera la carga completa del sitio y la disponibilidad de DOM
 document.addEventListener("DOMContentLoaded", function () {
+
+  // Alerta al usuario si fue redireccionado por requerir Login
+  verificaRedirecionHaciaLogin();
 
   // Inicio de sesion por Correo
   document.getElementById('iniciar-sesion').addEventListener('click', autenticarUsuario);
