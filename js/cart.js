@@ -225,6 +225,9 @@ function showCartListInfo() {
     // Inicializa variable para los datos HTML a mostrar
     let carritoElementosHTML = "";
 
+    // Inicializa variables para los datos de sesion
+    let carritoDatosSesionHTML = ""
+
     // Inicializa variables para calcular cantidades numéricas
     let subtotalArticulo = 0;
     let subtotalArticulos = 0;
@@ -283,7 +286,7 @@ function showCartListInfo() {
                     </div>
                 </th>
                 <td class="align-middle">
-                <input value="${articulo.name}-${articulo.count}" name="compraprod" type="text" hidden required>
+                <input value="${articulo.name}:${articulo.count}:${articulo.unitCost}:${articulo.currency}" name="compraprod" type="text" hidden required>
                     <div class="d-flex flex-row">
                         <button class="btn btn-link border px-2"
                             onclick="reduceCantidad(${i})">
@@ -331,11 +334,21 @@ function showCartListInfo() {
     // Calcula costo total
     totalArticulos = subtotalArticulos + costoEnvioArticulos;
 
+    // Crea elementos INPUT ocultos para enviar datos de Sesion en el formulario
+    carritoDatosSesionHTML = `
+    <input id="usuarioUid" name="usuarioUid" type="hidden" value="${usuarioActual.uid}">
+    <input id="usuarioName" name="usuarioName" type="hidden" value="${usuarioActual.nid}">
+    <input id="costoCompra" name="costoProd" type="hidden" value="${subtotalArticulos}">
+    <input id="costoEnvio" name="costoEnvio" type="hidden" value="${costoEnvioArticulos}">
+    <input id="costoTotal" name="costoTotal" type="hidden" value="${totalArticulos}">
+    `
+
     // Inserta HTML dentro de los identificadores correspondientes desde DOM
     document.getElementById("lista-carrito").innerHTML = carritoElementosHTML;
     document.getElementById("carrito-subtotal").innerHTML = moneda_formato_usd.format(subtotalArticulos);
     document.getElementById("carrito-costo-envio").innerHTML = moneda_formato_usd.format(costoEnvioArticulos);
     document.getElementById("carrito-costo-total").innerHTML = moneda_formato_usd.format(totalArticulos);
+    document.getElementById("carrito-datos-sesion").innerHTML = carritoDatosSesionHTML;
 };
 
 // Ordena y muestra los productos

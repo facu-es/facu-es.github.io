@@ -22,7 +22,7 @@
         El formulario abarca todo el sitio para poder aceptar las recomendaciones de Bootstrap 
         sobre la posición del Modal y a la vez poder validarlo mediante HTML5
   -->
-  <form id="pagar-carrito" action="#" novalidate>
+  <form id="pagar-carrito" action="http://localhost:3000/compra" method="post" novalidate>
 
   <!-- Modal -->
   <div class="modal fade" id="modal-medio-pago" tabindex="-1" aria-labelledby="modal-seleccion-medio-pago"
@@ -213,6 +213,8 @@
             </div>
           </div>
         </div>
+        <!-- Datos de sesion del formulario -->
+        <div id="carrito-datos-sesion"></div>
         <!-- Listado de Productos -->
         <div class="container">
           <section class="h-100 h-custom">
