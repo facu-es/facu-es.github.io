@@ -1,11 +1,14 @@
-const CATEGORIES_URL = "https://japceibal.github.io/emercado-api/cats/cat.json";
-const PUBLISH_PRODUCT_URL = "https://japceibal.github.io/emercado-api/sell/publish.json";
-const PRODUCTS_URL = "https://japceibal.github.io/emercado-api/cats_products/";
-const PRODUCT_INFO_URL = "https://japceibal.github.io/emercado-api/products/";
-const PRODUCT_INFO_COMMENTS_URL = "https://japceibal.github.io/emercado-api/products_comments/";
-const CART_INFO_URL = "https://japceibal.github.io/emercado-api/user_cart/";
-const CART_BUY_URL = "https://japceibal.github.io/emercado-api/cart/buy.json";
-const EXT_TYPE = ".json";
+const BASE_URL = "https://japceibal.github.io"; // JaP
+// const BASE_URL = "http://localhost:3000"; // Servidor local
+const CATEGORIES_URL = BASE_URL + "/emercado-api/cats/cat.json";
+const PUBLISH_PRODUCT_URL = BASE_URL + "/emercado-api/sell/publish.json";
+const PRODUCTS_URL = BASE_URL + "/emercado-api/cats_products/";
+const PRODUCT_INFO_URL = BASE_URL + "/emercado-api/products/";
+const PRODUCT_INFO_COMMENTS_URL = BASE_URL + "/emercado-api/products_comments/";
+const CART_INFO_URL = BASE_URL + "/emercado-api/user_cart/";
+const CART_BUY_URL = BASE_URL + "/emercado-api/cart/buy.json";
+const EXT_TYPE = ".json"; // JaP
+// const EXT_TYPE = ""; // Servidor local
 
 // Variable global que contendrá al objeto del usuario iniciado
 let usuarioActual = undefined;
